@@ -8,11 +8,15 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import {getScreenInfo} from "@/assets/js/utils/ScreenUtils";
 
 export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+  mounted() {
+    console.log(getScreenInfo())
   }
 }
 </script>

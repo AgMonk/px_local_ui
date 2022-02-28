@@ -3,4 +3,15 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-createApp(App).use(store).use(router).mount('#app')
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import Clipboard from 'v-clipboard3';
+
+import './assets/js/base/DateEnhancement'
+
+createApp(App)
+    .use(Clipboard)
+    .use(ElementPlus, {locale: zhCn,})
+
+    .use(store).use(router).mount('#app')
