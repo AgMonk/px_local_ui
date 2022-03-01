@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import Config from "@/store/Config";
+import Artworks from "@/store/Artworks";
 
 export default createStore({
   state: {
@@ -9,6 +10,6 @@ export default createStore({
   actions: {
   },
   modules: {
-    Config,
+    Config,Artworks
   }
 })

@@ -14,12 +14,7 @@ export const getIllustInfo = (pid) => {
         const extraIllusts = Object.keys(userIllusts).reverse()
             .map(i=>userIllusts[i]).filter(i=>!!i).map(i=>parseIllustInfo(i,'简略'))
 
-        const data = {illust,author, extraIllusts}
-
-        console.log(data)
-        return data
-    }).catch(reason => {
-        console.log(reason)
+        return {illust, author, extraIllusts}
     })
 }
 
@@ -37,13 +32,13 @@ const parseAuthorInfo = (body) => {
 //解析作品信息
 const parseIllustInfo = (body, level = '详情') => {
     const {
-        id, title, description,width,height, illustType
+        id, title, description,width,height, illustType,userId
         , createDate, uploadDate, urls
         , pageCount, bookmarkCount, likeCount, commentCount, responseCount, viewCount
         , bookmarkData,url
     } = body
 
-    const illust = {id:Number(id), title, description,width,height}
+    const illust = {id:Number(id), title, description,width,height,level,authorId:Number(userId)}
 
     if (level === '详情') {
         const tagList = body.tags.tags
@@ -55,7 +50,7 @@ const parseIllustInfo = (body, level = '详情') => {
         //处理url
         for (const urlsKey in urls) {
             if (urls.hasOwnProperty(urlsKey)) {
-                urls[urlsKey] = urls[urlsKey].replace("https://i.pximg.net", '')
+                urls[urlsKey] = replacePrefix(urls[urlsKey])
             }
         }
         illust.urls = urls
@@ -65,7 +60,7 @@ const parseIllustInfo = (body, level = '详情') => {
         //处理url
         if (url){
             illust.urls={
-                thumb:url.replace("https://i.pximg.net", '')
+                thumb:replacePrefix(url)
             }
         }
     }
@@ -95,3 +90,5 @@ const parseIllustInfo = (body, level = '详情') => {
 
     return illust
 }
+
+const replacePrefix = (s) =>s?s.replace("https://i.pximg.net", ''):undefined
