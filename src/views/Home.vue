@@ -9,6 +9,7 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import {getScreenInfo} from "@/assets/js/utils/ScreenUtils";
+import {getIllustInfo} from "@/assets/js/request/illust";
 
 export default {
   name: 'Home',
@@ -17,6 +18,7 @@ export default {
   },
   mounted() {
     console.log(getScreenInfo())
+    getIllustInfo(96599037)
   }
 }
 </script>

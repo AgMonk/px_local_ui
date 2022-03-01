@@ -1,7 +1,6 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <my-navigation/>
   </div>
   <router-view/>
 </template>
@@ -16,7 +15,7 @@
 }
 
 #nav {
-  padding: 30px;
+  /*padding: 30px;*/
 }
 
 #nav a {
@@ -27,4 +26,11 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
 </style>
+<script>
+import MyNavigation from "@/components/common/my-navigation";
+export default {
+  components: {MyNavigation}
+}
+</script>
