@@ -10,6 +10,7 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 import {getScreenInfo} from "@/assets/js/utils/ScreenUtils";
 import {getIllustInfo} from "@/assets/js/request/illust";
+import {setTitle} from "@/assets/js/request/request";
 
 export default {
   name: 'Home',
@@ -17,6 +18,7 @@ export default {
     HelloWorld
   },
   mounted() {
+    setTitle("首页")
     console.log(getScreenInfo())
     getIllustInfo(96599037)
   }

@@ -58,3 +58,8 @@ function onFulfilled(res) {
 function validateStatus(status) {
     return status >= 200 && status < 500; // default
 }
+
+
+export const setTitle = (title)=>{
+    document.title = `${title} - PLU`
+}
