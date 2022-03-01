@@ -53,6 +53,12 @@ const parseIllustInfo = (body, level = '详情') => {
                 urls[urlsKey] = replacePrefix(urls[urlsKey])
             }
         }
+        if (illustType===2){
+            urls.zip = urls.original
+                    .substring(0, urls.original.lastIndexOf('_'))
+                    .replace("img-original", "img-zip-ugoira")
+                + "_ugoira1920x1080.zip";
+        }
         illust.urls = urls
     }
 

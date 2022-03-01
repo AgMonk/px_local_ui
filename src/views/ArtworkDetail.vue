@@ -16,12 +16,16 @@
                 <my-copy-button :text="data.id">{{ data.id }}</my-copy-button>
                 <my-copy-button :text="`https://www.pixiv.net/artworks/${data.id}`">地址</my-copy-button>
               </el-descriptions-item>
-              <el-descriptions-item label="创建时间" v-if="data.timestamp">{{data.timestamp.create}}</el-descriptions-item>
-              <el-descriptions-item label="上传时间" v-if="data.timestamp&& data.timestamp.create!==data.timestamp.upload">{{data.timestamp.upload}}</el-descriptions-item>
+              <el-descriptions-item v-if="data.timestamp" label="创建时间">{{ data.timestamp.create }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.timestamp&& data.timestamp.create!==data.timestamp.upload" label="上传时间">{{ data.timestamp.upload }}</el-descriptions-item>
               <el-descriptions-item label="尺寸">{{ data.width }}x{{ data.height }}</el-descriptions-item>
-              <el-descriptions-item label="喜欢" v-if="data.counts">{{data.counts.like}}</el-descriptions-item>
-              <el-descriptions-item label="浏览" v-if="data.counts">{{data.counts.view}}</el-descriptions-item>
-              <el-descriptions-item label="收藏" v-if="data.counts">{{data.counts.bookmark}}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts" label="喜欢">{{ data.counts.like }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts" label="浏览">{{ data.counts.view }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts" label="收藏">{{ data.counts.bookmark }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts && data.counts.page>1" label="图片数">{{ data.counts.page }}</el-descriptions-item>
+              <el-descriptions-item label="下载">
+                <el-button type="primary" @click="downloadAll">下载所有</el-button>
+              </el-descriptions-item>
             </el-descriptions>
           </div>
         </el-aside>
@@ -49,7 +53,15 @@ export default {
   computed: {},
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
-
+    ...mapActions("Aria2", [`addQuery`, `addFirst`]),
+    downloadAll() {
+      const url = this.data.type === 2 ? this.data.urls.zip : this.data.urls.original
+      const count = this.data.counts.page
+      this.addQuery({url, count}).then(() => {
+        ElMessage.success(`已添加 ${count} 个任务到队列`)
+        this.addFirst()
+      })
+    },
   },
   mounted() {
     const pid = Number(this.$route.params.pid)
