@@ -50,6 +50,32 @@ export const addTask = ({filename, urls, dir}) => {
     })
 }
 
+export const tellStop = ()=>{
+    const id = uuid();
+    const data = {
+        method: 'aria2.tellStopped',
+        id,
+        jsonrpc: 2.0,
+        params: [-1,1000],
+    }
+    return aria2Request({data}).then(res=>{
+        return res.result
+    })
+}
+
+export const deleteQuest =(gid)=>{
+    const id = uuid();
+    const data = {
+        method: 'aria2.removeDownloadResult',
+        id,
+        jsonrpc: 2.0,
+        params: [gid],
+    }
+    return aria2Request({data}).then(res=>{
+        return res.result
+    })
+}
+
 aria2Request.interceptors.response.use(onFulfilled, onRejected);
 
 

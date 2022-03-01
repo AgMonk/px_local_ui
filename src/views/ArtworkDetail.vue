@@ -24,7 +24,7 @@
               <el-descriptions-item v-if="data.counts" label="收藏">{{ data.counts.bookmark }}</el-descriptions-item>
               <el-descriptions-item v-if="data.counts && data.counts.page>1" label="图片数">{{ data.counts.page }}</el-descriptions-item>
               <el-descriptions-item label="下载">
-                <el-button type="primary" @click="downloadAll">下载所有</el-button>
+                <el-button type="primary" @click="downloadAll">Aria2下载所有</el-button>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -40,6 +40,7 @@
 import {mapActions} from "vuex";
 import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
+import {tellStop} from "@/assets/js/request/aria2";
 
 export default {
   name: "ArtworkDetail",
