@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import Config from "@/store/Config";
 
 export default createStore({
   state: {
@@ -8,5 +9,6 @@ export default createStore({
   actions: {
   },
   modules: {
+    Config,
   }
 })
