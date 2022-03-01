@@ -18,7 +18,7 @@
       </el-tabs>
 
     </el-header>
-    <el-main>
+    <el-main v-loading="!show">
       <router-view v-if="show" />
     </el-main>
     <el-footer></el-footer>
@@ -29,6 +29,7 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
 import {ElMessage} from "element-plus";
+import {setTitle} from "@/assets/js/request/request";
 
 export default {
   name: "Artworks",
@@ -56,6 +57,7 @@ export default {
     },
   },
   mounted() {
+    setTitle("作品详情")
     const {name, params} = this.$route
     if (name === '作品详情') {
       const pid = Number(params.pid)
