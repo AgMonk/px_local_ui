@@ -59,3 +59,11 @@ Date.prototype.minusHours = function (hour) {
 Date.prototype.minusDays = function (day) {
     return this.minusHours(24 * day)
 }
+
+Date.prototype.getTimeSeconds = function () {
+    return Math.floor(this.getTime() / 1000)
+}
+
+Date.prototype.withUnixSeconds = function (time) {
+    return new Date(time * 1000)
+}
