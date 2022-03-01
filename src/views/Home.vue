@@ -20,7 +20,7 @@ export default {
   mounted() {
     setTitle("首页")
     console.log(getScreenInfo())
-    getIllustInfo(96599037)
+    getIllustInfo(96602700)
   }
 }
 </script>
