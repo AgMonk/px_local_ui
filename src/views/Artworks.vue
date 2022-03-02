@@ -5,9 +5,10 @@
       <el-tabs
           v-model="currentTab"
           class="demo-tabs"
-          closable
+          editable
           type="card"
           @edit="handleTabsEdit"
+          @tab-click="routeToPid($event.props.name)"
       >
         <el-tab-pane
             v-for="item in artworks"
@@ -28,7 +29,7 @@
 
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import {setTitle} from "@/assets/js/request/request";
 
 export default {
@@ -48,22 +49,46 @@ export default {
     handleTabsEdit(id, action) {
       if (action === 'remove') {
         this.delTab(id)
-        if (this.artworks.length>0){
+        if (this.artworks.length > 0) {
           this.currentTab = this.artworks[0].id
-        }else{
+        } else {
           this.$router.push('/home')
         }
       }
+      if (action === 'add') {
+        ElMessageBox.prompt('输入Pid或地址', {}).then(res => {
+          const {value, action} = res
+          if (action === 'confirm') {
+            if (!isNaN(value)) {
+              this.getInfo(value)
+            }else{
+              const pattern = /artworks\/(\d+)/
+              const match = pattern.exec(value)
+              if (match){
+                this.getInfo(Number(match[1]))
+              }
+            }
+          }
+        }).catch(reason => {
+          if (reason === 'cancel') {
+            ElMessage.info("已取消")
+          } else {
+            console.log(reason)
+            ElMessage.error("无法识别")
+          }
+        })
+      }
     },
-  },
-  mounted() {
-    setTitle("作品详情")
-    const {name, params} = this.$route
-    if (name === '作品详情') {
-      const pid = Number(params.pid)
-      if (this.artworks.map(i => i.pid).includes(pid)) {
+    getInfo(pid) {
+      if (isNaN(pid)){
+        return;
+      }
+      pid = Number(pid)
+      if (this.artworks.map(i => i.id).includes(pid)) {
         //pid已经存在
         this.currentTab = pid;
+        this.routeToPid(pid)
+        this.show = true
       } else {
         //pid不存在 请求
         this.show = false;
@@ -71,17 +96,31 @@ export default {
           this.addTab(res)
           this.currentTab = pid;
           this.show = true;
-        }).catch(reason=>{
+        }).catch(reason => {
           console.log(reason)
           const {message, status,} = reason
           ElMessage.error(`${status}: ${message}`)
         })
       }
-    } else if (this.artworks[0]) {
-      this.$router.push({name: '作品详情', params: {pid: this.artworks[0].pid}})
+    },
+    load(route) {
+      const {name, params} = route
+      if (name === '作品详情' && !isNaN(params.pid)) {
+        this.getInfo(params.pid)
+      } else if (this.artworks[0]) {
+        this.routeToPid(this.artworks[0].pid)
+      }
+    },
+    routeToPid(pid){
+      this.$router.push({name: '作品详情', params: {pid}})
     }
   },
-  watch: {},
+  mounted() {
+    setTitle("作品详情")
+    this.load(this.$route)
+  },
+  watch: {
+  },
   props: {},
 }
 

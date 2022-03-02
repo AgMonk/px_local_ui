@@ -40,7 +40,6 @@
 import {mapActions} from "vuex";
 import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
-import {tellStop} from "@/assets/js/request/aria2";
 
 export default {
   name: "ArtworkDetail",
@@ -63,19 +62,28 @@ export default {
         this.addFirst()
       })
     },
+    load(route) {
+      const pid = Number(route.params.pid)
+      this.getIllustInfo({pid}).then(res => {
+        console.log(res)
+        this.data = res
+      }).catch(reason => {
+        console.log(reason)
+        const {message, status,} = reason
+        ElMessage.error(`${status}: ${message}`)
+      })
+    },
   },
   mounted() {
-    const pid = Number(this.$route.params.pid)
-    this.getIllustInfo({pid}).then(res => {
-      console.log(res)
-      this.data = res
-    }).catch(reason => {
-      console.log(reason)
-      const {message, status,} = reason
-      ElMessage.error(`${status}: ${message}`)
-    })
+    this.load(this.$route)
   },
-  watch: {},
+  watch: {
+    $route(to) {
+      if (to.name === '作品详情') {
+        this.load(to)
+      }
+    }
+  },
   props: {},
 }
 
