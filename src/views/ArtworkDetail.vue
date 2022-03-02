@@ -46,14 +46,17 @@
               >
                 <el-divider content-position="left">评论区</el-divider>
                 <!--                todo-->
+                <el-scrollbar height="400px">
                 <div v-for="row in comments.data" style="text-align: left">
                   <illust-comment :comment="row" />
                 </div>
+                  <el-row style="color:white">
+                    <el-col v-if="!comments.hasNext">没有了</el-col>
+                    <el-col v-else>加载中...</el-col>
+                  </el-row>
+                </el-scrollbar>
 
-                <el-row style="color:white">
-                  <el-col v-if="!comments.hasNext">没有了</el-col>
-                  <el-col v-else>加载中...</el-col>
-                </el-row>
+
               </div>
 
             </el-main>
@@ -87,6 +90,7 @@
           </div>
         </el-aside>
       </el-container>
+      <el-backtop />
     </el-main>
     <el-footer></el-footer>
   </el-container>
