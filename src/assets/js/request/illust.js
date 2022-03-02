@@ -97,4 +97,4 @@ const parseIllustInfo = (body, level = '详情') => {
     return illust
 }
 
-const replacePrefix = (s) =>s?s.replace("https://i.pximg.net", ''):undefined
+export const replacePrefix = (s) =>s?s.replace("https://i.pximg.net", ''):undefined

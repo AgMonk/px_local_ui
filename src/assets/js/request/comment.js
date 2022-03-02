@@ -1,6 +1,7 @@
 // 评论
 
 import {pixivGetRequest} from "@/assets/js/request/request";
+import {replacePrefix} from "@/assets/js/request/illust";
 
 export const getRootComment = ({pid,offset=0,limit=50})=>{
     return pixivGetRequest({
@@ -29,7 +30,7 @@ const parseComment = (body)=>{
         const author = {
             id:Number(userId),
             name:userName,
-            avatar:img.replace("https://i.pximg.net","")
+            avatar:replacePrefix(img)
         }
         const data ={
             // url("https://s.pximg.net/common/images/stamp/generated-stamps/302_s.jpg?20180605")

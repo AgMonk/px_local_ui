@@ -25,7 +25,7 @@
              element-loading-svg-view-box="-10, -10, 50, 50"
              element-loading-text="加载中..."
     >
-      <router-view  />
+      <router-view v-if="artworks.length>0" />
     </el-main>
     <el-footer></el-footer>
   </el-container>

@@ -1,6 +1,7 @@
 // 用户
 
 import {pixivGetRequest} from "@/assets/js/request/request";
+import {replacePrefix} from "@/assets/js/request/illust";
 
 export const getUserInfo = (uid)=>{
     return pixivGetRequest({
@@ -20,8 +21,8 @@ export const getUserInfo = (uid)=>{
         })
         links.sort((a,b)=>a.name.localeCompare(b.name))
         return {
-            avatar:imageBig,
-            avatar2:image,
+            avatar:replacePrefix(imageBig),
+            avatar2:replacePrefix(image),
             id:Number(userId),
             isFollowed,name,comment,following,links,
         }

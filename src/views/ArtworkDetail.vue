@@ -63,8 +63,16 @@
           </el-container>
         </el-main>
         <el-aside id="信息">
-          <div id="作者信息">
+          <div id="作者信息" v-if="author">
+            <el-descriptions :column="1" border>
+              <el-descriptions-item>
+                <template #label>
+                  <user-avatar :size="40" :uid="author.id" />
+                </template>
+                <user-link :size="25" :uid="author.id" />
+              </el-descriptions-item>
 
+            </el-descriptions>
           </div>
           <div id="作品信息">
             <el-descriptions :column="1" border>
@@ -123,6 +131,7 @@ export default {
         data: [],
         hasNext: true,
       },
+      author:undefined,
     }
   },
   computed: {
@@ -131,6 +140,7 @@ export default {
   },
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
+    ...mapActions("User", [`getUserInfo`]),
     ...mapActions("Aria2", [`addQuery`, `addFirst`]),
     ...mapMutations("User",[`saveInfo2Cache`]),
     downloadAll() {
@@ -149,6 +159,7 @@ export default {
     },
     load(route) {
       const pid = Number(route.params.pid)
+      this.author = undefined;
       this.comments = {
         loading: false,
         offset: 0,
@@ -168,7 +179,10 @@ export default {
           this.original.push(domain + res.urls.original.replace("_p0", `_p${i}`))
         }
         this.loadSingleThumbs()
-        // this.loadComments()
+
+        this.getUserInfo({uid:res.authorId}).then(res=>{
+          this.author = res;
+        })
       }).catch(reason => {
         console.log(reason)
         const {message, status,} = reason
