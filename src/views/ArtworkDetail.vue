@@ -105,10 +105,12 @@ import {Lock} from '@element-plus/icons-vue';
 import {getRootComment} from "@/assets/js/request/comment";
 import {getUserInfo} from "@/assets/js/request/user";
 import IllustComment from "@/components/illust/IllustComment";
+import UserAvatar from "@/components/user/UserAvatar";
+import UserLink from "@/components/user/UserLink";
 
 export default {
   name: "ArtworkDetail",
-  components: {IllustComment, MyCopyButton, Lock},
+  components: {UserLink, UserAvatar, IllustComment, MyCopyButton, Lock},
   data() {
     return {
       data: undefined,

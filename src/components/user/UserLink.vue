@@ -1,7 +1,7 @@
 <template>
   <el-tooltip>
     <router-link :to="`/user/${uid}/illust/1`">
-      <el-link type="success" :style="`font-size: ${size}px;`">
+      <el-link :type="type" :style="`font-size: ${size}px;`">
         {{ name }}
       </el-link>
     </router-link>
@@ -58,6 +58,10 @@ export default {
       type:Number,
       default:15,
     },
+    type:{
+      type:String,
+      default:'primary'
+    }
   },
 }
 

@@ -1,6 +1,8 @@
 // Pixiv用户信息
 // noinspection JSUnusedLocalSymbols
 
+import {getUserInfo} from "@/assets/js/request/user";
+
 export default {
     namespaced: true,
     state: {
@@ -21,6 +23,12 @@ export default {
         method: ({dispatch, commit, state}, payload) => {
 
         },
+        getUserInfo: ({dispatch, commit, state}, {uid,force}) => {
+            return getUserInfo(uid).then(res => {
+                commit("saveInfo2Cache",res)
+            })
+        },
+
     },
     getters: {},
 }
