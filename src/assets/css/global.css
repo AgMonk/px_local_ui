@@ -33,3 +33,7 @@
 .common-text {
     color: hsla(0, 0%, 100%, .39)
 }
+
+.clickable {
+    cursor: pointer;
+}
