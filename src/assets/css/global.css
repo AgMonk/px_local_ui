@@ -30,3 +30,6 @@
 .el-tabs__item{
     color: #a18e6d;
 }
+.common-text {
+    color: hsla(0, 0%, 100%, .39)
+}

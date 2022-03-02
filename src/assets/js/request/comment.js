@@ -9,27 +9,38 @@ export const getRootComment = ({pid,offset=0,limit=50})=>{
             illust_id:pid,
             offset,limit,lang:'zh'
         }
-    }).then(res=> {
-        const body = res.body
-        const {hasNext} = body
-        const comments = body.comments.map(item =>{
-            const {comment,commentDate,hasReplies,id,img,userId,userName,stampId} = item
-            const author = {
-                id:Number(userId),
-                name:userName,
-                avatar:img.replace("https://i.pximg.net","")
-            }
-            const data ={
-                // url("https://s.pximg.net/common/images/stamp/generated-stamps/302_s.jpg?20180605")
-                stampId,
-                content:comment,
-                timestamp:commentDate,
-                hasReplies,
-                id:Number(id),
-            }
-            return {author,comment:data}
-        })
+    }).then(res=> parseComment(res.body))
+}
 
-        return {comments,hasNext};
+export const getRepliesOfComment = ({cid,page=1})=>{
+    return pixivGetRequest({
+        url:'/ajax/illusts/comments/replies',
+        params:{
+            comment_id:cid,
+            lang:'zh',page
+        }
+    }).then(res=> parseComment(res.body))
+}
+
+const parseComment = (body)=>{
+    const {hasNext} = body
+    const comments = body.comments.map(item =>{
+        const {comment,commentDate,hasReplies,id,img,userId,userName,stampId} = item
+        const author = {
+            id:Number(userId),
+            name:userName,
+            avatar:img.replace("https://i.pximg.net","")
+        }
+        const data ={
+            // url("https://s.pximg.net/common/images/stamp/generated-stamps/302_s.jpg?20180605")
+            stampId,
+            content:comment,
+            timestamp:commentDate,
+            hasReplies,
+            id:Number(id),
+        }
+        return {author,comment:data}
     })
+
+    return {comments,hasNext};
 }

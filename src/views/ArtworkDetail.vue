@@ -47,22 +47,7 @@
                 <el-divider content-position="left">评论区</el-divider>
                 <!--                todo-->
                 <div v-for="row in comments.data" style="text-align: left">
-
-                  <!--                todo 用户头像-->
-                  <span style="color:white">{{ row.author.name }}
-                                            <!--                todo 用户名跳转-->
-                  </span>
-                  <span class="common-text">@ {{ row.comment.timestamp }}</span>
-                  <div class="common-text" v-if="row.comment.content">
-                    {{ row.comment.content }}
-                  </div>
-                  <div v-else>
-                    <el-image :src="`https://s.pximg.net/common/images/stamp/generated-stamps/${row.comment.stampId}_s.jpg`"/>
-                  </div>
-                  <div v-if="row.hasReplies" class="common-text">
-                    <!--                todo 评论回复-->
-                    <el-button size="small">查看回复</el-button>
-                  </div>
+                  <illust-comment :comment="row" />
                 </div>
 
                 <el-row style="color:white">
@@ -115,10 +100,11 @@ import MyCopyButton from "@/components/common/my-copy-button";
 import {Lock} from '@element-plus/icons-vue';
 import {getRootComment} from "@/assets/js/request/comment";
 import {getUserInfo} from "@/assets/js/request/user";
+import IllustComment from "@/components/illust/IllustComment";
 
 export default {
   name: "ArtworkDetail",
-  components: {MyCopyButton, Lock},
+  components: {IllustComment, MyCopyButton, Lock},
   data() {
     return {
       data: undefined,
@@ -216,7 +202,5 @@ export default {
 </script>
 
 <style scoped>
-.common-text {
-  color: hsla(0, 0%, 100%, .39)
-}
+
 </style>
