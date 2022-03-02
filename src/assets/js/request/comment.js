@@ -13,13 +13,15 @@ export const getRootComment = ({pid,offset=0,limit=50})=>{
         const body = res.body
         const {hasNext} = body
         const comments = body.comments.map(item =>{
-            const {comment,commentDate,hasReplies,id,img,userId,userName} = item
+            const {comment,commentDate,hasReplies,id,img,userId,userName,stampId} = item
             const author = {
                 id:Number(userId),
                 name:userName,
                 avatar:img.replace("https://i.pximg.net","")
             }
             const data ={
+                // url("https://s.pximg.net/common/images/stamp/generated-stamps/302_s.jpg?20180605")
+                stampId,
                 content:comment,
                 timestamp:commentDate,
                 hasReplies,

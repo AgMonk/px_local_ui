@@ -25,21 +25,45 @@
 
               <div v-if="data.tags && data.tags.length>0" id="标签区" style="text-align: left">
                 <el-divider content-position="left">标签</el-divider>
-                <span v-for="tag in data.tags">
+                <span v-for="tag in data.tags" style="margin-left: 2px">
                   <el-tag size="small" style="padding: 0 2px;">
                     <el-icon v-if="tag.locked">
                       <lock />
                     </el-icon>
                     {{ tag.tag }}
                   </el-tag>
-                  <span style="color:hsla(0,0%,100%,.39)">{{ tag.translation }}</span>
+                  <span class="common-text">{{ tag.translation }}</span>
                 </span>
               </div>
-              <!--              v-infinite-scroll="loadComments" -->
-              <!--              infinite-scroll-disabled="!comments.hasNext"-->
-              <div id="评论区" v-loading="comments.loading">
+              <div id="评论区"
+                   v-loading="comments.loading"
+                   :element-loading-spinner="svg"
+                   element-loading-background="rgba(0, 0, 0, 0.8)"
+                   element-loading-svg-view-box="-10, -10, 50, 50"
+                   element-loading-text="加载中..."
+                   v-infinite-scroll="loadComments"
+                   :infinite-scroll-disabled="!comments.hasNext"
+              >
                 <el-divider content-position="left">评论区</el-divider>
                 <!--                todo-->
+                <div v-for="row in comments.data" style="text-align: left">
+
+                  <!--                todo 用户头像-->
+                  <span style="color:white">{{ row.author.name }}
+                                            <!--                todo 用户名跳转-->
+                  </span>
+                  <span class="common-text">@ {{ row.comment.timestamp }}</span>
+                  <div class="common-text" v-if="row.comment.content">
+                    {{ row.comment.content }}
+                  </div>
+                  <div v-else>
+                    <el-image :src="`https://s.pximg.net/common/images/stamp/generated-stamps/${row.comment.stampId}_s.jpg`"/>
+                  </div>
+                  <div v-if="row.hasReplies" class="common-text">
+                    <!--                todo 评论回复-->
+                    <el-button size="small">查看回复</el-button>
+                  </div>
+                </div>
 
                 <el-row style="color:white">
                   <el-col v-if="!comments.hasNext">没有了</el-col>
@@ -101,7 +125,7 @@ export default {
       thumbsList: [],
       original: [],
       comments: {
-        loading:false,
+        loading: false,
         offset: 0,
         data: [],
         hasNext: true,
@@ -109,7 +133,8 @@ export default {
     }
   },
   computed: {
-    ...mapState("Config", [`config`])
+    ...mapState("Config", [`config`]),
+    ...mapState("Loading", [`svg`]),
   },
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
@@ -130,6 +155,12 @@ export default {
     },
     load(route) {
       const pid = Number(route.params.pid)
+      this.comments = {
+        loading: false,
+        offset: 0,
+        data: [],
+        hasNext: true,
+      }
       this.getIllustInfo({pid}).then(res => {
         console.log(res)
         this.data = res
@@ -143,7 +174,7 @@ export default {
           this.original.push(domain + res.urls.original.replace("_p0", `_p${i}`))
         }
         this.loadSingleThumbs()
-        this.loadComments()
+        // this.loadComments()
       }).catch(reason => {
         console.log(reason)
         const {message, status,} = reason
@@ -151,17 +182,20 @@ export default {
       })
     },
     loadComments() {
-      this.comments.loading=true
+      if (this.comments.loading){
+        return
+      }
+      this.comments.loading = true
       getRootComment({pid: this.data.id, offset: this.comments.offset}).then(res => {
         const {comments, hasNext} = res
         this.comments.hasNext = hasNext
         this.comments.data.push(...comments)
-        this.comments.offset+=50;
-        this.comments.loading=false
+        this.comments.offset += 50;
+        this.comments.loading = false
         console.log(this.comments)
-      }).catch(reason=>{
+      }).catch(reason => {
         console.log(reason)
-        this.comments.loading=false
+        this.comments.loading = false
       })
     },
   },
@@ -181,5 +215,7 @@ export default {
 </script>
 
 <style scoped>
-
+.common-text {
+  color: hsla(0, 0%, 100%, .39)
+}
 </style>
