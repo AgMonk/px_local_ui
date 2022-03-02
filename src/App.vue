@@ -36,14 +36,17 @@
 </style>
 <script>
 import MyNavigation from "@/components/common/my-navigation";
-import {mapActions} from "vuex";
+import {mapActions, mapMutations} from "vuex";
+
 export default {
   components: {MyNavigation},
-  methods:{
+  methods: {
     ...mapActions("Aria2", [`checkCompleted`]),
+    ...mapMutations("Config", [`loadConfig`])
   },
   mounted() {
-    setInterval(()=>this.checkCompleted(),30*1000)
+    setInterval(() => this.checkCompleted(), 30 * 1000)
+    this.loadConfig()
   }
 }
 </script>
