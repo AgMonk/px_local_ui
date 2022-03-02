@@ -119,7 +119,10 @@ export default {
       if (name === '作品详情' && !isNaN(params.pid)) {
         this.getInfo(params.pid)
       } else if (this.artworks[0]) {
-        this.routeToPid(this.artworks[0].pid)
+        this.routeToPid(this.artworks[0].id)
+      } else{
+        ElMessage.error("未打开任何作品")
+        history.back();
       }
     },
     routeToPid(pid){
