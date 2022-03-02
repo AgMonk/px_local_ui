@@ -10,10 +10,10 @@ export default {
         method(state, payload) {
 
         },
-        saveInfo2Cache(state, {key,value}) {
-            const k = `${key}`
+        saveInfo2Cache(state, value) {
+            const k = `${value.id}`
             state.cache[k] = Object.assign({},state.cache[k],value)
-            console.log(state.cache[k])
+            // console.log(state.cache[k])
         },
 
     },

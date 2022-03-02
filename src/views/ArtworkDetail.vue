@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
 import {Lock} from '@element-plus/icons-vue';
@@ -126,6 +126,7 @@ export default {
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
     ...mapActions("Aria2", [`addQuery`, `addFirst`]),
+    ...mapMutations("User",[`saveInfo2Cache`]),
     downloadAll() {
       const url = this.data.type === 2 ? this.data.urls.zip : this.data.urls.original
       const count = this.data.counts.page
@@ -180,6 +181,10 @@ export default {
         this.comments.offset += 50;
         this.comments.loading = false
         console.log(this.comments)
+
+        for (let i = 0; i < comments.length; i++) {
+          this.saveInfo2Cache(comments[i].author)
+        }
       }).catch(reason => {
         console.log(reason)
         this.comments.loading = false

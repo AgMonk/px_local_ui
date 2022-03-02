@@ -1,10 +1,11 @@
 <template>
   <div style="margin-left: 20px;margin-top: 5px">
     <!--                todo 用户头像-->
-    <span style="color:white">{{ comment.author.name }}
-                              <!--                todo 用户名跳转-->
+    <user-avatar :uid="comment.author.id" :size="30"/>
+    <span>
+      <user-link :uid="comment.author.id" :size="15"/>
     </span>
-    <span class="common-text">@ {{ comment.comment.timestamp }}</span>
+    <span class="common-text" style="margin-left: 5px">@ {{ comment.comment.timestamp }}</span>
     <div v-if="comment.comment.content" class="common-text">
       {{ comment.comment.content }}
     </div>
@@ -23,9 +24,13 @@
 
 <script>
 import {getRepliesOfComment} from "@/assets/js/request/comment";
+import {mapMutations} from "vuex";
+import UserAvatar from "@/components/user/UserAvatar";
+import UserLink from "@/components/user/UserLink";
 
 export default {
   name: "IllustComment",
+  components: {UserLink, UserAvatar},
   data() {
     return {
       replies: [],
@@ -35,11 +40,15 @@ export default {
   },
   computed: {},
   methods: {
+    ...mapMutations("User",[`saveInfo2Cache`]),
     loadReplies(){
       getRepliesOfComment({cid:this.comment.comment.id,page:this.page}).then(res=>{
         const {comments, hasNext} = res
         this.hasNext = hasNext;
         this.replies.push(...comments)
+        for (let i = 0; i < comments.length; i++) {
+          this.saveInfo2Cache(comments[i].author)
+        }
       })
     }
   },
