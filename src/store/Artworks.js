@@ -50,7 +50,7 @@ export default {
                 commit("saveInfo2Cache", {key, value: {time: now, data: illust}});
                 extraIllusts.forEach(i => commit("saveInfo2Cache", {key: `${i.id}`, value: {time: now, data: i}}))
 
-                /*todo 保存作者用户信息*/
+                commit('User/saveInfo2Cache',{key:author.id,value:author},{root:true})
 
                 // console.log(state.cache)
                 return illust

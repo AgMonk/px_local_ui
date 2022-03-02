@@ -114,6 +114,7 @@ import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
 import {Lock} from '@element-plus/icons-vue';
 import {getRootComment} from "@/assets/js/request/comment";
+import {getUserInfo} from "@/assets/js/request/user";
 
 export default {
   name: "ArtworkDetail",
