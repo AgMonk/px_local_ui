@@ -8,7 +8,7 @@ export default {
     state: {
         query: [],
         downloading: [],
-        deleteQuery:[],
+        deleteQuery: [],
     },
     mutations: {
         method(state, payload) {
@@ -21,26 +21,29 @@ export default {
         },
         deleteQuest: ({dispatch, commit, state}) => {
             const gid = state.deleteQuery[0]
-            if (gid){
-                deleteQuest(gid).then(res=>{
-                    state.deleteQuery.splice(0,1)
+            if (gid) {
+                deleteQuest(gid).then(res => {
+                    state.deleteQuery.splice(0, 1)
                     dispatch('deleteQuest')
                 })
             }
         },
         checkCompleted: ({dispatch, commit, state}) => {
+            if (state.downloading.length === 0) {
+                return;
+            }
             let count = 0;
-            tellStop().then(res=>{
-                res.forEach(item=>{
-                    const {gid,status} = item
-                    if (state.downloading.includes(gid) && status==='complete'){
-                        state.downloading = state.downloading.filter(i=>i!==gid)
+            tellStop().then(res => {
+                res.forEach(item => {
+                    const {gid, status} = item
+                    if (state.downloading.includes(gid) && status === 'complete') {
+                        state.downloading = state.downloading.filter(i => i !== gid)
                         state.deleteQuery.push(gid)
                         count++;
-                    }else{
+                    } else {
                     }
                 })
-                if (count>0){
+                if (count > 0) {
                     dispatch("deleteQuest")
                 }
             })
