@@ -10,6 +10,8 @@ export default {
         accounts:[],
         config:{
             token:"",
+            //图片服务器
+            domain:"/pxre",
         },
     },
     mutations: {

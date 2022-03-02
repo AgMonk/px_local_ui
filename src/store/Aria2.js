@@ -38,8 +38,6 @@ export default {
                         state.deleteQuery.push(gid)
                         count++;
                     }else{
-                        console.log(state.downloading.includes(gid))
-                        console.log(status==='complete')
                     }
                 })
                 if (count>0){

@@ -19,8 +19,13 @@
       </el-tabs>
 
     </el-header>
-    <el-main v-loading="!show">
-      <router-view v-if="show" />
+    <el-main v-loading="!show"
+             :element-loading-spinner="svg"
+             element-loading-background="rgba(0, 0, 0, 0.8)"
+             element-loading-svg-view-box="-10, -10, 50, 50"
+             element-loading-text="加载中..."
+    >
+      <router-view  />
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -42,7 +47,9 @@ export default {
   },
   computed: {
     ...mapState("Artworks", [`artworks`]),
+    ...mapState("Loading", [`svg`]),
   },
+
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
     ...mapMutations("Artworks", [`delTab`, `addTab`]),
@@ -86,20 +93,19 @@ export default {
       pid = Number(pid)
       if (this.artworks.map(i => i.id).includes(pid)) {
         //pid已经存在
-        this.currentTab = pid;
         this.routeToPid(pid)
-        this.show = true
       } else {
         //pid不存在 请求
         this.show = false;
         this.getIllustInfo({pid}).then(res => {
           this.addTab(res)
-          this.currentTab = pid;
-          this.show = true;
+          this.routeToPid(pid)
         }).catch(reason => {
           console.log(reason)
           const {message, status,} = reason
-          ElMessage.error(`${status}: ${message}`)
+          const m = `${status}: ${message}`
+          console.log(m)
+          ElMessage.error(m)
         })
       }
     },
@@ -112,7 +118,9 @@ export default {
       }
     },
     routeToPid(pid){
+      this.currentTab = pid;
       this.$router.push({name: '作品详情', params: {pid}})
+      this.show = true
     }
   },
   mounted() {

@@ -1,10 +1,34 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-main>
+    <el-main v-if="data">
       <el-container>
         <el-main id="预览图片">
+          <el-container direction="vertical">
+            <el-main>
+              <div v-if="data.counts.page>1" id="预览区" style="text-align: left">
+                <el-image
+                    v-for="(item,i) in thumbsList"
+                    :initial-index="i"
+                    :preview-src-list="[item]"
+                    :src="item"
+                    fit="cover"
+                    hide-on-click-modal
+                    style="width: 80px; height: 80px"
+                    @load="loadSingleThumbs"
+                    @error="loadSingleThumbs"
+                />
+              </div>
+              <div id="图片区">
+                <!--                todo-->
+                <el-image :initial-index="1" :preview-src-list="original" :src="config.domain+data.urls.regular" hide-on-click-modal />
+              </div>
+              <div id="评论区">
+                <!--                todo-->
+              </div>
 
+            </el-main>
+          </el-container>
         </el-main>
         <el-aside id="信息">
           <div id="作者信息">
@@ -37,7 +61,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
 
@@ -47,10 +71,15 @@ export default {
 
   data() {
     return {
-      data: {},
+      data: undefined,
+      thumbs: [],
+      thumbsList: [],
+      original: [],
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Config", [`config`])
+  },
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
     ...mapActions("Aria2", [`addQuery`, `addFirst`]),
@@ -62,11 +91,27 @@ export default {
         this.addFirst()
       })
     },
+    loadSingleThumbs(){
+      let i = this.thumbsList.length;
+      if (i<this.thumbs.length){
+        this.thumbsList.push(this.thumbs[i])
+      }
+    },
     load(route) {
       const pid = Number(route.params.pid)
       this.getIllustInfo({pid}).then(res => {
         console.log(res)
         this.data = res
+
+        this.thumbs = [];
+        this.thumbsList = [];
+        this.original = [];
+        const domain = this.config.domain;
+        for (let i = 0; i < res.counts.page; i++) {
+          this.thumbs.push(domain + res.urls.small.replace("_p0", `_p${i}`))
+          this.original.push(domain + res.urls.original.replace("_p0", `_p${i}`))
+        }
+        this.loadSingleThumbs()
       }).catch(reason => {
         console.log(reason)
         const {message, status,} = reason
