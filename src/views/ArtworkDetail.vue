@@ -157,6 +157,22 @@ export default {
         this.thumbsList.push(this.thumbs[i])
       }
     },
+    loadAuthorInfo(uid){
+      this.getUserInfo({uid}).then(res=>{
+        this.author = res;
+      }).catch(reason => {
+        console.log(reason)
+        const {message, status,} = reason
+        const m = `${status}: ${message}`
+        console.log(m)
+        if (message.startsWith('timeout of')){
+          ElMessage.info("作者信息请求超时，稍后重试")
+          setTimeout(()=>this.loadAuthorInfo(uid),3000)
+        }else{
+          ElMessage.error(m)
+        }
+      })
+    },
     load(route) {
       const pid = Number(route.params.pid)
       this.author = undefined;
@@ -179,10 +195,8 @@ export default {
           this.original.push(domain + res.urls.original.replace("_p0", `_p${i}`))
         }
         this.loadSingleThumbs()
+        this.loadAuthorInfo(res.authorId)
 
-        this.getUserInfo({uid:res.authorId}).then(res=>{
-          this.author = res;
-        })
       }).catch(reason => {
         console.log(reason)
         const {message, status,} = reason
