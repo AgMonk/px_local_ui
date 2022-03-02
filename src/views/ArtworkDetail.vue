@@ -70,6 +70,7 @@
                   <user-avatar :size="40" :uid="author.id" />
                 </template>
                 <user-link :size="25" :uid="author.id" />
+                <user-follow-button :user="author" style="margin-left: 5px" />
               </el-descriptions-item>
 
             </el-descriptions>
@@ -111,14 +112,14 @@ import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
 import {Lock} from '@element-plus/icons-vue';
 import {getRootComment} from "@/assets/js/request/comment";
-import {getUserInfo} from "@/assets/js/request/user";
 import IllustComment from "@/components/illust/IllustComment";
 import UserAvatar from "@/components/user/UserAvatar";
 import UserLink from "@/components/user/UserLink";
+import UserFollowButton from "@/components/user/UserFollowButton";
 
 export default {
   name: "ArtworkDetail",
-  components: {UserLink, UserAvatar, IllustComment, MyCopyButton, Lock},
+  components: {UserFollowButton, UserLink, UserAvatar, IllustComment, MyCopyButton, Lock},
   data() {
     return {
       data: undefined,

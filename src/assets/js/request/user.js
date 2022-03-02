@@ -1,6 +1,6 @@
 // 用户
 
-import {pixivGetRequest} from "@/assets/js/request/request";
+import {pixivGetRequest, pixivPostWithFormDataRequest} from "@/assets/js/request/request";
 import {replacePrefix} from "@/assets/js/request/illust";
 
 export const getUserInfo = (uid)=>{
@@ -19,12 +19,42 @@ export const getUserInfo = (uid)=>{
             const url = social[name].url
             links.push({name,url})
         })
-        links.sort((a,b)=>a.name.localeCompare(b.name))
+        links.sort((a, b) => a.name.localeCompare(b.name))
         return {
-            avatar:replacePrefix(imageBig),
-            avatar2:replacePrefix(image),
-            id:Number(userId),
-            isFollowed,name,comment,following,links,
+            avatar: replacePrefix(imageBig),
+            avatar2: replacePrefix(image),
+            id: Number(userId),
+            isFollowed, name, comment, following, links,
+        }
+    })
+}
+
+export const follow = (uid, token) => {
+    return pixivPostWithFormDataRequest({
+        url: '/bookmark_add.php',
+        data: {
+            mode: "add",
+            type: "user",
+            user_id: uid,
+            tag: "",
+            restrict: 0,
+            format: "json",
+        },
+        headers: {
+            'x-csrf-token': token,
+        }
+    })
+}
+export const unfollow = (uid, token) => {
+    return pixivPostWithFormDataRequest({
+        url: '/rpc_group_setting.php',
+        data: {
+            mode: "del",
+            type: "bookuser",
+            id: uid,
+        },
+        headers: {
+            'x-csrf-token': token,
         }
     })
 }
