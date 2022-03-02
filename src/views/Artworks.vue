@@ -105,7 +105,12 @@ export default {
           const {message, status,} = reason
           const m = `${status}: ${message}`
           console.log(m)
-          ElMessage.error(m)
+          if (message.startsWith('timeout of')){
+            ElMessage.info("请求超时，稍后重试")
+            setTimeout(()=>this.getInfo(pid),5000)
+          }else{
+            ElMessage.error(m)
+          }
         })
       }
     },

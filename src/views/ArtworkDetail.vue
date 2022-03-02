@@ -15,16 +15,36 @@
                     fit="cover"
                     hide-on-click-modal
                     style="width: 80px; height: 80px"
-                    @load="loadSingleThumbs"
                     @error="loadSingleThumbs"
+                    @load="loadSingleThumbs"
                 />
               </div>
               <div id="图片区">
-                <!--                todo-->
                 <el-image :initial-index="1" :preview-src-list="original" :src="config.domain+data.urls.regular" hide-on-click-modal />
               </div>
-              <div id="评论区">
+
+              <div v-if="data.tags && data.tags.length>0" id="标签区" style="text-align: left">
+                <el-divider content-position="left">标签</el-divider>
+                <span v-for="tag in data.tags">
+                  <el-tag size="small" style="padding: 0 2px;">
+                    <el-icon v-if="tag.locked">
+                      <lock />
+                    </el-icon>
+                    {{ tag.tag }}
+                  </el-tag>
+                  <span style="color:hsla(0,0%,100%,.39)">{{ tag.translation }}</span>
+                </span>
+              </div>
+              <!--              v-infinite-scroll="loadComments" -->
+              <!--              infinite-scroll-disabled="!comments.hasNext"-->
+              <div id="评论区" v-loading="comments.loading">
+                <el-divider content-position="left">评论区</el-divider>
                 <!--                todo-->
+
+                <el-row style="color:white">
+                  <el-col v-if="!comments.hasNext">没有了</el-col>
+                  <el-col v-else>加载中...</el-col>
+                </el-row>
               </div>
 
             </el-main>
@@ -36,6 +56,7 @@
           </div>
           <div id="作品信息">
             <el-descriptions :column="1" border>
+              <el-descriptions-item label="标题">{{ data.title }}</el-descriptions-item>
               <el-descriptions-item label="pid">
                 <my-copy-button :text="data.id">{{ data.id }}</my-copy-button>
                 <my-copy-button :text="`https://www.pixiv.net/artworks/${data.id}`">地址</my-copy-button>
@@ -52,6 +73,9 @@
               </el-descriptions-item>
             </el-descriptions>
           </div>
+          <div id="描述区">
+            {{ data.description }}
+          </div>
         </el-aside>
       </el-container>
     </el-main>
@@ -64,17 +88,24 @@
 import {mapActions, mapState} from "vuex";
 import {ElMessage} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
+import {Lock} from '@element-plus/icons-vue';
+import {getRootComment} from "@/assets/js/request/comment";
 
 export default {
   name: "ArtworkDetail",
-  components: {MyCopyButton},
-
+  components: {MyCopyButton, Lock},
   data() {
     return {
       data: undefined,
       thumbs: [],
       thumbsList: [],
       original: [],
+      comments: {
+        loading:false,
+        offset: 0,
+        data: [],
+        hasNext: true,
+      },
     }
   },
   computed: {
@@ -91,9 +122,9 @@ export default {
         this.addFirst()
       })
     },
-    loadSingleThumbs(){
+    loadSingleThumbs() {
       let i = this.thumbsList.length;
-      if (i<this.thumbs.length){
+      if (i < this.thumbs.length) {
         this.thumbsList.push(this.thumbs[i])
       }
     },
@@ -112,10 +143,25 @@ export default {
           this.original.push(domain + res.urls.original.replace("_p0", `_p${i}`))
         }
         this.loadSingleThumbs()
+        this.loadComments()
       }).catch(reason => {
         console.log(reason)
         const {message, status,} = reason
         ElMessage.error(`${status}: ${message}`)
+      })
+    },
+    loadComments() {
+      this.comments.loading=true
+      getRootComment({pid: this.data.id, offset: this.comments.offset}).then(res => {
+        const {comments, hasNext} = res
+        this.comments.hasNext = hasNext
+        this.comments.data.push(...comments)
+        this.comments.offset+=50;
+        this.comments.loading=false
+        console.log(this.comments)
+      }).catch(reason=>{
+        console.log(reason)
+        this.comments.loading=false
       })
     },
   },
