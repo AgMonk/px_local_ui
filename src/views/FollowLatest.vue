@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import {getFollowLatest} from "@/assets/js/request/follow-latest";
 import {setTitle} from "@/assets/js/request/request";
+import {mapActions} from "vuex";
 
 export default {
   name: "FollowLatest",
@@ -20,10 +20,12 @@ export default {
     return {}
   },
   computed: {},
-  methods: {},
+  methods: {
+    ...mapActions("FollowLatest", [`getFollowLatest`]),
+  },
   mounted() {
     setTitle("关注作品")
-    getFollowLatest(1).then(res => {
+    this.getFollowLatest({page: 1}).then(res => {
       console.log(res)
     })
   },
