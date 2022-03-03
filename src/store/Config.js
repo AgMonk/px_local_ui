@@ -9,6 +9,7 @@ export default {
     state: {
         accounts: [],
         config: {
+            uid: "",
             token: "",
             //图片服务器
             domain: "/pxre",
@@ -23,6 +24,9 @@ export default {
         },
         setAccounts(state, {cookies, token}) {
             setCookies(cookies, 30, "/pixiv-net")
+            const pattern = /PHPSESSID=(\d+)/
+            const group = pattern.exec(cookies)
+            state.config.uid = Number(group[1]);
             state.config.token = token;
             putCache("config", state.config)
         },

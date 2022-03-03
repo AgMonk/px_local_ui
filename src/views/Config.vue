@@ -4,7 +4,7 @@
     <el-header>
     </el-header>
     <el-main>
-      <el-descriptions :column="1" border>
+      <el-descriptions :column="2" border>
         <el-descriptions-item label="设置Cooke和Token">
           <el-button type="primary" @click="openDialogCookie">设置Cooke和Token</el-button>
         </el-descriptions-item>
@@ -60,7 +60,7 @@ export default {
     ...mapMutations('Config', [`setAccounts`, `setConfig`]),
     openDialogCookie() {
       this.dialogShow.cookie = true
-      this.$refs['token-input'].focus()
+      setTimeout(() => this.$refs['token-input'].focus(), 500)
     }
   },
   mounted() {
