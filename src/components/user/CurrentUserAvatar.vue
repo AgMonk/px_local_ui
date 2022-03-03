@@ -42,6 +42,8 @@ export default {
             {name: "我的收藏", route: {/*todo*/}},
             {name: "配置", route: {name: "配置"}},
           ]
+        }).catch(() => {
+          setTimeout(() => this.load(config), 3000)
         })
       }
     },
