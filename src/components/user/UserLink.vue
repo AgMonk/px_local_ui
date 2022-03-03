@@ -2,9 +2,9 @@
   <el-tooltip>
     <!--    todo 用户作品链接-->
     <!--    <router-link :to="`/user/${uid}/illust/1`">-->
-    <el-link :type="type" :style="`font-size: ${size}px;`">
-        {{ name }}
-      </el-link>
+    <el-link :style="`font-size: ${size}px;`" :type="type" :underline="false">
+      {{ name }}
+    </el-link>
     <!--    </router-link>-->
     <template #content>
       <el-link type="primary" :href="`https://www.pixiv.net/users/${uid}/artworks`" target="_blank">
