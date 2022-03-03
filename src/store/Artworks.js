@@ -67,11 +67,11 @@ export default {
                 return new Promise((r) => r(data))
             }
             return getIllustInfo(pid).then(res => {
-                const {illust, author, extraIllusts} = res
+                const {illust, author, userIllusts} = res
                 console.log(res)
 
                 commit("saveInfo2Cache", {key, value: {time: now, data: illust}});
-                extraIllusts.forEach(i => commit("saveInfo2Cache", {key: `${i.id}`, value: {time: now, data: i}}))
+                userIllusts.forEach(i => commit("saveInfo2Cache", {key: `${i.id}`, value: {time: now, data: i}}))
 
                 commit('User/saveInfo2Cache',author,{root:true})
 

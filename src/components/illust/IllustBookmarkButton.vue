@@ -1,11 +1,11 @@
 <template>
-  <el-icon v-if="loading" :size="size">
+  <el-icon v-if="loading" :color="clockColor" :size="size">
     <alarm-clock />
   </el-icon>
   <el-icon v-else-if="bookmarked" :size="size" class="clickable" color="red" @click="del">
     <star-filled />
   </el-icon>
-  <el-icon v-else :size="size" class="clickable" @click="add">
+  <el-icon v-else :color="starColor" :size="size" class="clickable" @click="add">
     <star />
   </el-icon>
 </template>
@@ -76,6 +76,8 @@ export default {
     bmkData: {},
     pid: {type: Number, required: true},
     size: {type: Number, default: 30},
+    starColor: {type: String, default: 'black'},
+    clockColor: {type: String, default: 'black'},
   },
 }
 

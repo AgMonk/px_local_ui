@@ -30,9 +30,6 @@
   color: #42b983;
 }
 
-#app{
-  background-color: #2c3e50;
-}
 
 </style>
 <script>
