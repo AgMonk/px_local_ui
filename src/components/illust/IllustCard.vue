@@ -8,13 +8,17 @@
                     style="border-radius:15px"
                     @error="avatarLoad"
                     @load="avatarLoad"
+                    lazy
           />
         </illust-link>
-        <el-tag v-if="isR_18" effect="dark" style="position: absolute; top: 0; left: 0;padding: 0 2px;" type="danger">R-18</el-tag>
-        <span class="b1" style="position: absolute; top: 120px ; right: 0;border-radius:15px">
+        <!--        r-18标记-->
+        <el-tag v-if="loadCompleted&&isR_18" effect="dark" style="position: absolute; top: 0; left: 0;padding: 0 2px;" type="danger">R-18</el-tag>
+        <!--        收藏按钮-->
+        <span v-if="loadCompleted" class="b1" style="position: absolute; top: 120px ; right: 0;border-radius:15px">
           <illust-bookmark-button :bmk-data="illust.bmkData" :pid="illust.id" clock-color="white" star-color="white" />
         </span>
-        <span v-if="page>1" class="b1" style="color:white;position: absolute; top: 0; right: 0;border-radius:10px">
+        <!--        图片数量-->
+        <span v-if="loadCompleted&&page>1" class="b1" style="color:white;position: absolute; top: 0; right: 0;border-radius:10px">
           <el-icon>
             <document-copy />
           </el-icon>
@@ -60,6 +64,7 @@ export default {
       isR_18: false,
       bookmark: undefined,
       page: undefined,
+      loadCompleted: false,
     }
   },
   emits: ['image-load'],
@@ -69,9 +74,11 @@ export default {
   },
   methods: {
     avatarLoad() {
+      this.loadCompleted = true
       this.$emit("image-load", this.illust.id)
     },
     load(pid) {
+      this.loadCompleted = false
       this.illust = this.cache[`${pid}`].data
       const {tags, counts} = this.illust
       this.isR_18 = tags.map(i => i.tag).includes("R-18") || tags.map(i => i.tag).includes("r-18")

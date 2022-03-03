@@ -15,7 +15,9 @@
       <el-button size="small" type="primary" @click="load($route,true)">刷新</el-button>
     </el-header>
     <el-main style="text-align: left">
-      <illust-card v-for="pid in pidShow" :pid="pid" @image-load="move" />
+      <el-scrollbar height="621px">
+        <illust-card v-for="pid in pidShow" :pid="pid" @image-load="move" />
+      </el-scrollbar>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
