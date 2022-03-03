@@ -19,26 +19,27 @@ export const getIllustInfo = (pid) => {
 }
 
 //解析作者信息
-const parseAuthorInfo = (body) => {
-    const {userId, userName, userIllusts, fanboxPromotion} = body
+export const parseAuthorInfo = (body) => {
+    const {userId, userName, userIllusts, fanboxPromotion, profileImageUrl} = body
 
     return {
         id: Number(userId),
         name: userName.split("@")[0],
         illusts: Object.keys(userIllusts).map(i => Number(i)).reverse(),
         hasFanbox: !!fanboxPromotion,
+        avatar: profileImageUrl ? replacePrefix(profileImageUrl) : undefined,
     }
 }
 //解析作品信息
-const parseIllustInfo = (body, level = '详情') => {
+export const parseIllustInfo = (body, level = '详情') => {
     const {
-        id, title, description,width,height, illustType,userId
+        id, title, description, width, height, illustType, userId
         , createDate, uploadDate, urls
         , pageCount, bookmarkCount, likeCount, commentCount, responseCount, viewCount
-        , bookmarkData,url
+        , bookmarkData, url
     } = body
 
-    const illust = {id:Number(id), title, description,width,height,level,authorId:Number(userId)}
+    const illust = {id: Number(id), title, description, width, height, level, authorId: Number(userId)}
 
     if (level === '详情') {
         const tagList = body.tags.tags
