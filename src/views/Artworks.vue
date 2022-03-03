@@ -136,6 +136,11 @@ export default {
     this.load(this.$route)
   },
   watch: {
+    $route(to) {
+      if (to.name === '作品详情' || to.name === '作品详情组') {
+        this.load(to)
+      }
+    }
   },
   props: {},
 }
