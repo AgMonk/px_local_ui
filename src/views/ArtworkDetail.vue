@@ -75,11 +75,11 @@
 
             </el-descriptions>
           </div>
-          <div id="作品信息">
+          <div v-if="data" id="作品信息">
             <el-descriptions :column="1" border>
               <el-descriptions-item label="标题">{{ data.title }}</el-descriptions-item>
               <el-descriptions-item label="操作">
-                <illust-bookmark-button :bmk-data="data.bmkData" />
+                <illust-bookmark-button :bmk-data="data.bmkData" :pid="data.id" />
 
               </el-descriptions-item>
               <el-descriptions-item label="pid">

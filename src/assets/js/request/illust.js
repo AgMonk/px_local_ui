@@ -1,4 +1,4 @@
-import {pixivGetRequest} from "@/assets/js/request/request";
+import {pixivGetRequest, pixivPostRequest, pixivPostWithFormDataRequest} from "@/assets/js/request/request";
 
 
 export const getIllustInfo = (pid) => {
@@ -97,4 +97,38 @@ const parseIllustInfo = (body, level = '详情') => {
     return illust
 }
 
-export const replacePrefix = (s) =>s?s.replace("https://i.pximg.net", ''):undefined
+export const replacePrefix = (s) => s ? s.replace("https://i.pximg.net", '') : undefined
+
+export const bookmarkDel = (id, token) => {
+    return pixivPostWithFormDataRequest({
+        url: '/rpc/index.php',
+        data: {
+            mode: 'delete_illust_bookmark',
+            bookmark_id: id
+        },
+        headers: {
+            'x-csrf-token': token,
+        }
+    })
+}
+
+export const bookmarkAdd = (pid, token) => {
+    return pixivPostRequest({
+        url: '/ajax/illusts/bookmarks/add',
+        data: {
+            illust_id: pid,
+            restrict: 0,
+            comment: '',
+            tags: []
+        },
+        headers: {
+            'x-csrf-token': token,
+        }
+    }).then(res => {
+        const {last_bookmark_id, stacc_status_id} = res.body
+        return {
+            bookmarkId: last_bookmark_id,
+            statusId: stacc_status_id,
+        }
+    })
+}
