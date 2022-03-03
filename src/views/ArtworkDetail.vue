@@ -122,6 +122,7 @@ import UserAvatar from "@/components/user/UserAvatar";
 import UserLink from "@/components/user/UserLink";
 import UserFollowButton from "@/components/user/UserFollowButton";
 import IllustBookmarkButton from "@/components/illust/IllustBookmarkButton";
+import {autoRetry} from "@/assets/js/utils/RequestUtils";
 
 export default {
   name: "ArtworkDetail",
@@ -165,20 +166,9 @@ export default {
       }
     },
     loadAuthorInfo(uid){
-      this.getUserInfo({uid}).then(res=>{
+      this.getUserInfo({uid}).then(res => {
         this.author = res;
-      }).catch(reason => {
-        console.log(reason)
-        const {message, status,} = reason
-        const m = `${status}: ${message}`
-        console.log(m)
-        if (message.startsWith('timeout of')){
-          ElMessage.info("作者信息请求超时，稍后重试")
-          setTimeout(()=>this.loadAuthorInfo(uid),3000)
-        }else{
-          ElMessage.error(m)
-        }
-      })
+      }).catch(reason => autoRetry(reason, () => this.loadAuthorInfo(uid)))
     },
     load(route) {
       const pid = Number(route.params.pid)

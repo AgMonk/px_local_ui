@@ -17,6 +17,10 @@ const routes = [
     },
     {
         path: '/follow-latest',
+        redirect: "/follow-latest/1",
+    },
+    {
+        path: '/follow-latest/:page',
         name: '关注作品',
         component: FollowLatest
     },

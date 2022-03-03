@@ -36,6 +36,7 @@
 import {mapActions, mapMutations, mapState} from "vuex";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {setTitle} from "@/assets/js/request/request";
+import {autoRetry} from "@/assets/js/utils/RequestUtils";
 
 export default {
   name: "Artworks",
@@ -100,18 +101,8 @@ export default {
         this.getIllustInfo({pid}).then(res => {
           this.addTab(res)
           this.routeToPid(pid)
-        }).catch(reason => {
-          console.log(reason)
-          const {message, status,} = reason
-          const m = `${status}: ${message}`
-          console.log(m)
-          if (message.startsWith('timeout of')){
-            ElMessage.info("请求超时，稍后重试")
-            setTimeout(()=>this.getInfo(pid),5000)
-          }else{
-            ElMessage.error(m)
-          }
         })
+            .catch(reason => autoRetry(reason, () => this.getInfo(pid)))
       }
     },
     load(route) {
