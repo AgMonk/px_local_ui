@@ -2,7 +2,7 @@
   <el-icon v-if="loading" :size="size">
     <alarm-clock />
   </el-icon>
-  <el-icon v-else-if="bookmarked" :size="size" class="clickable" color="red">
+  <el-icon v-else-if="bookmarked" :size="size" class="clickable" color="red" @click="del">
     <star-filled />
   </el-icon>
   <el-icon v-else :size="size" class="clickable" @click="add">
@@ -28,9 +28,9 @@ export default {
     ...mapState("Config", [`config`]),
   },
   methods: {
-    ...mapActions("Artworks", [`bookmarkAdd`]),
+    ...mapActions("Artworks", [`bookmarkAdd`, `bookmarkDel`]),
     update(o) {
-      this.bookmarked = o && o.id;
+      this.bookmarked = o ? o.id : undefined;
     },
     add() {
       this.loading = true;
@@ -51,6 +51,18 @@ export default {
         }
       })
     },
+    del() {
+      this.loading = true;
+      this.bookmarkDel({pid: this.pid, id: this.bookmarked, token: this.config.token}).then(() => {
+        ElMessage.success("取消收藏成功")
+        this.bookmarked = undefined
+        this.loading = false;
+      }).catch(reason => {
+        const {status, message} = reason
+        ElMessage.error(`${status}: ${message}`)
+        this.loading = false;
+      })
+    }
   },
   mounted() {
     this.update(this.bmkData)

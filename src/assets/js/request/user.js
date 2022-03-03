@@ -24,7 +24,7 @@ export const getUserInfo = (uid)=>{
             avatar: replacePrefix(imageBig),
             avatar2: replacePrefix(image),
             id: Number(userId),
-            isFollowed, name, comment, following, links,
+            isFollowed, name: name.split("@")[0], comment, following, links,
         }
     })
 }

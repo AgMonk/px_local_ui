@@ -24,7 +24,7 @@ const parseAuthorInfo = (body) => {
 
     return {
         id: Number(userId),
-        name: userName,
+        name: userName.split("@")[0],
         illusts: Object.keys(userIllusts).map(i => Number(i)).reverse(),
         hasFanbox: !!fanboxPromotion,
     }

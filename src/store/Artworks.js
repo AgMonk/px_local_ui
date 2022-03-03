@@ -1,8 +1,9 @@
 // 作品详情
 // noinspection JSUnusedLocalSymbols
 
-import {bookmarkAdd, getIllustInfo} from "@/assets/js/request/illust";
+import {bookmarkAdd, bookmarkDel, getIllustInfo} from "@/assets/js/request/illust";
 import {copyObj} from "@/assets/js/utils/ObjUtils";
+import {ElMessage} from "element-plus";
 
 export default {
     namespaced: true,
@@ -35,17 +36,25 @@ export default {
         bookmarkAdd: ({dispatch, commit, state}, {pid, token}) => {
             return bookmarkAdd(pid, token).then(res => {
                 const {bookmarkId, statusId} = res
-                console.log(copyObj(state.cache[`${pid}`].data))
                 state.cache[`${pid}`].data.bmkData = {
                     id: bookmarkId,
                     private: false
                 }
-                console.log(copyObj(state.cache[`${pid}`].data))
                 return bookmarkId;
             })
         },
-        bookmarkDel: ({dispatch, commit, state}, payload) => {
-
+        bookmarkDel: ({dispatch, commit, state}, {pid, id, token}) => {
+            return bookmarkDel(id, token).then(res => {
+                delete state.cache[`${pid}`].data.bmkData
+            }).catch(reason => {
+                const {status, message} = reason
+                if (status === 404) {
+                    ElMessage.error(`${status}: ${message}`)
+                    delete state.cache[`${pid}`].data.bmkData
+                } else {
+                    throw reason
+                }
+            })
         },
         getIllustInfo: ({dispatch, commit, state}, {pid, force, levels = ['详情']}) => {
             const now = new Date().getTimeSeconds();

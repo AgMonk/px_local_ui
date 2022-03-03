@@ -28,9 +28,9 @@ const parseComment = (body)=>{
     const comments = body.comments.map(item =>{
         const {comment,commentDate,hasReplies,id,img,userId,userName,stampId} = item
         const author = {
-            id:Number(userId),
-            name:userName,
-            avatar:replacePrefix(img)
+            id: Number(userId),
+            name: userName.split("@")[0],
+            avatar: replacePrefix(img)
         }
         const data ={
             // url("https://s.pximg.net/common/images/stamp/generated-stamps/302_s.jpg?20180605")
