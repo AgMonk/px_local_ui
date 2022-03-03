@@ -25,7 +25,8 @@
              element-loading-svg-view-box="-10, -10, 50, 50"
              element-loading-text="加载中..."
     >
-      <router-view v-if="artworks.length>0" />
+      <div v-if="!show" style="height:200px"></div>
+      <router-view v-else />
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -118,8 +119,8 @@ export default {
     },
     routeToPid(pid){
       this.currentTab = pid;
-      this.$router.push({name: '作品详情', params: {pid}})
       this.show = true
+      this.$router.push({name: '作品详情', params: {pid}})
     }
   },
   mounted() {
