@@ -10,7 +10,9 @@
                      :total="655350"
                      layout="prev, pager, next,jumper"
                      @current-change="$router.push({params:{page:$event}})"
+
       />
+      <el-button size="small" type="primary" @click="load($route,true)">刷新</el-button>
     </el-header>
     <el-main style="text-align: left">
       <illust-card v-for="pid in pidShow" :pid="pid" @image-load="move" />
@@ -47,9 +49,11 @@ export default {
       // console.log(e)
       if (this.pidList.length > 0) {
         this.pidShow.push(...this.pidList.splice(0, 1))
+      } else {
+        console.log(this.pidList)
       }
     },
-    load(route) {
+    load(route, force) {
       if (route.name !== '关注作品') {
         return;
       }
@@ -57,13 +61,12 @@ export default {
 
       const page = Number(route.params.page)
       this.page = page;
-      this.getFollowLatest({page}).then(res => {
+      this.getFollowLatest({page, force}).then(res => {
         this.pidShow = [];
-        this.pidList = [];
+        this.pidList = res;
         this.loading = false;
-        this.pidList.push(...res)
-        this.move()
-      }).catch(reason => autoRetry(reason, () => this.load(route)))
+        setTimeout(() => this.move(), 300)
+      }).catch(reason => autoRetry(reason, () => this.load(route, force)))
     }
   },
   mounted() {
