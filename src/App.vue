@@ -4,6 +4,7 @@
       <my-navigation />
     </div>
     <router-view />
+    <current-user-avatar />
   </div>
 </template>
 
@@ -37,9 +38,10 @@
 <script>
 import MyNavigation from "@/components/common/my-navigation";
 import {mapActions, mapMutations} from "vuex";
+import CurrentUserAvatar from "@/components/user/CurrentUserAvatar";
 
 export default {
-  components: {MyNavigation},
+  components: {CurrentUserAvatar, MyNavigation},
   methods: {
     ...mapActions("Aria2", [`checkCompleted`]),
     ...mapMutations("Config", [`loadConfig`])

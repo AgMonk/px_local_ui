@@ -9,7 +9,7 @@ export default {
     state: {
         accounts: [],
         config: {
-            uid: "",
+            uid: 0,
             token: "",
             //图片服务器
             domain: "/pxre",
