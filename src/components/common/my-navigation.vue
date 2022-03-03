@@ -23,7 +23,7 @@ export default {
       routes: [
         {path: '/home', name: '首页'},
         {path: "/artworks", name: "作品"},
-        {path: "/config", name: "配置"},
+        {path: "/follow-latest", name: "关注"},
       ],
       activeIndex: "",
       url: "",

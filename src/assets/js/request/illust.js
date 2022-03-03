@@ -9,12 +9,15 @@ export const getIllustInfo = (pid) => {
         const author = parseAuthorInfo(body)
         const illust = parseIllustInfo(body)
 
+        const data = {illust, author}
         //简略的作品数据
         const {userIllusts} = body
-        const extraIllusts = Object.keys(userIllusts).reverse()
-            .map(i=>userIllusts[i]).filter(i=>!!i).map(i=>parseIllustInfo(i,'简略'))
+        if (userIllusts) {
+            data.userIllusts = Object.keys(userIllusts).reverse()
+                .map(i => userIllusts[i]).filter(i => !!i).map(i => parseIllustInfo(i, '简略'))
+        }
 
-        return {illust, author, extraIllusts}
+        return data
     })
 }
 
@@ -22,19 +25,26 @@ export const getIllustInfo = (pid) => {
 export const parseAuthorInfo = (body) => {
     const {userId, userName, userIllusts, fanboxPromotion, profileImageUrl} = body
 
-    return {
+    const data = {
         id: Number(userId),
         name: userName.split("@")[0],
-        illusts: Object.keys(userIllusts).map(i => Number(i)).reverse(),
-        hasFanbox: !!fanboxPromotion,
-        avatar: profileImageUrl ? replacePrefix(profileImageUrl) : undefined,
+    };
+    if (userIllusts) {
+        data.userIllusts = Object.keys(userIllusts).map(i => Number(i)).reverse()
     }
+    if (profileImageUrl) {
+        data.avatar = replacePrefix(profileImageUrl)
+    }
+    if (body.hasOwnProperty('fanboxPromotion')) {
+        data.hasFanbox = !!fanboxPromotion
+    }
+    return data
 }
 //解析作品信息
 export const parseIllustInfo = (body, level = '详情') => {
     const {
         id, title, description, width, height, illustType, userId
-        , createDate, uploadDate, urls
+        , createDate, uploadDate, urls, updateDate
         , pageCount, bookmarkCount, likeCount, commentCount, responseCount, viewCount
         , bookmarkData, url
     } = body
@@ -54,7 +64,7 @@ export const parseIllustInfo = (body, level = '详情') => {
                 urls[urlsKey] = replacePrefix(urls[urlsKey])
             }
         }
-        if (illustType===2){
+        if (illustType === 2) {
             urls.zip = urls.original
                     .substring(0, urls.original.lastIndexOf('_'))
                     .replace("img-original", "img-zip-ugoira")
@@ -65,11 +75,12 @@ export const parseIllustInfo = (body, level = '详情') => {
 
     if (level === '简略') {
         //处理url
-        if (url){
-            illust.urls={
-                thumb:replacePrefix(url)
+        if (url) {
+            illust.urls = {
+                thumb: replacePrefix(url)
             }
         }
+        illust.tags = body.tags;
     }
 
 
@@ -77,6 +88,7 @@ export const parseIllustInfo = (body, level = '详情') => {
     illust.timestamp = {
         create: new Date(createDate).toDateTime(),
         upload: new Date(uploadDate).toDateTime(),
+        update: new Date(updateDate).toDateTime(),
     }
 
     //处理计数器
@@ -132,4 +144,13 @@ export const bookmarkAdd = (pid, token) => {
             statusId: stacc_status_id,
         }
     })
+}
+
+export const setIfExists = (src, srcKey, {des, desKey, value}) => {
+    des = des ? des : src
+    desKey = desKey ? desKey : srcKey
+    value = value !== undefined ? value : src[srcKey]
+    if (src.hasOwnProperty(srcKey)) {
+        des[desKey] = value;
+    }
 }

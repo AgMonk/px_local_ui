@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Config from "@/views/Config";
 import Artworks from "@/views/Artworks";
 import ArtworkDetail from "@/views/ArtworkDetail";
+import FollowLatest from "@/views/FollowLatest";
 
 const routes = [
     {
@@ -13,6 +14,11 @@ const routes = [
         path: '/home',
         name: '首页',
         component: Home
+    },
+    {
+        path: '/follow-latest',
+        name: '关注作品',
+        component: FollowLatest
     },
     {
         path: '/config',
