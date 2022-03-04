@@ -4,3 +4,11 @@ export const getTypeOf = function (obj) {
 }
 
 export const copyObj = (obj) => JSON.parse(JSON.stringify(obj))
+
+
+//根据Id字段去重
+export const distinctById = (array) => {
+    const map = {}
+    array.forEach(i => map[i.id] = i)
+    return Object.keys(map).map(i => map[i])
+}
