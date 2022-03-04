@@ -14,6 +14,11 @@
             <el-radio-button label="/pxre">pixiv.re</el-radio-button>
           </el-radio-group>
         </el-descriptions-item>
+        <el-descriptions-item label="卡片缓存详情">
+          <el-tooltip content="显示作品卡片时，缓存该作品的详细信息，这会在卡片上显示作品的收藏数、加速作品详情页的访问速度，但是也会减慢卡片的加载速度" effect="light">
+            <el-switch v-model="form.detail" active-text="是" inactive-color="red" inactive-text="否" inline-prompt @change="setConfig({key:'detail',value:$event})" />
+          </el-tooltip>
+        </el-descriptions-item>
       </el-descriptions>
       <el-dialog v-model="dialogShow.cookie" close-on-click-modal title="设置Cooke和Token">
         <el-form>
@@ -50,6 +55,7 @@ export default {
           token: "",
         },
         domain: "",
+        detail: false,
       }
     }
   },
@@ -66,6 +72,7 @@ export default {
   mounted() {
     setTitle("配置")
     this.form.domain = this.config.domain;
+    this.form.detail = this.config.detail;
   },
   watch: {},
   props: {},
