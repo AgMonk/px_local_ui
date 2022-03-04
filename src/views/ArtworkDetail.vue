@@ -91,27 +91,30 @@
           <div v-else v-loading="!author" style="height:50px"></div>
           <div v-if="data" id="作品信息">
             <el-descriptions :column="1" border>
-              <el-descriptions-item label="标题">{{ data.title }}</el-descriptions-item>
-              <el-descriptions-item label="操作">
+              <el-descriptions-item label="标题" label-class-name="des-label">{{ data.title }}</el-descriptions-item>
+              <el-descriptions-item label="操作" label-class-name="des-label">
                 <illust-bookmark-button :bmk-data="data.bmkData" :pid="data.id" />
 
               </el-descriptions-item>
-              <el-descriptions-item label="pid">
+              <el-descriptions-item label="pid" label-class-name="des-label">
                 <my-copy-button :text="data.id">{{ data.id }}</my-copy-button>
                 <my-copy-button :text="`https://www.pixiv.net/artworks/${data.id}`">地址</my-copy-button>
               </el-descriptions-item>
-              <el-descriptions-item v-if="data.timestamp" label="创建时间">{{ data.timestamp.create }}</el-descriptions-item>
-              <el-descriptions-item v-if="data.timestamp&& data.timestamp.create!==data.timestamp.upload" label="上传时间">{{ data.timestamp.upload }}</el-descriptions-item>
-              <el-descriptions-item label="尺寸">{{ data.width }}x{{ data.height }}</el-descriptions-item>
-              <el-descriptions-item v-if="data.counts" label="喜欢">{{ data.counts.like }}</el-descriptions-item>
-              <el-descriptions-item v-if="data.counts" label="浏览">{{ data.counts.view }}</el-descriptions-item>
-              <el-descriptions-item v-if="data.counts" label="收藏">{{ data.counts.bookmark }}
+              <el-descriptions-item v-if="data.timestamp" label="创建时间" label-class-name="des-label">{{ data.timestamp.create }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.timestamp&& data.timestamp.create!==data.timestamp.upload" label="上传时间" label-class-name="des-label">{{
+                  data.timestamp.upload
+                                                                                                                                                    }}
               </el-descriptions-item>
-              <el-descriptions-item v-if="data.counts && data.counts.page>1" label="图片数">{{ data.counts.page }}</el-descriptions-item>
-              <el-descriptions-item label="下载">
+              <el-descriptions-item label="尺寸" label-class-name="des-label">{{ data.width }}x{{ data.height }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts" label="喜欢" label-class-name="des-label">{{ data.counts.like }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts" label="浏览" label-class-name="des-label">{{ data.counts.view }}</el-descriptions-item>
+              <el-descriptions-item v-if="data.counts" label="收藏" label-class-name="des-label">{{ data.counts.bookmark }}
+              </el-descriptions-item>
+              <el-descriptions-item v-if="data.counts && data.counts.page>1" label="图片数" label-class-name="des-label">{{ data.counts.page }}</el-descriptions-item>
+              <el-descriptions-item label="下载" label-class-name="des-label">
                 <el-button type="primary" @click="downloadAll">Aria2下载所有</el-button>
               </el-descriptions-item>
-              <el-descriptions-item label="描述">
+              <el-descriptions-item label="描述" label-class-name="des-label">
                 {{ data.description }}
               </el-descriptions-item>
             </el-descriptions>
@@ -257,4 +260,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

@@ -51,3 +51,7 @@ a {
 .router-link-active {
     text-decoration: none;
 }
+
+.des-label {
+    min-width: 80px
+}
