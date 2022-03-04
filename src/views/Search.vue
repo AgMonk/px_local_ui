@@ -1,5 +1,10 @@
 <template>
-  <el-container direction="vertical">
+  <el-container v-loading="loading"
+                :element-loading-spinner="svg" direction="vertical"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+                element-loading-svg-view-box="-10, -10, 50, 50"
+                element-loading-text="加载中..."
+  >
     <!--  <el-container direction="horizontal">-->
     <el-header>
       <el-form @submit.prevent>
@@ -18,7 +23,16 @@
       </el-form>
     </el-header>
     <el-main>
+      <el-pagination v-model:current-page="page"
+                     :page-size="60"
+                     :total="total"
+                     layout="prev, pager, next,jumper"
+                     @current-change="$router.push({params:{page:$event}})"
 
+      />
+      <el-main style="text-align: left">
+        <illust-card-div ref="card-div" @refresh="load($route, true)" />
+      </el-main>
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -28,32 +42,47 @@
 <script>
 import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
+import {autoRetry} from "@/assets/js/utils/RequestUtils";
+import IllustCardDiv from "@/components/illust/IllustCardDiv";
 
 export default {
   name: "Search",
+  components: {IllustCardDiv},
   data() {
     return {
       keyword: "",
       page: 1,
       savedKeywords: [],
-      scd: "",
-      ecd: "",
+      scd: undefined,
+      ecd: undefined,
+      total: 100,
+      loading: false,
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Loading", [`svg`]),
+    ...mapState("Config", [`config`]),
+
+  },
   methods: {
     ...mapActions('Search', [`getSearchResult`]),
+    ...mapGetters("Artworks", [`getIllustFromCache`]),
     route2Search(keyword, page = 1) {
       this.$router.push({name: "搜索结果", params: {keyword, page}})
     },
     search(keyword = this.keyword, page = 1, force) {
       this.keyword = keyword
-      this.page = page;
-
+      this.page = Number(page);
+      this.loading = true;
       this.getSearchResult({keyword, page, force, scd: this.scd, ecd: this.ecd}).then(res => {
         console.log(res)
-      })
+        this.total = res.total
+        const array = res.illusts.filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
+        this.$refs['card-div'].clear(array)
+        this.loading = false;
+
+      }).catch(reason => autoRetry(reason, () => this.search(keyword, page, force)))
     },
     saveKeyword() {
       ElMessageBox.prompt('保存名称', {}).then(res => {
@@ -71,13 +100,13 @@ export default {
         }
       })
     },
-    load(route) {
+    load(route, force) {
       if (!route.path.startsWith('/search')) {
         return;
       }
       const {keyword, page} = route.params
       if (keyword && page) {
-        this.search(keyword, page)
+        this.search(keyword, page, force)
       }
     },
   },
