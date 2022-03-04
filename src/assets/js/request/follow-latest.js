@@ -1,7 +1,7 @@
 // 关注作品
 
 import {pixivGetRequest} from "@/assets/js/request/request";
-import {parseAuthorInfo, parseIllustInfo} from "@/assets/js/request/illust";
+import {parseSimpleIllustInfo} from "@/assets/js/request/illust";
 
 export const getFollowLatest = (p) => {
     return pixivGetRequest({
@@ -22,17 +22,12 @@ export const getFollowLatest = (p) => {
             tags[tag] = {tag, translation}
         })
 
-        const illustList = illust.map(body => {
-            const author = parseAuthorInfo(body)
-            const illust = parseIllustInfo(body, "简略")
-            illust.tags = illust.tags.map(tag => tags[tag] ? tags[tag] : {tag})
-            return {author, illust}
-        })
+        const illustList = parseSimpleIllustInfo(illust, tags)
         const illusts = illustList.map(i => i.illust)
         const authorMap = {}
         illustList.map(i => i.author).forEach(i => authorMap[i.id] = i)
         const authors = Object.keys(authorMap).map(i => authorMap[i])
 
-        return {authors, illusts}
+        return {tags, authors, illusts}
     })
 }

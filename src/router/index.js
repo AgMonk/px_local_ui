@@ -4,6 +4,7 @@ import Config from "@/views/Config";
 import Artworks from "@/views/Artworks";
 import ArtworkDetail from "@/views/ArtworkDetail";
 import FollowLatest from "@/views/FollowLatest";
+import Search from "@/views/Search";
 
 const routes = [
     {
@@ -15,6 +16,17 @@ const routes = [
         name: '首页',
         component: Home
     },
+    {
+        path: '/search',
+        name: '搜索',
+        component: Search,
+    },
+    {
+        path: '/search/:keyword/:page',
+        name: '搜索结果',
+        component: Search,
+    },
+
     {
         path: '/follow-latest',
         redirect: "/follow-latest/1",

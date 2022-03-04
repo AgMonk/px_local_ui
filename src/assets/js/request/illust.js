@@ -154,3 +154,17 @@ export const setIfExists = (src, srcKey, {des, desKey, value}) => {
         des[desKey] = value;
     }
 }
+
+export const parseSimpleIllustInfo = (array, tagsMap) => {
+    if (!array || array.length === 0) {
+        return []
+    }
+    return array.map(body => {
+        const author = parseAuthorInfo(body)
+        const illust = parseIllustInfo(body, "简略")
+        if (tagsMap) {
+            illust.tags = illust.tags.map(tag => tagsMap[tag] ? tagsMap[tag] : {tag})
+        }
+        return {author, illust}
+    })
+}
