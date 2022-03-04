@@ -19,12 +19,12 @@
           <illust-bookmark-button :bmk-data="illust.bmkData" :pid="illust.id" clock-color="white" star-color="white" />
         </span>
         <!--        图片数量-->
-        <span v-if="loadCompleted&&page>1" class="b1" style="color:white;position: absolute; top: 0; right: 0;border-radius:10px">
+        <el-tag v-if="loadCompleted&&page>1" effect="dark" style="color:white;position: absolute; top: 0; right: 0;border-radius:10px;padding: 0 2px;">
           <el-icon>
             <document-copy />
           </el-icon>
           {{ page }}
-        </span>
+        </el-tag>
         <span v-if="loadCompleted&&bookmark" class="b1" style="color:white;position: absolute; top: 120px; left: 0;border-radius:10px">
           <el-tag effect="dark" style="padding: 0 2px;" type="danger">{{ bookmark }}</el-tag>
         </span>
