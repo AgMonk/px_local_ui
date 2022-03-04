@@ -28,7 +28,7 @@
 <script>
 import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {search} from "@/assets/js/request/search";
+import {mapActions} from "vuex";
 
 export default {
   name: "Search",
@@ -37,18 +37,23 @@ export default {
       keyword: "",
       page: 1,
       savedKeywords: [],
+      scd: "",
+      ecd: "",
     }
   },
   computed: {},
   methods: {
+    ...mapActions('Search', [`getSearchResult`]),
     route2Search(keyword, page = 1) {
       this.$router.push({name: "搜索结果", params: {keyword, page}})
     },
-    search(keyword = this.keyword, page = 1) {
+    search(keyword = this.keyword, page = 1, force) {
       this.keyword = keyword
       this.page = page;
 
-      search(keyword, {page})
+      this.getSearchResult({keyword, page, force, scd: this.scd, ecd: this.ecd}).then(res => {
+        console.log(res)
+      })
     },
     saveKeyword() {
       ElMessageBox.prompt('保存名称', {}).then(res => {
