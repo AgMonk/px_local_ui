@@ -3,7 +3,13 @@
     <div>
       <span><!--todo 时间跨度--></span>
       <el-button size="small" type="primary" @click="$emit('refresh')">刷新</el-button>
-      <el-tag v-if="query.length>0" effect="dark" style="margin-left: 2px" type="primary">队列剩余：{{ query.length }}</el-tag>
+      <span v-if="showDateRange" class="common-text" style="margin-left: 2px">
+        <el-tag effect="dark">{{ maxDate }}</el-tag>
+        ~
+        <el-tag effect="dark">{{ minDate }}</el-tag>
+      </span>
+      <el-tag v-if="query.length>0" effect="dark" style="margin-left: 2px">队列：{{ query.length }}</el-tag>
+
     </div>
     <el-scrollbar height="651px">
       <illust-card v-for="pid in data" :pid="pid" @image-load="thread--;" />
@@ -14,6 +20,7 @@
 
 <script>
 import IllustCard from "@/components/illust/IllustCard";
+import {mapState} from "vuex";
 
 export default {
   name: "IllustCardDiv",
@@ -31,9 +38,13 @@ export default {
       maxThreads: 3,
       //自动加载
       internal: 0,
+      maxDate: "",
+      minDate: "",
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Artworks", [`cache`]),
+  },
   methods: {
     clear(array) {
       this.data = [];
@@ -46,6 +57,12 @@ export default {
     addQuery(array) {
       console.log(`添加作品卡队列 ${array.length} 个`)
       this.query.push(...array)
+
+      //  获取时间跨度
+      const max = Math.max(...this.data, ...this.query)
+      const min = Math.min(...this.data, ...this.query)
+      this.maxDate = this.cache[`${max}`].data.timestamp.create.substring(5, 16)
+      this.minDate = this.cache[`${min}`].data.timestamp.create.substring(5, 16)
     },
   },
   mounted() {
@@ -63,7 +80,9 @@ export default {
     clearInterval(this.internal)
   },
   watch: {},
-  props: {},
+  props: {
+    showDateRange: {type: Boolean, default: true}
+  },
 }
 
 </script>
