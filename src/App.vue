@@ -2,6 +2,10 @@
   <div id="app">
     <div id="nav">
       <my-navigation />
+      <div style="text-align: left;margin:2px 0">
+        <el-button size="small" type="primary" @click="back">&lt;</el-button>
+        <el-button size="small" type="primary" @click="forward">></el-button>
+      </div>
     </div>
     <router-view />
     <current-user-avatar />
@@ -41,11 +45,17 @@ export default {
   components: {CurrentUserAvatar, MyNavigation},
   methods: {
     ...mapActions("Aria2", [`checkCompleted`]),
-    ...mapMutations("Config", [`loadConfig`])
+    ...mapMutations("Config", [`loadConfig`]),
+    back() {
+      history.back();
+    },
+    forward() {
+      history.forward()
+    }
   },
   mounted() {
     setInterval(() => this.checkCompleted(), 30 * 1000)
     this.loadConfig()
-  }
+  },
 }
 </script>

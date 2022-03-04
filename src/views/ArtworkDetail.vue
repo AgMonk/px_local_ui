@@ -19,8 +19,22 @@
                     @load="loadSingleThumbs"
                 />
               </div>
-              <div id="图片区">
-                <el-image :initial-index="1" :preview-src-list="original" :src="config.domain+data.urls.regular" hide-on-click-modal />
+              <div v-show="!loadingThumb" id="图片区">
+                <el-image :initial-index="1"
+                          :preview-src-list="original"
+                          :src="config.domain+data.urls.regular"
+                          hide-on-click-modal
+                          @error="loadingThumb=false"
+                          @load="loadingThumb=false"
+                />
+              </div>
+              <div v-if="loadingThumb" v-loading="loadingThumb" :element-loading-spinner="svg"
+                   element-loading-background="rgba(0, 0, 0, 0.8)"
+                   element-loading-svg-view-box="-10, -10, 50, 50"
+                   element-loading-text="加载中..."
+                   style="height:300px"
+              >
+
               </div>
 
               <div v-if="data.tags && data.tags.length>0" id="标签区" style="text-align: left">
@@ -72,9 +86,9 @@
                 <user-link :size="25" :uid="author.id" />
                 <user-follow-button :user="author" style="margin-left: 5px" />
               </el-descriptions-item>
-
             </el-descriptions>
           </div>
+          <div v-else v-loading="!author" style="height:50px"></div>
           <div v-if="data" id="作品信息">
             <el-descriptions :column="1" border>
               <el-descriptions-item label="标题">{{ data.title }}</el-descriptions-item>
@@ -97,10 +111,13 @@
               <el-descriptions-item label="下载">
                 <el-button type="primary" @click="downloadAll">Aria2下载所有</el-button>
               </el-descriptions-item>
+              <el-descriptions-item label="描述">
+                {{ data.description }}
+              </el-descriptions-item>
             </el-descriptions>
           </div>
           <div id="描述区">
-            {{ data.description }}
+
           </div>
         </el-aside>
       </el-container>
@@ -139,7 +156,8 @@ export default {
         data: [],
         hasNext: true,
       },
-      author:undefined,
+      author: undefined,
+      loadingThumb: true,
     }
   },
   computed: {
@@ -173,6 +191,7 @@ export default {
     load(route) {
       const pid = Number(route.params.pid)
       this.author = undefined;
+      this.loadingThumb = true;
       this.comments = {
         loading: false,
         offset: 0,

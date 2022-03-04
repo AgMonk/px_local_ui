@@ -15,6 +15,8 @@ export default {
             domain: "/pxre",
             //显示作品卡片时，缓存该作品详情（可以显示出收藏数）
             detail: false,
+            //不显示已收藏的卡片（在“我的收藏”页无效）
+            filterBookmarked: false,
         },
     },
     mutations: {
