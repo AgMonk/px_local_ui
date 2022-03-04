@@ -24,7 +24,7 @@ export default {
                 cacheObj: state.cache,
                 key: `关注作品第${page}页`,
                 requestMethod: () => getFollowLatest(page),
-                seconds: 5 * 60,
+                seconds: 10 * 60,
                 force,
             }).then(res => {
                 const {authors, illusts} = res

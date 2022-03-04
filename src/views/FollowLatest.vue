@@ -36,6 +36,10 @@ export default {
   data() {
     return {
       loading: false,
+      step: {
+        current: 0,
+        max: 2,
+      },
       pidShow: [],
       pidList: [],
       page: 1,
@@ -48,11 +52,11 @@ export default {
   methods: {
     ...mapActions("FollowLatest", [`getFollowLatest`]),
     move() {
+      this.step.current++;
       // console.log(e)
-      if (this.pidList.length > 0) {
-        this.pidShow.push(...this.pidList.splice(0, 1))
-      } else {
-        console.log(this.pidList)
+      if (this.pidList.length > 0 && this.step.current === this.step.max) {
+        this.pidShow.push(...this.pidList.splice(0, this.step.max))
+        this.step.current = 0
       }
     },
     load(route, force) {
@@ -67,7 +71,10 @@ export default {
         this.pidShow = [];
         this.pidList = res;
         this.loading = false;
-        setTimeout(() => this.move(), 300)
+        setTimeout(() => {
+          this.step.current = this.step.max - 1
+          this.move()
+        }, 300)
       }).catch(reason => autoRetry(reason, () => this.load(route, force)))
     }
   },
