@@ -59,7 +59,6 @@
                    element-loading-text="加载中..."
               >
                 <el-divider content-position="left">评论区</el-divider>
-                <!--                todo-->
                 <el-scrollbar height="400px">
                   <div v-for="row in comments.data" style="text-align: left">
                     <illust-comment :comment="row" />

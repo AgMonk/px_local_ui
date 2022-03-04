@@ -15,7 +15,9 @@
             保存
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-for="item in savedKeywords" :command="item.keyword">{{ item.label }}</el-dropdown-item>
+                <el-dropdown-item v-for="item in savedKeywords" :command="item.keyword">{{ item.label }}
+                                                                                        <!--                todo 移除搜索-->
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -111,8 +113,12 @@ export default {
       ElMessageBox.prompt('保存名称', {}).then(res => {
         const {value, action} = res
         if (action === 'confirm') {
+          //todo 保存时过滤label相同的快捷搜索
+          //todo 保存后排序
           this.savedKeywords.push({label: value, keyword: this.keyword})
           ElMessage.success("已保存搜索")
+
+          /*todo 保存快捷搜索到config*/
         }
       }).catch(reason => {
         if (reason === 'cancel') {
@@ -137,6 +143,8 @@ export default {
     setTitle("搜索")
     document.getElementById('输入框').focus()
     this.load(this.$route)
+
+    /*todo 从config加载快捷搜索*/
   },
   watch: {
     $route(to) {
