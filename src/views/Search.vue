@@ -24,15 +24,22 @@
     </el-header>
     <el-main>
       <el-pagination v-model:current-page="page"
+                     v-if="searchCount>0"
                      :page-size="60"
                      :total="total"
-                     layout="prev, pager, next,jumper"
+                     layout="prev, pager, next,jumper,total"
                      @current-change="$router.push({params:{page:$event}})"
 
       />
-      <el-main style="text-align: left">
-        <illust-card-div ref="card-div" @refresh="load($route, true)" />
-      </el-main>
+      <div id="相关标签"><!--todo--></div>
+      <div v-if="popularCount>0" id="热门作品" style="text-align: left">
+        <el-divider content-position="left">热门作品</el-divider>
+        <illust-card-div ref="popular-result" :height="207" disable-refresh />
+      </div>
+      <div v-if="searchCount>0" id="搜索结果" style="text-align: left">
+        <el-divider content-position="left">搜索结果</el-divider>
+        <illust-card-div ref="search-result" @refresh="load($route, true)" />
+      </div>
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -58,6 +65,8 @@ export default {
       ecd: undefined,
       total: 100,
       loading: false,
+      popularCount: 0,
+      searchCount: 0,
     }
   },
   computed: {
@@ -75,11 +84,25 @@ export default {
       this.keyword = keyword
       this.page = Number(page);
       this.loading = true;
+      this.searchCount = 1;
+      this.popularCount = 1;
       this.getSearchResult({keyword, page, force, scd: this.scd, ecd: this.ecd}).then(res => {
         console.log(res)
-        this.total = res.total
-        const array = res.illusts.filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
-        this.$refs['card-div'].clear(array)
+        const {popular, relatedTags, total, illusts} = res
+        const {recent, permanent} = popular
+        this.total = total
+        const array = illusts.filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
+        this.searchCount = array.length
+        if (this.searchCount > 0) {
+          this.$refs['search-result'].clear(array)
+        }
+
+        const p = [...recent, ...permanent].filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
+        this.popularCount = p.length;
+        if (this.popularCount > 0) {
+          this.$refs['popular-result'].clear(p)
+        }
+
         this.loading = false;
 
       }).catch(reason => autoRetry(reason, () => this.search(keyword, page, force)))

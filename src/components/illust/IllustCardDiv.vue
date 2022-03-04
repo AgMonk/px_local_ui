@@ -1,8 +1,7 @@
 <template>
   <div>
     <div>
-      <span><!--todo 时间跨度--></span>
-      <el-button size="small" type="primary" @click="$emit('refresh')">刷新</el-button>
+      <el-button v-if="!disableRefresh" size="small" type="primary" @click="$emit('refresh')">刷新</el-button>
       <span v-if="showDateRange && maxDate" class="common-text" style="margin-left: 2px">
         <el-tag effect="dark">{{ maxDate }}</el-tag>
         ~
@@ -11,7 +10,7 @@
       <el-tag v-if="query.length>0" effect="dark" style="margin-left: 2px">队列：{{ query.length }}</el-tag>
 
     </div>
-    <el-scrollbar height="651px">
+    <el-scrollbar :height="`${height}px`">
       <illust-card v-for="pid in data" :pid="pid" @image-load="thread--;" />
     </el-scrollbar>
   </div>
@@ -81,7 +80,9 @@ export default {
   },
   watch: {},
   props: {
-    showDateRange: {type: Boolean, default: true}
+    showDateRange: {type: Boolean, default: true},
+    height: {type: Number, default: 651},
+    disableRefresh: {type: Boolean, default: false},
   },
 }
 

@@ -58,10 +58,15 @@ export default {
     handleTabsEdit(id, action) {
       if (action === 'remove') {
         this.delTab(id)
+        console.log("移除标签 pid = " + id)
         if (this.artworks.length > 0) {
-          this.currentTab = this.artworks[0].id
+          const pidList = this.artworks.map(i => i.id)
+          if (!pidList.includes(this.currentTab)) {
+            this.routeToPid(pidList[0])
+          }
         } else {
-          this.$router.push('/home')
+          const path = this.$route.query.from ? this.$route.query.from : '/home'
+          this.$router.push(path)
         }
       }
       if (action === 'add') {
@@ -120,7 +125,7 @@ export default {
     routeToPid(pid){
       this.currentTab = pid;
       this.show = true
-      this.$router.push({name: '作品详情', params: {pid}})
+      this.$router.push({params: {pid}, query: this.$route.query})
     }
   },
   mounted() {

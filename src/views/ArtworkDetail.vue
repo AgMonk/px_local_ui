@@ -246,6 +246,7 @@ export default {
   },
   mounted() {
     this.load(this.$route)
+    console.log(this.$route)
   },
   watch: {
     $route(to) {

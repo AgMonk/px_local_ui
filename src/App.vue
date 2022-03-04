@@ -5,6 +5,7 @@
       <div style="text-align: left;margin:2px 0">
         <el-button size="small" type="primary" @click="back">&lt;</el-button>
         <el-button size="small" type="primary" @click="forward">></el-button>
+        <el-button v-if="$route.query.from" size="small" type="primary" @click="$router.push($route.query.from)">↑</el-button>
       </div>
     </div>
     <router-view />
