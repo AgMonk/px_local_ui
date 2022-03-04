@@ -50,20 +50,20 @@
                 </span>
               </div>
               <div id="评论区"
+                   v-infinite-scroll="loadComments"
                    v-loading="comments.loading"
                    :element-loading-spinner="svg"
+                   :infinite-scroll-disabled="!comments.hasNext"
                    element-loading-background="rgba(0, 0, 0, 0.8)"
                    element-loading-svg-view-box="-10, -10, 50, 50"
                    element-loading-text="加载中..."
-                   v-infinite-scroll="loadComments"
-                   :infinite-scroll-disabled="!comments.hasNext"
               >
                 <el-divider content-position="left">评论区</el-divider>
                 <!--                todo-->
                 <el-scrollbar height="400px">
-                <div v-for="row in comments.data" style="text-align: left">
-                  <illust-comment :comment="row" />
-                </div>
+                  <div v-for="row in comments.data" style="text-align: left">
+                    <illust-comment :comment="row" />
+                  </div>
                   <el-row style="color:white">
                     <el-col v-if="!comments.hasNext">没有了</el-col>
                     <el-col v-else>加载中...</el-col>
@@ -77,7 +77,7 @@
           </el-container>
         </el-main>
         <el-aside id="信息">
-          <div id="作者信息" v-if="author">
+          <div v-if="author" id="作者信息">
             <el-descriptions :column="1" border>
               <el-descriptions-item>
                 <template #label>
@@ -168,7 +168,7 @@ export default {
     ...mapActions("Artworks", [`getIllustInfo`]),
     ...mapActions("User", [`getUserInfo`]),
     ...mapActions("Aria2", [`addQuery`, `addFirst`]),
-    ...mapMutations("User",[`saveInfo2Cache`]),
+    ...mapMutations("User", [`saveInfo2Cache`]),
     downloadAll() {
       const url = this.data.type === 2 ? this.data.urls.zip : this.data.urls.original
       const count = this.data.counts.page
@@ -183,7 +183,7 @@ export default {
         this.thumbsList.push(this.thumbs[i])
       }
     },
-    loadAuthorInfo(uid){
+    loadAuthorInfo(uid) {
       this.getUserInfo({uid}).then(res => {
         this.author = res;
       }).catch(reason => autoRetry(reason, () => this.loadAuthorInfo(uid)))
@@ -220,7 +220,7 @@ export default {
       })
     },
     loadComments() {
-      if (this.comments.loading){
+      if (this.comments.loading) {
         return
       }
       this.comments.loading = true
@@ -257,5 +257,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

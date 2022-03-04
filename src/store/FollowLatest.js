@@ -30,7 +30,7 @@ export default {
                 const {authors, illusts} = res
                 authors.forEach(author => commit('User/saveInfo2Cache', author, {root: true}))
                 illusts.forEach(i => commit('Artworks/saveInfo2Cache', {key: `${i.id}`, value: {time: now, data: i}}, {root: true}))
-                return illusts.map(i => i.id)
+                return illusts
             })
         },
 

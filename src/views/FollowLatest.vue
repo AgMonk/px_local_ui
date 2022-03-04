@@ -14,7 +14,7 @@
       />
     </el-header>
     <el-main style="text-align: left">
-     <illust-card-div ref="card-div" @refresh="load($route, true)" />
+      <illust-card-div ref="card-div" @refresh="load($route, true)" />
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     ...mapState("Loading", [`svg`]),
-
+    ...mapState("Config", [`config`]),
   },
   methods: {
     ...mapActions("FollowLatest", [`getFollowLatest`]),
@@ -58,7 +58,8 @@ export default {
       const page = Number(route.params.page)
       this.page = page;
       this.getFollowLatest({page, force}).then(res => {
-        this.$refs['card-div'].clear(res)
+        const array = res.filter(item => !this.config.filterBookmarked || !item.bmkData).map(i => i.id);
+        this.$refs['card-div'].clear(array)
         this.loading = false;
       }).catch(reason => autoRetry(reason, () => this.load(route, force)))
     }
