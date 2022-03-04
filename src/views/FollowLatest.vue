@@ -12,12 +12,9 @@
                      @current-change="$router.push({params:{page:$event}})"
 
       />
-      <el-button size="small" type="primary" @click="load($route,true)">刷新</el-button>
     </el-header>
     <el-main style="text-align: left">
-      <el-scrollbar height="651px">
-        <illust-card v-for="pid in pidShow" :pid="pid" @image-load="move" />
-      </el-scrollbar>
+     <illust-card-div ref="card-div" @refresh="load($route, true)" />
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -29,10 +26,11 @@ import {setTitle} from "@/assets/js/request/request";
 import {mapActions, mapState} from "vuex";
 import IllustCard from "@/components/illust/IllustCard";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
+import IllustCardDiv from "@/components/illust/IllustCardDiv";
 
 export default {
   name: "FollowLatest",
-  components: {IllustCard},
+  components: {IllustCardDiv, IllustCard},
   data() {
     return {
       loading: false,
@@ -51,14 +49,6 @@ export default {
   },
   methods: {
     ...mapActions("FollowLatest", [`getFollowLatest`]),
-    move() {
-      this.step.current++;
-      // console.log(e)
-      if (this.pidList.length > 0 && this.step.current === this.step.max) {
-        this.pidShow.push(...this.pidList.splice(0, this.step.max))
-        this.step.current = 0
-      }
-    },
     load(route, force) {
       if (route.name !== '关注作品') {
         return;
@@ -68,13 +58,8 @@ export default {
       const page = Number(route.params.page)
       this.page = page;
       this.getFollowLatest({page, force}).then(res => {
-        this.pidShow = [];
-        this.pidList = res;
+        this.$refs['card-div'].clear(res)
         this.loading = false;
-        setTimeout(() => {
-          this.step.current = this.step.max - 1
-          this.move()
-        }, 300)
       }).catch(reason => autoRetry(reason, () => this.load(route, force)))
     }
   },
