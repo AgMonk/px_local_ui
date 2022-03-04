@@ -25,7 +25,7 @@
           </el-icon>
           {{ page }}
         </span>
-        <span v-if="bookmark" class="b1" style="color:white;position: absolute; top: 120px; left: 0;border-radius:10px">
+        <span v-if="loadCompleted&&bookmark" class="b1" style="color:white;position: absolute; top: 120px; left: 0;border-radius:10px">
           <el-tag effect="dark" style="padding: 0 2px;" type="danger">{{ bookmark }}</el-tag>
         </span>
 
@@ -49,12 +49,13 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import UserAvatar from "@/components/user/UserAvatar";
 import UserLink from "@/components/user/UserLink";
 import IllustBookmarkButton from "@/components/illust/IllustBookmarkButton";
 import IllustLink from "@/components/illust/IllustLink";
 import {DocumentCopy} from "@element-plus/icons-vue";
+import {autoRetry} from "@/assets/js/utils/RequestUtils";
 
 export default {
   name: "IllustCard",
@@ -75,27 +76,42 @@ export default {
     ...mapState("Config", [`config`]),
   },
   methods: {
+    ...mapActions("Artworks", [`getIllustInfo`]),
     avatarLoad() {
-      this.loadCompleted = true
-      this.$emit("image-load", this.illust.id)
+      this.loadCompleted = true;
+      if (this.config.detail) {
+        this.getDetail();
+      } else {
+        this.$emit("image-load", this.illust.id)
+      }
+    },
+    getDetail() {
+      this.getIllustInfo({pid: this.pid}).then(() => {
+        this.load(this.pid)
+        this.$emit("image-load", this.illust.id)
+      }).catch(reason => autoRetry(reason, () => this.getDetail()))
+    },
+    bmk() {
+      const b = this.illust.counts.bookmark
+      if (b) {
+        if (b > 1000) {
+          this.bookmark = Math.floor(b / 100) / 10 + 'k'
+        } else {
+          this.bookmark = b;
+        }
+      }
     },
     load(pid) {
-      this.loadCompleted = false
       this.illust = this.cache[`${pid}`].data
       const {tags, counts, type} = this.illust
       this.isR_18 = tags.map(i => i.tag).includes("R-18") || tags.map(i => i.tag).includes("r-18")
       this.isGif = type === 2
       this.page = counts.page;
-      if (counts.bookmark) {
-        if (counts.bookmark > 1000) {
-          this.bookmark = Math.floor(counts.bookmark / 100) / 10 + 'k'
-        } else {
-          this.bookmark = counts.bookmark;
-        }
-      }
+      this.bmk()
     }
   },
   mounted() {
+    this.loadCompleted = false
     this.load(this.pid)
   },
   watch: {

@@ -13,6 +13,8 @@ export default {
             token: "",
             //图片服务器
             domain: "/pxre",
+            //显示作品卡片时，缓存该作品详情（可以显示出收藏数）
+            detail: false,
         },
     },
     mutations: {
@@ -20,7 +22,7 @@ export default {
 
         },
         loadConfig(state) {
-            state.config = getCache("config")
+            state.config = Object.assign({}, state.config, getCache("config"))
         },
         setAccounts(state, {cookies, token}) {
             setCookies(cookies, 30, "/pixiv-net")

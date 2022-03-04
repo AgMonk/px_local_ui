@@ -35,7 +35,7 @@ export default {
       //当前并行数量
       thread: 0,
       //加载卡片的最大并行数量
-      maxThreads: 3,
+      maxThreads: 2,
       //自动加载
       internal: 0,
       maxDate: "",
