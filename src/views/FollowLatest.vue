@@ -23,7 +23,7 @@
 
 <script>
 import {setTitle} from "@/assets/js/request/request";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import IllustCard from "@/components/illust/IllustCard";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
@@ -48,6 +48,7 @@ export default {
     ...mapState("Config", [`config`]),
   },
   methods: {
+    ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapActions("FollowLatest", [`getFollowLatest`]),
     load(route, force) {
       if (route.name !== '关注作品') {
@@ -58,7 +59,7 @@ export default {
       const page = Number(route.params.page)
       this.page = page;
       this.getFollowLatest({page, force}).then(res => {
-        const array = res.filter(item => !this.config.filterBookmarked || !item.bmkData).map(i => i.id);
+        const array = res.filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
         this.$refs['card-div'].clear(array)
         this.loading = false;
       }).catch(reason => autoRetry(reason, () => this.load(route, force)))

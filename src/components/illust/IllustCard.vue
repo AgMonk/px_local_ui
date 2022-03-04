@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import UserAvatar from "@/components/user/UserAvatar";
 import UserLink from "@/components/user/UserLink";
 import IllustBookmarkButton from "@/components/illust/IllustBookmarkButton";
@@ -72,10 +72,10 @@ export default {
   },
   emits: ['image-load'],
   computed: {
-    ...mapState("Artworks", [`cache`]),
     ...mapState("Config", [`config`]),
   },
   methods: {
+    ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapActions("Artworks", [`getIllustInfo`]),
     avatarLoad() {
       this.loadCompleted = true;
@@ -102,7 +102,7 @@ export default {
       }
     },
     load(pid) {
-      this.illust = this.cache[`${pid}`].data
+      this.illust = this.getIllustFromCache()(pid)
       const {tags, counts, type} = this.illust
       this.isR_18 = tags.map(i => i.tag).includes("R-18") || tags.map(i => i.tag).includes("r-18")
       this.isGif = type === 2

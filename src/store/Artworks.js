@@ -15,8 +15,8 @@ export default {
         method(state, payload) {
 
         },
-        addTab(state, {id,title}) {
-            state.artworks.push({id,title})
+        addTab(state, {id, title}) {
+            state.artworks.push({id, title})
         },
         delTab(state, id) {
             state.artworks = state.artworks.filter(i => i.id !== id)
@@ -73,7 +73,7 @@ export default {
                 commit("saveInfo2Cache", {key, value: {time: now, data: illust}});
                 userIllusts.forEach(i => commit("saveInfo2Cache", {key: `${i.id}`, value: {time: now, data: i}}))
 
-                commit('User/saveInfo2Cache',author,{root:true})
+                commit('User/saveInfo2Cache', author, {root: true})
 
                 // console.log(state.cache)
                 return illust
@@ -82,5 +82,9 @@ export default {
 
 
     },
-    getters: {},
+    getters: {
+        getIllustFromCache: (state) => (pid) => {
+            return state.cache[`${pid}`].data
+        },
+    },
 }

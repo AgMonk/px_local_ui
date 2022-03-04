@@ -3,7 +3,7 @@
     <div>
       <span><!--todo 时间跨度--></span>
       <el-button size="small" type="primary" @click="$emit('refresh')">刷新</el-button>
-      <span v-if="showDateRange" class="common-text" style="margin-left: 2px">
+      <span v-if="showDateRange && maxDate" class="common-text" style="margin-left: 2px">
         <el-tag effect="dark">{{ maxDate }}</el-tag>
         ~
         <el-tag effect="dark">{{ minDate }}</el-tag>
@@ -20,7 +20,7 @@
 
 <script>
 import IllustCard from "@/components/illust/IllustCard";
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   name: "IllustCardDiv",
@@ -43,9 +43,9 @@ export default {
     }
   },
   computed: {
-    ...mapState("Artworks", [`cache`]),
   },
   methods: {
+    ...mapGetters("Artworks", [`getIllustFromCache`]),
     clear(array) {
       this.data = [];
       this.query = [];
@@ -61,8 +61,8 @@ export default {
       //  获取时间跨度
       const max = Math.max(...this.data, ...this.query)
       const min = Math.min(...this.data, ...this.query)
-      this.maxDate = this.cache[`${max}`].data.timestamp.create.substring(5, 16)
-      this.minDate = this.cache[`${min}`].data.timestamp.create.substring(5, 16)
+      this.maxDate = this.getIllustFromCache()(max).timestamp.create.substring(5, 16)
+      this.minDate = this.getIllustFromCache()(min).timestamp.create.substring(5, 16)
     },
   },
   mounted() {
