@@ -11,11 +11,11 @@
         <el-form-item>
           <el-input id="输入框" v-model="keyword" clearable size="small" style="max-width: 70%" @keyup.enter="route2Search(keyword)" />
           <el-button size="small" style="margin-left: 5px" type="primary" @click="route2Search(keyword)">搜索</el-button>
-          <el-dropdown size="small" split-button style="margin-left: 5px" type="primary" @click="saveKeyword" @command="route2Search($event)">
+          <el-dropdown size="small" split-button style="margin-left: 5px" type="primary" @click="addKeyword(keyword)" @command="route2Search($event)">
             保存
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-for="item in savedKeywords" :command="item.keyword">
+                <el-dropdown-item v-for="item in config.search.keywords" :command="item.keyword">
                   <el-tooltip :content="item.keyword" placement="left">
                     <el-tag closable effect="dark" @close="delKeyword(item.label)">{{ item.label }}</el-tag>
                   </el-tooltip>
@@ -35,10 +35,25 @@
                      @current-change="$router.push({params:{page:$event}})"
 
       />
-      <div id="相关标签">
-
+      <div v-if="relatedTags.length>0" v-show="config.search.relatedTags" id="相关标签" style="text-align: left">
+        <el-divider content-position="left">相关标签</el-divider>
+        <el-tag v-for="tag in relatedTags" effect="dark" style="margin-right: 3px">
+          <el-tooltip content="or">
+            <el-icon @click="route2Search(`${keyword} or ${tag}`)">
+              <circle-plus-filled />
+            </el-icon>
+          </el-tooltip>
+          <el-tooltip content="and">
+            <span class="clickable" @click="route2Search(`${keyword} ${tag}`)">{{ tag }}</span>
+          </el-tooltip>
+          <el-tooltip content="替换">
+            <el-icon @click="route2Search(tag)">
+              <d-arrow-right />
+            </el-icon>
+          </el-tooltip>
+        </el-tag>
       </div>
-      <div v-if="popularCount>0" id="热门作品" style="text-align: left">
+      <div v-if="popularCount>0" v-show="config.search.popular" id="热门作品" style="text-align: left">
         <el-divider content-position="left">热门作品</el-divider>
         <illust-card-div ref="popular-result" :height="207" :show-date-range="false" disable-refresh />
       </div>
@@ -54,25 +69,25 @@
 
 <script>
 import {setTitle} from "@/assets/js/request/request";
-import {ElMessage, ElMessageBox} from "element-plus";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import {CirclePlusFilled, DArrowRight} from "@element-plus/icons-vue";
 
 export default {
   name: "Search",
-  components: {IllustCardDiv},
+  components: {IllustCardDiv, CirclePlusFilled, DArrowRight},
   data() {
     return {
       keyword: "",
       page: 1,
-      savedKeywords: [],
       scd: undefined,
       ecd: undefined,
       total: 100,
       loading: false,
       popularCount: 0,
       searchCount: 0,
+      relatedTags: [],
     }
   },
   computed: {
@@ -82,7 +97,7 @@ export default {
   methods: {
     ...mapActions('Search', [`getSearchResult`]),
     ...mapGetters("Artworks", [`getIllustFromCache`]),
-    ...mapMutations('Config', [`setConfig`]),
+    ...mapMutations('Config', [`setConfig`, `addKeyword`, `delKeyword`]),
     route2Search(keyword, page = 1) {
       this.$router.push({name: "搜索结果", params: {keyword: keyword.trim(), page}})
     },
@@ -97,6 +112,7 @@ export default {
         const {popular, relatedTags, total, illusts} = res
         const {recent, permanent} = popular
         this.total = total
+        this.relatedTags = relatedTags
         const array = illusts.map(i => i.id);
         this.searchCount = array.length
         if (this.searchCount > 0) {
@@ -113,38 +129,6 @@ export default {
 
       }).catch(reason => autoRetry(reason, () => this.search(keyword, page, force)))
     },
-    saveKeyword() {
-      ElMessageBox.prompt('TIPS:会覆盖名称相同的已有搜索', '保存名称', {
-        inputValue: this.keyword,
-      }).then(res => {
-        const {value, action} = res
-        if (action === 'confirm') {
-          //过滤label相同的快捷搜索
-          this.savedKeywords = this.savedKeywords.filter(i => i.label !== value)
-          //排序
-          this.savedKeywords.sort((a, b) => a.label.localeCompare(b.label))
-          this.savedKeywords.push({label: value, keyword: this.keyword})
-          this.setConfig({key: 'savedKeywords', value: this.savedKeywords})
-          ElMessage.success("已保存搜索")
-        }
-      }).catch(reason => {
-        if (reason === 'cancel') {
-          ElMessage.info("已取消")
-        } else {
-          console.log(reason)
-          ElMessage.error("无法识别")
-        }
-      })
-    },
-    delKeyword(label) {
-      ElMessageBox.confirm(`确认移除? ${label}`).then(() => {
-        this.savedKeywords = this.savedKeywords.filter(i => i.label !== label)
-        this.setConfig({key: 'savedKeywords', value: this.savedKeywords})
-      }).catch(reason => {
-        console.log(reason)
-        ElMessage.info("已取消")
-      })
-    },
     load(route, force) {
       if (!route.path.startsWith('/search')) {
         return;
@@ -158,7 +142,6 @@ export default {
   mounted() {
     setTitle("搜索")
 
-    this.savedKeywords = this.config.savedKeywords
     document.getElementById('输入框').focus()
     this.load(this.$route)
 

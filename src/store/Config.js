@@ -3,7 +3,7 @@
 
 import {setCookies} from "@/assets/js/utils/CookieUtils";
 import {getCache, putCache} from "@/assets/js/utils/StorageUtils";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
     namespaced: true,
@@ -13,7 +13,6 @@ export default {
             uid: 0,
             token: "",
             //保存的搜索关键字
-            savedKeywords: [],
             //图片服务器
             domain: "/pxre",
             //显示作品卡片时，缓存该作品详情（可以显示出收藏数）
@@ -26,11 +25,47 @@ export default {
                 //作者名称关键字屏蔽
                 username: [],
             },
+            search: {
+                keywords: [],
+                popular: false,
+                relatedTags: false,
+            },
         },
     },
     mutations: {
         method(state, payload) {
 
+        },
+        addKeyword(state, keyword) {
+            ElMessageBox.prompt('TIPS:会覆盖名称相同的已有搜索', '保存名称', {
+                inputValue: keyword,
+            }).then(res => {
+                const label = res.value
+                //过滤label相同的快捷搜索
+                state.config.search.keywords = state.config.search.keywords.filter(i => i.label !== label)
+                //排序
+                state.config.search.keywords.sort((a, b) => a.label.localeCompare(b.label))
+                state.config.search.keywords.push({label, keyword})
+
+                putCache("config", state.config)
+                ElMessage.success("已保存搜索")
+            }).catch(reason => {
+                if (reason === 'cancel') {
+                    ElMessage.info("已取消")
+                } else {
+                    console.log(reason)
+                    ElMessage.error("无法识别")
+                }
+            })
+        },
+        delKeyword(state, label) {
+            ElMessageBox.confirm(`确认移除? ${label}`).then(() => {
+                state.config.search.keywords = state.config.search.keywords.filter(i => i.label !== label)
+                putCache("config", state.config)
+            }).catch(reason => {
+                console.log(reason)
+                ElMessage.info("已取消")
+            })
         },
         addFilter(state, {key, value}) {
             state.config.filter[key].push(value)

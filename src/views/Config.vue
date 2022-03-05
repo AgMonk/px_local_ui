@@ -4,23 +4,41 @@
     <el-header>
     </el-header>
     <el-main>
-      <el-divider content-position="left">配置</el-divider>
-      <el-descriptions :column="2" border>
-        <el-descriptions-item label="设置Cooke和Token">
-          <el-button type="primary" @click="openDialogCookie">设置Cooke和Token</el-button>
-        </el-descriptions-item>
-        <el-descriptions-item label="图片服务器">
-          <el-radio-group v-model="configuration.domain" size="large" @change="setConfig({key:'domain',value:$event})">
-            <el-radio-button label="/pximg">pixiv.net</el-radio-button>
-            <el-radio-button label="/pxre">pixiv.re</el-radio-button>
-          </el-radio-group>
-        </el-descriptions-item>
-        <el-descriptions-item label="卡片缓存详情">
-          <el-tooltip content="显示作品卡片时，缓存该作品的详细信息，这会在卡片上显示作品的收藏数、加速作品详情页的访问速度，但是也会减慢卡片的加载速度" effect="light">
-            <el-switch v-model="configuration.detail" active-text="是" inactive-color="red" inactive-text="否" inline-prompt @change="setConfig({key:'detail',value:$event})" />
-          </el-tooltip>
-        </el-descriptions-item>
-      </el-descriptions>
+      <div>
+        <el-divider content-position="left">常规</el-divider>
+        <el-descriptions :column="2" border>
+          <el-descriptions-item label="设置Cooke和Token">
+            <el-button type="primary" @click="openDialogCookie">设置Cooke和Token</el-button>
+          </el-descriptions-item>
+          <el-descriptions-item label="图片服务器">
+            <el-radio-group v-model="configuration.domain" size="large" @change="setConfig({key:'domain',value:$event})">
+              <el-radio-button label="/pximg">pixiv.net</el-radio-button>
+              <el-radio-button label="/pxre">pixiv.re</el-radio-button>
+            </el-radio-group>
+          </el-descriptions-item>
+          <el-descriptions-item label="卡片缓存详情">
+            <el-tooltip content="显示作品卡片时，缓存该作品的详细信息，这会在卡片上显示作品的收藏数、加速作品详情页的访问速度，但是也会减慢卡片的加载速度" effect="light">
+              <el-switch v-model="configuration.detail" active-text="是" inactive-color="red" inactive-text="否" inline-prompt @change="setConfig({key:'detail',value:$event})" />
+            </el-tooltip>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+      <div>
+        <el-divider content-position="left">搜索</el-divider>
+        <el-descriptions :column="2" border>
+          <el-descriptions-item label="显示热门作品">
+            <el-switch v-model="configuration.search.popular" active-text="是" inactive-color="red" inactive-text="否" inline-prompt
+                       @change="setConfig({key:'search',value:configuration.search})"
+            />
+          </el-descriptions-item>
+          <el-descriptions-item label="显示相关标签">
+            <el-switch v-model="configuration.search.relatedTags" active-text="是" inactive-color="red" inactive-text="否" inline-prompt
+                       @change="setConfig({key:'search',value:configuration.search})"
+            />
+          </el-descriptions-item>
+
+        </el-descriptions>
+      </div>
       <div>
         <el-divider content-position="left">屏蔽选项</el-divider>
         <el-tabs type="border-card">
@@ -100,6 +118,11 @@ export default {
           title: [],
           //作者名称关键字屏蔽
           username: [],
+        },
+        search: {
+          keywords: [],
+          popular: false,
+          relatedTags: false,
         },
       },
     }
