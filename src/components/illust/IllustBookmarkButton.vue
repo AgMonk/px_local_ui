@@ -28,7 +28,7 @@ export default {
     ...mapState("Config", [`config`]),
   },
   methods: {
-    ...mapActions("Artworks", [`bookmarkAdd`, `bookmarkDel`]),
+    ...mapActions("Artworks", [`bookmarkAdd`, `bookmarkDel`, `getIllustInfo`]),
     update(o) {
       this.bookmarked = o ? o.id : undefined;
     },
@@ -38,6 +38,9 @@ export default {
         ElMessage.success("收藏成功")
         this.bookmarked = res
         this.loading = false;
+        if (!res.id) {
+          this.getIllustInfo({pid: this.pid, force: true}).then(res => this.update(res.bmkData))
+        }
       }).catch(reason => {
         this.loading = false;
         console.log(reason)
