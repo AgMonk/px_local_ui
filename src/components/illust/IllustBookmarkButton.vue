@@ -38,7 +38,7 @@ export default {
         ElMessage.success("收藏成功")
         this.bookmarked = res
         this.loading = false;
-        if (!res.id) {
+        if (!res) {
           this.getIllustInfo({pid: this.pid, force: true}).then(res => this.update(res.bmkData))
         }
       }).catch(reason => {
