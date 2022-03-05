@@ -15,8 +15,10 @@
             保存
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-for="item in savedKeywords" :command="item.keyword">{{ item.label }}
-                                                                                        <!--                todo 移除搜索-->
+                <el-dropdown-item v-for="item in savedKeywords" :command="item.keyword">
+                  <el-tooltip :content="item.keyword" placement="left">
+                    <el-tag closable effect="dark" @close="delKeyword(item.label)">{{ item.label }}</el-tag>
+                  </el-tooltip>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -25,15 +27,17 @@
       </el-form>
     </el-header>
     <el-main>
-      <el-pagination v-model:current-page="page"
-                     v-if="searchCount>0"
+      <el-pagination v-if="searchCount>0"
+                     v-model:current-page="page"
                      :page-size="60"
                      :total="total"
                      layout="prev, pager, next,jumper,total"
                      @current-change="$router.push({params:{page:$event}})"
 
       />
-      <div id="相关标签"><!--todo--></div>
+      <div id="相关标签">
+
+      </div>
       <div v-if="popularCount>0" id="热门作品" style="text-align: left">
         <el-divider content-position="left">热门作品</el-divider>
         <illust-card-div ref="popular-result" :height="207" :show-date-range="false" disable-refresh />
@@ -51,7 +55,7 @@
 <script>
 import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
 
@@ -74,13 +78,13 @@ export default {
   computed: {
     ...mapState("Loading", [`svg`]),
     ...mapState("Config", [`config`]),
-
   },
   methods: {
     ...mapActions('Search', [`getSearchResult`]),
     ...mapGetters("Artworks", [`getIllustFromCache`]),
+    ...mapMutations('Config', [`setConfig`]),
     route2Search(keyword, page = 1) {
-      this.$router.push({name: "搜索结果", params: {keyword, page}})
+      this.$router.push({name: "搜索结果", params: {keyword: keyword.trim(), page}})
     },
     search(keyword = this.keyword, page = 1, force) {
       this.keyword = keyword
@@ -89,7 +93,7 @@ export default {
       this.searchCount = 1;
       this.popularCount = 1;
       this.getSearchResult({keyword, page, force, scd: this.scd, ecd: this.ecd}).then(res => {
-        console.log(res)
+        // console.log(res)
         const {popular, relatedTags, total, illusts} = res
         const {recent, permanent} = popular
         this.total = total
@@ -110,15 +114,18 @@ export default {
       }).catch(reason => autoRetry(reason, () => this.search(keyword, page, force)))
     },
     saveKeyword() {
-      ElMessageBox.prompt('保存名称', {}).then(res => {
+      ElMessageBox.prompt('TIPS:会覆盖名称相同的已有搜索', '保存名称', {
+        inputValue: this.keyword,
+      }).then(res => {
         const {value, action} = res
         if (action === 'confirm') {
-          //todo 保存时过滤label相同的快捷搜索
-          //todo 保存后排序
+          //过滤label相同的快捷搜索
+          this.savedKeywords = this.savedKeywords.filter(i => i.label !== value)
+          //排序
+          this.savedKeywords.sort((a, b) => a.label.localeCompare(b.label))
           this.savedKeywords.push({label: value, keyword: this.keyword})
+          this.setConfig({key: 'savedKeywords', value: this.savedKeywords})
           ElMessage.success("已保存搜索")
-
-          /*todo 保存快捷搜索到config*/
         }
       }).catch(reason => {
         if (reason === 'cancel') {
@@ -127,6 +134,15 @@ export default {
           console.log(reason)
           ElMessage.error("无法识别")
         }
+      })
+    },
+    delKeyword(label) {
+      ElMessageBox.confirm(`确认移除? ${label}`).then(() => {
+        this.savedKeywords = this.savedKeywords.filter(i => i.label !== label)
+        this.setConfig({key: 'savedKeywords', value: this.savedKeywords})
+      }).catch(reason => {
+        console.log(reason)
+        ElMessage.info("已取消")
       })
     },
     load(route, force) {
@@ -141,6 +157,8 @@ export default {
   },
   mounted() {
     setTitle("搜索")
+
+    this.savedKeywords = this.config.savedKeywords
     document.getElementById('输入框').focus()
     this.load(this.$route)
 

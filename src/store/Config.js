@@ -12,6 +12,8 @@ export default {
         config: {
             uid: 0,
             token: "",
+            //保存的搜索关键字
+            savedKeywords: [],
             //图片服务器
             domain: "/pxre",
             //显示作品卡片时，缓存该作品详情（可以显示出收藏数）
