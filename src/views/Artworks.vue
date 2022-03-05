@@ -115,17 +115,18 @@ export default {
       const {name, params} = route
       if (name === '作品详情' && !isNaN(params.pid)) {
         this.getInfo(params.pid)
-      } else if (this.artworks[0]) {
-        this.routeToPid(this.artworks[0].id)
-      } else{
+      } else if (this.artworks.length === 0) {
         ElMessage.error("未打开任何作品")
         history.back();
+      } else {
+        this.show = true
+        this.currentTab = 0;
       }
     },
     routeToPid(pid){
       this.currentTab = pid;
       this.show = true
-      this.$router.push({params: {pid}, query: this.$route.query})
+      this.$router.push({name: '作品详情', params: {pid}, query: this.$route.query})
     }
   },
   mounted() {
