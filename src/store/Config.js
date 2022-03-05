@@ -8,7 +8,6 @@ import {ElMessage, ElMessageBox} from "element-plus";
 export default {
     namespaced: true,
     state: {
-        accounts: [],
         config: {
             uid: 0,
             token: "",
@@ -35,6 +34,25 @@ export default {
     mutations: {
         method(state, payload) {
 
+        },
+        importArray(state, {title, path, overwrite}) {
+            ElMessageBox.prompt('请粘贴导出的字符串', `导入 ${title}`, {}).then(res => {
+                const array = JSON.parse(res.value)
+                if (overwrite) {
+                    state.config[path[0]][path[1]] = array
+                } else {
+                    state.config[path[0]][path[1]].push(...array)
+                }
+                putCache("config", state.config)
+                ElMessage.success(`已导入 ${array.length} 个数据`)
+            }).catch(reason => {
+                if (reason === 'cancel') {
+                    ElMessage.info("已取消")
+                } else {
+                    console.log(reason)
+                    ElMessage.error("字符串非法")
+                }
+            })
         },
         addKeyword(state, keyword) {
             ElMessageBox.prompt('TIPS:会覆盖名称相同的已有搜索', '保存名称', {
@@ -72,8 +90,8 @@ export default {
             ElMessage.success("添加成功")
             putCache("config", state.config)
         },
-        delFilter(state, {key, value}) {
-            state.config.filter[key] = state.config.filter[key].filter(i => i !== value)
+        delFilter(state, {key, index}) {
+            state.config.filter[key].splice(index, 1)
             ElMessage.success("移除成功")
             putCache("config", state.config)
         },

@@ -39,12 +39,12 @@
         <el-divider content-position="left">相关标签</el-divider>
         <el-tag v-for="tag in relatedTags" effect="dark" style="margin-right: 3px">
           <el-tooltip content="or">
-            <el-icon @click="route2Search(`${keyword} or ${tag}`)">
+            <el-icon @click="keyword = `${keyword} or ${tag}`">
               <circle-plus-filled />
             </el-icon>
           </el-tooltip>
           <el-tooltip content="and">
-            <span class="clickable" @click="route2Search(`${keyword} ${tag}`)">{{ tag }}</span>
+            <span class="clickable" @click="keyword = `${keyword} ${tag}`">{{ tag }}</span>
           </el-tooltip>
           <el-tooltip content="替换">
             <el-icon @click="route2Search(tag)">
@@ -144,8 +144,6 @@ export default {
 
     document.getElementById('输入框').focus()
     this.load(this.$route)
-
-    /*todo 从config加载快捷搜索*/
   },
   watch: {
     $route(to) {

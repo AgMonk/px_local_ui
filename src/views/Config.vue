@@ -6,7 +6,7 @@
     <el-main>
       <div>
         <el-divider content-position="left">常规</el-divider>
-        <el-descriptions :column="2" border>
+        <el-descriptions :column="3" border>
           <el-descriptions-item label="设置Cooke和Token">
             <el-button type="primary" @click="openDialogCookie">设置Cooke和Token</el-button>
           </el-descriptions-item>
@@ -25,7 +25,7 @@
       </div>
       <div>
         <el-divider content-position="left">搜索</el-divider>
-        <el-descriptions :column="2" border>
+        <el-descriptions :column="3" border>
           <el-descriptions-item label="显示热门作品">
             <el-switch v-model="configuration.search.popular" active-text="是" inactive-color="red" inactive-text="否" inline-prompt
                        @change="setConfig({key:'search',value:configuration.search})"
@@ -36,6 +36,11 @@
                        @change="setConfig({key:'search',value:configuration.search})"
             />
           </el-descriptions-item>
+          <el-descriptions-item label="已保存的搜索">
+            {{ configuration.search.keywords.length }} 个
+            <el-button size="small" type="primary" @click="importArray({title:'搜索',path:['search','keywords'],overwrite:true})">导入</el-button>
+            <my-copy-button :text="JSON.stringify(configuration.search.keywords)">导出</my-copy-button>
+          </el-descriptions-item>
 
         </el-descriptions>
       </div>
@@ -45,22 +50,28 @@
           <el-tab-pane label="UID">
             <h4>根据UID屏蔽作品</h4>
             <el-button size="small" type="primary" @click="addTag('uid')">添加</el-button>
+            <el-button size="small" type="primary" @click="importArray({title:'UID',path:['filter','uid']})">导入</el-button>
+            <my-copy-button :text="JSON.stringify(configuration.filter.uid)">导出</my-copy-button>
             <div style="text-align: left">
-              <el-tag v-for="uid in configuration.filter.uid" class="filter-tag" closable effect="dark" @close="closeTag('uid',uid)">{{ uid }}&nbsp;({{ getName(uid) }})</el-tag>
+              <el-tag v-for="(uid,i) in configuration.filter.uid" class="filter-tag" closable effect="dark" @close="closeTag('uid',i)">{{ uid }}&nbsp;({{ getName(uid) }})</el-tag>
             </div>
           </el-tab-pane>
           <el-tab-pane label="标题">
             <h4>根据标题中出现的关键字屏蔽作品</h4>
             <el-button size="small" type="primary" @click="addTag('title')">添加</el-button>
+            <el-button size="small" type="primary" @click="importArray({title:'标题关键字',path:['filter','title']})">导入</el-button>
+            <my-copy-button :text="JSON.stringify(configuration.filter.title)">导出</my-copy-button>
             <div style="text-align: left">
-              <el-tag v-for="keyword in configuration.filter.title" class="filter-tag" closable effect="dark" @close="closeTag('title',keyword)">{{ keyword }}</el-tag>
+              <el-tag v-for="(keyword,i) in configuration.filter.title" class="filter-tag" closable effect="dark" @close="closeTag('title',i)">{{ keyword }}</el-tag>
             </div>
           </el-tab-pane>
           <el-tab-pane label="用户名">
             <h4>根据用户名中出现的关键字屏蔽作品</h4>
             <el-button size="small" type="primary" @click="addTag('username')">添加</el-button>
+            <el-button size="small" type="primary" @click="importArray({title:'用户名关键字',path:['filter','username']})">导入</el-button>
+            <my-copy-button :text="JSON.stringify(configuration.filter.username)">导出</my-copy-button>
             <div style="text-align: left">
-              <el-tag v-for="keyword in configuration.filter.username" class="filter-tag" closable effect="dark" @close="closeTag('username',keyword)">{{ keyword }}</el-tag>
+              <el-tag v-for="(keyword,i) in configuration.filter.username" class="filter-tag" closable effect="dark" @close="closeTag('username',i)">{{ keyword }}</el-tag>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -95,9 +106,11 @@
 import {mapGetters, mapMutations, mapState} from "vuex";
 import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
+import MyCopyButton from "@/components/common/my-copy-button";
 
 export default {
   name: "Config",
+  components: {MyCopyButton},
   data() {
     return {
       dialogShow: {
@@ -132,14 +145,14 @@ export default {
   },
   methods: {
     ...mapGetters("User", [`getUserFromCache`]),
-    ...mapMutations('Config', [`setAccounts`, `setConfig`, `addFilter`, `delFilter`]),
+    ...mapMutations('Config', [`setAccounts`, `setConfig`, `addFilter`, `delFilter`, `importArray`]),
     openDialogCookie() {
       this.dialogShow.cookie = true
       setTimeout(() => this.$refs['token-input'].focus(), 500)
     },
-    closeTag(key, value) {
+    closeTag(key, index) {
       ElMessageBox.confirm("确认移除?").then(() => {
-        this.delFilter({key, value})
+        this.delFilter({key, index})
       }).catch(reason => {
         console.log(reason)
         ElMessage.info("已取消")
