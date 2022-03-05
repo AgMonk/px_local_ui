@@ -11,6 +11,7 @@
       </el-link>
       <br>
       <my-copy-button :text="`https://www.pixiv.net/artworks/${pid}`">复制</my-copy-button>
+      <el-button size="small" type="primary" @click="addTitleFilter">添加屏蔽</el-button>
     </template>
   </el-tooltip>
 
@@ -18,6 +19,8 @@
 
 <script>
 import MyCopyButton from "@/components/common/my-copy-button";
+import {mapGetters, mapMutations} from "vuex";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
   name: "IllustLink",
@@ -26,7 +29,21 @@ export default {
     return {}
   },
   computed: {},
-  methods: {},
+  methods: {
+    ...mapGetters("Artworks", [`getIllustFromCache`]),
+    ...mapMutations('Config', [`addFilter`]),
+    addTitleFilter() {
+      const illust = this.getIllustFromCache()(this.pid)
+      ElMessageBox.prompt('关键字', '添加标题关键字屏蔽', {
+        inputValue: illust ? illust.title : '',
+      }).then(res => {
+        this.addFilter({key: 'title', value: res.value})
+      }).catch(reason => {
+        console.log(reason)
+        ElMessage.info("已取消")
+      })
+    },
+  },
   mounted() {
   },
   watch: {},
