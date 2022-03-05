@@ -93,13 +93,13 @@ export default {
         const {popular, relatedTags, total, illusts} = res
         const {recent, permanent} = popular
         this.total = total
-        const array = illusts.filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
+        const array = illusts.map(i => i.id);
         this.searchCount = array.length
         if (this.searchCount > 0) {
           this.$refs['search-result'].clear(array)
         }
 
-        const p = [...recent, ...permanent].filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
+        const p = [...recent, ...permanent].map(i => i.id);
         this.popularCount = p.length;
         if (this.popularCount > 0) {
           this.$refs['popular-result'].clear(p)

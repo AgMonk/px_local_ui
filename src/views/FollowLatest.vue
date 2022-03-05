@@ -59,8 +59,7 @@ export default {
       const page = Number(route.params.page)
       this.page = page;
       this.getFollowLatest({page, force}).then(res => {
-        const array = res.filter(item => !this.config.filterBookmarked || !this.getIllustFromCache()(item.id).bmkData).map(i => i.id);
-        this.$refs['card-div'].clear(array)
+        this.$refs['card-div'].clear(res.map(i => i.id))
         this.loading = false;
       }).catch(reason => autoRetry(reason, () => this.load(route, force)))
     }
