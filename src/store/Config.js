@@ -43,9 +43,9 @@ export default {
                 const label = res.value
                 //过滤label相同的快捷搜索
                 state.config.search.keywords = state.config.search.keywords.filter(i => i.label !== label)
+                state.config.search.keywords.push({label, keyword})
                 //排序
                 state.config.search.keywords.sort((a, b) => a.label.localeCompare(b.label))
-                state.config.search.keywords.push({label, keyword})
 
                 putCache("config", state.config)
                 ElMessage.success("已保存搜索")
