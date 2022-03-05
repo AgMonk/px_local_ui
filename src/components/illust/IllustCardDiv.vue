@@ -34,7 +34,7 @@
 
 <script>
 import IllustCard from "@/components/illust/IllustCard";
-import {mapGetters} from "vuex";
+import {mapGetters, mapState} from "vuex";
 
 export default {
   name: "IllustCardDiv",
@@ -92,14 +92,17 @@ export default {
       minDate: "",
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Config", [`config`]),
+  },
   methods: {
     ...mapGetters("Artworks", [`getIllustFromCache`]),
+    ...mapGetters("User", [`getUserFromCache`]),
     dataInit() {
       this.data = {normal: [], bookmarked: [], filter: [],}
       this.query = {normal: [], bookmarked: [], filter: [],}
       this.fullData = []
-      this.threads.current = 0;
+      this.threads = {normal: {current: 0, max: 2,}, bookmarked: {current: 0, max: 2,}, filter: {current: 0, max: 2,},}
     },
     clear(array) {
       this.dataInit();
@@ -113,7 +116,24 @@ export default {
     },
     //判断作品应该被屏蔽
     isFilter(illust) {
-      //todo
+      const {uid, title, username} = this.config.filter
+      if (uid.includes(illust.authorId)) {
+        return true;
+      }
+      for (let i = 0; i < title.length; i++) {
+        if (illust.title.includes(title[i])) {
+          return true;
+        }
+      }
+      const user = this.getUserFromCache()(illust.authorId)
+      if (user) {
+        const name = user.name
+        for (let i = 0; i < username.length; i++) {
+          if (name.includes(username[i])) {
+            return true;
+          }
+        }
+      }
       return false;
     },
     //  设置时间跨度

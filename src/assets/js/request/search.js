@@ -7,7 +7,7 @@ import {distinctById} from "@/assets/js/utils/ObjUtils";
 export const search = (keyword, {page = 1, scd, ecd, mode = 'all'}) => {
     return pixivGetRequest({
         url: `/ajax/search/artworks/${keyword}`,
-        params: {page, scd, ecd, mode}
+        params: {p: page, scd, ecd, mode}
     }).then(res => {
         const {tagTranslation, popular, relatedTags, illustManga} = res.body
 
