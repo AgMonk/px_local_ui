@@ -3,7 +3,6 @@
 import {ElMessage} from "element-plus";
 
 export const autoRetry = (reason, method) => {
-    console.log(reason)
     const {message, status,} = reason
     const m = `${status}: ${message}`
     if (message.startsWith('timeout of')) {
@@ -12,5 +11,6 @@ export const autoRetry = (reason, method) => {
     } else {
         console.log(m)
         ElMessage.error(m)
+        throw reason
     }
 }

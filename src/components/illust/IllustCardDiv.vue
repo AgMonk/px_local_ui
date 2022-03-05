@@ -140,7 +140,6 @@ export default {
     setDateRange() {
       const max = Math.max(...this.fullData)
       const min = Math.min(...this.fullData)
-      console.log(`${min}~${max}`)
       this.maxDate = this.getIllustFromCache()(max).timestamp.create.substring(5, 16)
       this.minDate = this.getIllustFromCache()(min).timestamp.create.substring(5, 16)
     },

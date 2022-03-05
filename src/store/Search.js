@@ -29,7 +29,7 @@ export default {
                 seconds: 30 * 60,
                 force,
             }).then(res => {
-                console.log(res)
+                // console.log(res)
                 const {popular, relatedTags, total, authors, illusts} = res
                 const {recent, permanent} = popular
                 authors.forEach(author => commit('User/saveInfo2Cache', author, {root: true}))

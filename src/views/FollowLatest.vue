@@ -15,6 +15,7 @@
     </el-header>
     <el-main style="text-align: left">
       <illust-card-div ref="card-div" @refresh="load($route, true)" />
+      <div v-if="loading" style="height:300px"></div>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
