@@ -6,7 +6,7 @@
                 element-loading-text="加载中..."
   >
     <!--  <el-container direction="horizontal">-->
-    <el-header>
+    <el-header height="70px">
       <el-form @submit.prevent>
         <el-form-item>
           <el-input id="输入框" v-model="keyword" clearable size="small" style="max-width: 70%" @keyup.enter="route2Search(keyword)" />
@@ -23,6 +23,14 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
+        </el-form-item>
+        <el-form-item>
+          <el-date-picker v-model="dateRange" :shortcuts="dateShortcuts" clearable end-placeholder="结束日期" range-separator="到" size="small" start-placeholder="起始日期"
+                          type="daterange"
+                          unlink-panels
+                          value-format="YYYY-MM-DD"
+                          @change="change"
+          />
         </el-form-item>
       </el-form>
     </el-header>
@@ -81,13 +89,18 @@ export default {
     return {
       keyword: "",
       page: 1,
-      scd: undefined,
-      ecd: undefined,
       total: 100,
       loading: false,
       popularCount: 0,
       searchCount: 0,
       relatedTags: [],
+      dateRange: [],
+      dateShortcuts: [
+        {text: "3天前", value: () => this.getDateShortcuts(3)},
+        {text: "7天前", value: () => this.getDateShortcuts(7)},
+        {text: "14天前", value: () => this.getDateShortcuts(14)},
+        {text: "30天前", value: () => this.getDateShortcuts(30)},
+      ],
     }
   },
   computed: {
@@ -98,8 +111,17 @@ export default {
     ...mapActions('Search', [`getSearchResult`]),
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapMutations('Config', [`setConfig`, `addKeyword`, `delKeyword`]),
-    route2Search(keyword, page = 1) {
-      this.$router.push({name: "搜索结果", params: {keyword: keyword.trim(), page}})
+    change(e) {
+      console.log(e)
+    },
+    getDateShortcuts(days) {
+      const end = new Date()
+      const start = end.minusDays(days)
+      return [start.toDate(), end.toDate()]
+    },
+    route2Search(keyword, page = 1, range = this.dateRange ? this.dateRange : []) {
+      const [scd, ecd] = range;
+      this.$router.push({name: "搜索结果", params: {keyword: keyword.trim(), page}, query: {scd, ecd}})
     },
     search(keyword = this.keyword, page = 1, force) {
       this.keyword = keyword
@@ -107,7 +129,9 @@ export default {
       this.loading = true;
       this.searchCount = 1;
       this.popularCount = 1;
-      this.getSearchResult({keyword, page, force, scd: this.scd, ecd: this.ecd}).then(res => {
+      const range = this.dateRange ? this.dateRange : []
+      const [scd, ecd] = range;
+      this.getSearchResult({keyword, page, force, scd, ecd}).then(res => {
         // console.log(res)
         const {popular, relatedTags, total, illusts} = res
         const {recent, permanent} = popular
@@ -133,7 +157,10 @@ export default {
       if (!route.path.startsWith('/search')) {
         return;
       }
+      console.log(route)
       const {keyword, page} = route.params
+      const {scd, ecd} = route.query;
+      this.dateRange = [scd, ecd]
       if (keyword && page) {
         this.search(keyword, page, force)
       }
@@ -141,7 +168,6 @@ export default {
   },
   mounted() {
     setTitle("搜索")
-
     document.getElementById('输入框').focus()
     this.load(this.$route)
   },

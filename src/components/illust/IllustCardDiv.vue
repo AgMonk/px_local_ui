@@ -186,7 +186,7 @@ export default {
   props: {
     showDateRange: {type: Boolean, default: true},
     disableGroup: {type: Boolean, default: false},
-    height: {type: Number, default: 651},
+    height: {type: Number, default: 207 * 3},
     disableRefresh: {type: Boolean, default: false},
   },
 }

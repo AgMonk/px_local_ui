@@ -1,6 +1,6 @@
 <template>
   <el-tooltip :disabled="disabledTooltip" effect="light" placement="top">
-    <router-link :to="{name:'作品详情',params:{pid},query:{from:$route.path}}">
+    <router-link :to="{name:'作品详情',params:{pid},query:{from:$route.fullPath}}">
       <el-link :style="`font-size: ${size}px;`" :type="type" :underline="false">
         <slot />
       </el-link>
