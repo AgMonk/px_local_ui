@@ -19,7 +19,7 @@
       </el-row>
 
     </div>
-    <el-scrollbar :height="`${height}px`">
+    <el-scrollbar v-show="data.normal.length>0" :height="`${height}px`">
       <illust-card v-for="pid in data.normal" :pid="pid" @image-load="threads.normal.current--;" />
     </el-scrollbar>
 
@@ -84,7 +84,7 @@ export default {
       mode: 'normal',
       modes: [
         {name: 'bookmarked', title: '已收藏'},
-        {name: 'filter', title: '已过滤'},
+        {name: 'filter', title: '已屏蔽'},
       ],
       //自动加载
       internal: 0,

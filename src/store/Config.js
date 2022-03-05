@@ -3,6 +3,7 @@
 
 import {setCookies} from "@/assets/js/utils/CookieUtils";
 import {getCache, putCache} from "@/assets/js/utils/StorageUtils";
+import {ElMessage} from "element-plus";
 
 export default {
     namespaced: true,
@@ -31,10 +32,12 @@ export default {
         },
         addFilter(state, {key, value}) {
             state.config.filter[key].push(value)
+            ElMessage.success("添加成功")
             putCache("config", state.config)
         },
         delFilter(state, {key, value}) {
             state.config.filter[key] = state.config.filter[key].filter(i => i !== value)
+            ElMessage.success("移除成功")
             putCache("config", state.config)
         },
         loadConfig(state) {
@@ -58,5 +61,10 @@ export default {
 
         },
     },
-    getters: {},
+    getters: {
+        isFilterExists: (state) => (key, value) => {
+            const filter = state.config.filter;
+            return filter.hasOwnProperty(key) && filter[key].includes(value)
+        }
+    },
 }

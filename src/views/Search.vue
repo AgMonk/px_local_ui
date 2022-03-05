@@ -36,7 +36,7 @@
       <div id="相关标签"><!--todo--></div>
       <div v-if="popularCount>0" id="热门作品" style="text-align: left">
         <el-divider content-position="left">热门作品</el-divider>
-        <illust-card-div ref="popular-result" :height="207" disable-refresh />
+        <illust-card-div ref="popular-result" :height="207" :show-date-range="false" disable-refresh />
       </div>
       <div v-if="searchCount>0" id="搜索结果" style="text-align: left">
         <el-divider content-position="left">搜索结果</el-divider>

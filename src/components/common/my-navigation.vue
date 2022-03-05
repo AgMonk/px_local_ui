@@ -25,6 +25,7 @@ export default {
         {path: "/artworks", name: "作品"},
         {path: "/search", name: "搜索"},
         {path: "/follow-latest", name: "关注"},
+        {path: "/config", name: "配置"},
       ],
       activeIndex: "",
       url: "",
