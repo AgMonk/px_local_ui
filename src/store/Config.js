@@ -29,6 +29,14 @@ export default {
         method(state, payload) {
 
         },
+        addFilter(state, {key, value}) {
+            state.config.filter[key].push(value)
+            putCache("config", state.config)
+        },
+        delFilter(state, {key, value}) {
+            state.config.filter[key] = state.config.filter[key].filter(i => i !== value)
+            putCache("config", state.config)
+        },
         loadConfig(state) {
             state.config = Object.assign({}, state.config, getCache("config"))
         },

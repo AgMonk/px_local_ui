@@ -11,7 +11,8 @@
         官方地址
       </el-link>
       <br>
-      <my-copy-button :text="`https://www.pixiv.net/users/${uid}/artworks`">复制</my-copy-button>
+      <my-copy-button :text="`https://www.pixiv.net/users/${uid}/artworks`">复制地址</my-copy-button>
+      <my-copy-button :text="uid">复制UID</my-copy-button>
     </template>
   </el-tooltip>
 </template>
