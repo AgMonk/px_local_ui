@@ -20,9 +20,9 @@ export default {
             filter: {
                 uid: [],
                 //作品标题关键字屏蔽
-                title: [],
+                title: ['国漫', '资源'],
                 //作者名称关键字屏蔽
-                username: [],
+                username: ['王者', '国漫', '资源'],
             },
             search: {
                 keywords: [],
