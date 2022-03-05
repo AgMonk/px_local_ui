@@ -15,6 +15,14 @@ export default {
             domain: "/pxre",
             //显示作品卡片时，缓存该作品详情（可以显示出收藏数）
             detail: false,
+            //过滤器
+            filter: {
+                uid: [],
+                //作品标题关键字屏蔽
+                title: [],
+                //作者名称关键字屏蔽
+                username: [],
+            },
         },
     },
     mutations: {
