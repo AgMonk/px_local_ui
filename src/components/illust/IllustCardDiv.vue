@@ -166,7 +166,7 @@ export default {
   watch: {},
   props: {
     showDateRange: {type: Boolean, default: true},
-    disableGroup: {type: Boolean, default: true},
+    disableGroup: {type: Boolean, default: false},
     height: {type: Number, default: 651},
     disableRefresh: {type: Boolean, default: false},
   },

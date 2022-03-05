@@ -48,5 +48,9 @@ export default {
 
 
     },
-    getters: {},
+    getters: {
+        getUserFromCache: (state) => (uid) => {
+            return state.cache[`${uid}`]
+        },
+    },
 }

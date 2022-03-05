@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 import MyCopyButton from "@/components/common/my-copy-button";
 
 export default {
@@ -30,13 +30,13 @@ export default {
     }
   },
   computed: {
-    ...mapState("User", [`cache`]),
   },
   methods: {
+    ...mapGetters("User", [`getUserFromCache`]),
     load(uid) {
-      const key = `${uid}`
-      if (this.cache.hasOwnProperty(key) && this.cache[key].name) {
-        this.name = this.cache[key].name
+      const user = this.getUserFromCache()(uid)
+      if (user && user.name) {
+        this.name = user.name
       } else {
         this.name = '[未命名用户]';
       }

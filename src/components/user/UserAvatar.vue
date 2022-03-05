@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 
 export default {
   name: "UserAvatar",
@@ -15,14 +15,14 @@ export default {
   },
   computed: {
     ...mapState("Config", [`config`]),
-    ...mapState("User",[`cache`]),
   },
   methods: {
-    load(uid){
-      const key = `${uid}`
-      if (this.cache.hasOwnProperty(key)){
-        this.src = this.config.domain+this.cache[key].avatar
-      }else{
+    ...mapGetters("User", [`getUserFromCache`]),
+    load(uid) {
+      const user = this.getUserFromCache()(uid)
+      if (user) {
+        this.src = this.config.domain + user.avatar
+      } else {
         this.src = this.empty;
       }
     }
