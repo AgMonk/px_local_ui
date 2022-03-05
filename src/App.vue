@@ -11,6 +11,7 @@
     <router-view />
     <el-backtop />
     <current-user-avatar />
+    <el-link href="https://github.com/AgMonk/px_local_ui" target="bland" type="primary">Github</el-link>
   </div>
 </template>
 

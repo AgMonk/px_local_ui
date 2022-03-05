@@ -105,6 +105,7 @@ export default {
             state.config.uid = Number(group[1]);
             state.config.token = token;
             putCache("config", state.config)
+            window.location.reload()
         },
         setConfig(state, {key, value}) {
             state.config[key] = value;
