@@ -1,16 +1,23 @@
 <template>
   <div>
     <div>
-      <el-button v-if="!disableRefresh" size="small" type="primary" @click="$emit('refresh')">刷新</el-button>
-      <span v-if="showDateRange && maxDate" class="common-text" style="margin-left: 2px">
-        <el-tag effect="dark">{{ maxDate }}</el-tag>
-        ~
-        <el-tag effect="dark">{{ minDate }}</el-tag>
-      </span>
-      <el-tag v-if="query.normal.length>0" effect="dark" style="margin-left: 2px">队列：{{ query.normal.length }}</el-tag>
-      <el-button v-for="item in modes" v-show="counts[item.name]>0" size="small" style="margin-left: 3px;" type="primary" @click="dialogShow[item.name]=true">
-        {{ item.title }}({{ counts[item.name] }})
-      </el-button>
+      <el-row>
+        <el-col :span="12">
+          <span v-if="showDateRange && maxDate" class="common-text" style="margin-left: 2px">
+            <el-tag effect="dark">{{ maxDate }}</el-tag>
+            ~
+            <el-tag effect="dark">{{ minDate }}</el-tag>
+          </span>
+          <el-tag v-if="query.normal.length>0" effect="dark" style="margin-left: 2px">队列：{{ query.normal.length }}</el-tag>
+        </el-col>
+        <el-col :span="12">
+          <el-button v-if="!disableRefresh" size="small" style="margin-right: 3px;" type="primary" @click="$emit('refresh')">刷新</el-button>
+          <el-button v-for="item in modes" v-show="counts[item.name]>0" size="small" style="margin-right: 3px;" type="primary" @click="dialogShow[item.name]=true">
+            {{ item.title }}({{ counts[item.name] }})
+          </el-button>
+        </el-col>
+      </el-row>
+
     </div>
     <el-scrollbar :height="`${height}px`">
       <illust-card v-for="pid in data.normal" :pid="pid" @image-load="threads.normal.current--;" />
@@ -121,19 +128,24 @@ export default {
       this.fullData.push(...array)
       this.setDateRange();
 
-      const fullData = array.map(id => this.getIllustFromCache()(id))
-      const normalData = fullData.filter(item => !this.isBookmarked(item)).filter(item => !this.isFilter(item))
-      const bookmarkedData = fullData.filter(item => this.isBookmarked(item)).filter(item => !this.isFilter(item))
-      const filterData = fullData.filter(item => this.isFilter(item))
+      if (this.disableGroup) {
+        this.query.normal.push(...array)
+        console.log(`添加作品卡队列 ${array.length} 个`)
+      } else {
+        const fullData = array.map(id => this.getIllustFromCache()(id))
+        const normalData = fullData.filter(item => !this.isBookmarked(item)).filter(item => !this.isFilter(item))
+        const bookmarkedData = fullData.filter(item => this.isBookmarked(item)).filter(item => !this.isFilter(item))
+        const filterData = fullData.filter(item => this.isFilter(item))
 
-      this.query.normal.push(...normalData.map(i => i.id))
-      this.query.bookmarked.push(...bookmarkedData.map(i => i.id))
-      this.query.filter.push(...filterData.map(i => i.id))
+        this.query.normal.push(...normalData.map(i => i.id))
+        this.query.bookmarked.push(...bookmarkedData.map(i => i.id))
+        this.query.filter.push(...filterData.map(i => i.id))
 
-      console.log(`添加作品卡队列 ${array.length} 个 其中 常规 ${normalData.length} 个 已收藏 ${bookmarkedData.length} 个 已屏蔽 ${filterData.length} 个`)
+        console.log(`添加作品卡队列 ${array.length} 个 其中 常规 ${normalData.length} 个 已收藏 ${bookmarkedData.length} 个 已屏蔽 ${filterData.length} 个`)
 
-      this.counts.bookmarked = this.data.bookmarked.length + this.query.bookmarked.length;
-      this.counts.filter = this.data.filter.length + this.query.filter.length;
+        this.counts.bookmarked = this.data.bookmarked.length + this.query.bookmarked.length;
+        this.counts.filter = this.data.filter.length + this.query.filter.length;
+      }
     },
   },
   mounted() {
@@ -154,6 +166,7 @@ export default {
   watch: {},
   props: {
     showDateRange: {type: Boolean, default: true},
+    disableGroup: {type: Boolean, default: true},
     height: {type: Number, default: 651},
     disableRefresh: {type: Boolean, default: false},
   },

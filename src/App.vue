@@ -9,6 +9,7 @@
       </div>
     </div>
     <router-view />
+    <el-backtop />
     <current-user-avatar />
   </div>
 </template>

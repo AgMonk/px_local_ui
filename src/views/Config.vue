@@ -19,17 +19,6 @@
             <el-switch v-model="form.detail" active-text="是" inactive-color="red" inactive-text="否" inline-prompt @change="setConfig({key:'detail',value:$event})" />
           </el-tooltip>
         </el-descriptions-item>
-        <el-descriptions-item label="过滤已收藏">
-          <el-tooltip content="不显示已收藏的卡片（在“我的收藏”页无效）" effect="light">
-            <el-switch v-model="form.filterBookmarked"
-                       active-text="是"
-                       inactive-color="red"
-                       inactive-text="否"
-                       inline-prompt
-                       @change="setConfig({key:'filterBookmarked',value:$event})"
-            />
-          </el-tooltip>
-        </el-descriptions-item>
       </el-descriptions>
       <el-dialog v-model="dialogShow.cookie" close-on-click-modal title="设置Cooke和Token">
         <el-form>
@@ -67,7 +56,6 @@ export default {
         },
         domain: "",
         detail: false,
-        filterBookmarked: false,
       }
     }
   },
