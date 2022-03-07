@@ -5,7 +5,7 @@
         <illust-link :pid="illust.id" disabledTooltip type="success">
           <el-image :size="150"
                     :src="config.domain+illust.urls.thumb"
-                    lazy
+                    :lazy="config.search.lazy"
                     style="border-radius:15px"
                     @error="avatarLoad"
                     @load="avatarLoad"

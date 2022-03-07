@@ -28,6 +28,7 @@ export default {
                 keywords: [],
                 popular: false,
                 relatedTags: false,
+                lazy: true,
             },
         },
     },

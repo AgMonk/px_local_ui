@@ -177,7 +177,7 @@ export default {
         //报告队列剩余数量
         this.$emit('load-image', this.query)
       }
-    }, 300)
+    }, 100)
   },
   unmounted() {
     clearInterval(this.internal)
