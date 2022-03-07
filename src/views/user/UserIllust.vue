@@ -41,6 +41,7 @@ export default {
     ...mapActions("User", [`getUserProfileAll`]),
     ...mapActions("Artworks", [`getUserProfileIllust`]),
     loadProfileAll(uid, force) {
+      this.loading = true;
       this.getUserProfileAll({uid, force}).then(res => {
         this.data = res[this.type]
 
