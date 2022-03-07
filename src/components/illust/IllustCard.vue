@@ -3,13 +3,15 @@
     <el-row>
       <el-col :span="24">
         <illust-link :pid="illust.id" disabledTooltip type="success">
-          <el-image :size="150"
-                    :src="config.domain+illust.urls.thumb"
-                    :lazy="config.search.lazy"
-                    style="border-radius:15px"
-                    @error="avatarLoad"
-                    @load="avatarLoad"
-          />
+          <div style="display:inline-block;width:150px;height:150px">
+            <el-image :lazy="config.search.lazy"
+                      :size="150"
+                      :src="config.domain+illust.urls.thumb"
+                      style="border-radius:15px"
+                      @error="avatarLoad"
+                      @load="avatarLoad"
+            />
+          </div>
         </illust-link>
         <!--        r-18标记-->
         <el-tag v-if="loadCompleted&&isR_18" effect="dark" style="position: absolute; top: 0; left: 0;padding: 0 2px;" type="danger">R-18</el-tag>
