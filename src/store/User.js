@@ -1,7 +1,7 @@
 // Pixiv用户信息
 // noinspection JSUnusedLocalSymbols
 
-import {follow, getUserBookmark, getUserInfo, getUserProfileAll, unfollow} from "@/assets/js/request/user";
+import {follow, getUserBookmark, getUserBookmarkTags, getUserInfo, getUserProfileAll, unfollow} from "@/assets/js/request/user";
 import {getCache, getCacheByTime} from "@/assets/js/utils/CacheUtils";
 
 export default {
@@ -10,6 +10,7 @@ export default {
         cache: {},
         profile: {},
         bookmark: {},
+        tags: {},
     },
     mutations: {
         method(state, payload) {
@@ -70,7 +71,12 @@ export default {
                 return {illusts: illusts.map(i => i.id), total: res.total}
             })
         },
-
+        getUserBookmarkTags: ({dispatch, commit, state}, {uid, force}) => {
+            return getCacheByTime({
+                cacheObj: state.tags, key: `${uid}`, force, seconds: 60 * 60,
+                requestMethod: () => getUserBookmarkTags(uid)
+            })
+        },
     },
     getters: {
         getUserFromCache: (state) => (uid) => {

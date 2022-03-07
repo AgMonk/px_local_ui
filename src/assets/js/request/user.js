@@ -124,10 +124,10 @@ export const getUserBookmarkTags = (uid, lang = 'zh') => {
         const pub = res.body['public'];
         const pri = res.body['private'];
         const compare = (a, b) => {
-            if (a && a.tag === '未分類') {
+            if (a.tag === '未分類') {
                 return -1
             }
-            if (b && b.tag === '未分類') {
+            if (b.tag === '未分類') {
                 return 1
             }
             return b.cnt - a.cnt;

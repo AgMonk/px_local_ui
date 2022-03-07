@@ -6,11 +6,37 @@
                 element-loading-text="加载中..."
   >
     <!--  <el-container direction="horizontal">-->
-    <el-header v-if="config.uid===params.uid">
-      <el-radio-group v-model="query.show" size="large" @change="pushRoute">
-        <el-radio-button label="show">公开</el-radio-button>
-        <el-radio-button label="hide">不公开</el-radio-button>
-      </el-radio-group>
+    <el-header>
+      <el-form inline>
+        <el-form-item v-if="config.uid===params.uid">
+          <el-radio-group v-model="query.show" @change="pushRoute">
+            <el-radio-button label="show">公开</el-radio-button>
+            <el-radio-button label="hide">不公开</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-tooltip content="默认只显示数量最多的前20个标签，请输入关键字搜索" placement="top">
+            <el-select v-if="tags.pub.length>0 && query.show==='show'" v-model="query.tag" :filter-method="tagFilter" clearable filterable placeholder="公开标签" @change="pushRoute">
+              <el-option
+                  v-for="item in tagSelector.pub"
+                  :key="item.tag"
+                  :label="`${item.tag}(${item.cnt})`"
+                  :value="item.tag"
+              >
+              </el-option>
+            </el-select>
+            <el-select v-if="tags.pri.length>0 && query.show==='hide'" v-model="query.tag" clearable filterable placeholder="私有标签">
+              <el-option
+                  v-for="item in tagSelector.pri"
+                  :key="item.tag"
+                  :label="`${item.tag}(${item.cnt})`"
+                  :value="item.tag"
+              >
+              </el-option>
+            </el-select>
+          </el-tooltip>
+        </el-form-item>
+      </el-form>
     </el-header>
     <el-main style="text-align: left">
       <illust-card-div ref="card-div" :disable-group="config.uid===params.uid" @refresh="load($route, true)" />
@@ -26,7 +52,6 @@ import {mapActions, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
 import {setTitle} from "@/assets/js/request/request";
-import {getUserBookmarkTags} from "@/assets/js/request/user";
 
 export default {
   name: "UserBookmark",
@@ -41,6 +66,14 @@ export default {
         show: 'show',
         tag: '',
       },
+      tags: {
+        pub: [],
+        pri: [],
+      },
+      tagSelector: {
+        pub: [],
+        pri: [],
+      },
       loading: false,
     }
   },
@@ -50,9 +83,17 @@ export default {
     ...mapState("Config", [`config`]),
   },
   methods: {
-    ...mapActions("User", [`getUserBookmark`]),
+    ...mapActions("User", [`getUserBookmark`, `getUserBookmarkTags`]),
     pushRoute() {
       this.$router.push({name: '用户收藏', params: this.params, query: this.query})
+    },
+    tagFilter(value) {
+      const key = this.query.show === 'show' ? 'pub' : 'pri';
+      if (value) {
+        this.tagSelector[key] = this.tags[key].filter(i => i.tag.includes(value))
+      } else {
+        this.tagSelector[key] = this.tags[key].slice(0, Math.min(this.tags[key].length, 20))
+      }
     },
     loadUserBookmark(force) {
       this.loading = true;
@@ -63,9 +104,11 @@ export default {
       }).catch(reason => autoRetry(reason, () => this.loadUserBookmark(force)))
     },
     loadUserBookmarkTags(force) {
-      getUserBookmarkTags(this.params.uid).then(res => {
-        console.log(res)
-      })
+      this.getUserBookmarkTags({uid: this.params.uid, force}).then(res => {
+        this.tags = res
+        this.tagSelector.pub = res.pub.slice(0, Math.min(res.pub.length, 20))
+        this.tagSelector.pri = res.pri.slice(0, Math.min(res.pri.length, 20))
+      }).catch(reason => autoRetry(reason, () => this.loadUserBookmarkTags(force)))
     },
     load(route, force) {
       if (route.name === '用户收藏') {
