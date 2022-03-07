@@ -4,6 +4,7 @@
 import {bookmarkAdd, bookmarkDel, getIllustInfo} from "@/assets/js/request/illust";
 import {copyObj} from "@/assets/js/utils/ObjUtils";
 import {ElMessage} from "element-plus";
+import {getUserProfileIllust} from "@/assets/js/request/user";
 
 export default {
     namespaced: true,
@@ -79,7 +80,18 @@ export default {
                 return illust
             })
         },
-
+        getUserProfileIllust: ({dispatch, commit, state}, {uid, page, data, type, lang = 'zh', is_first_page}) => {
+            const ids = data.filter(id => !Object.keys(state.cache).includes(`${id}`));
+            if (ids.length === 0) {
+                return new Promise((r) => r({}))
+            }
+            const now = new Date().getTimeSeconds();
+            return getUserProfileIllust({uid, ids, type, is_first_page, lang}).then(res => {
+                console.log(res)
+                res.forEach(i => commit("saveInfo2Cache", {key: `${i.id}`, value: {time: now, data: i}}))
+                return {}
+            })
+        },
 
     },
     getters: {

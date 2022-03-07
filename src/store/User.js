@@ -9,6 +9,7 @@ export default {
     state: {
         cache: {},
         profile: {},
+        bookmark: {},
     },
     mutations: {
         method(state, payload) {
@@ -38,7 +39,7 @@ export default {
             })
         },
         getUserInfo: ({dispatch, commit, state}, {uid, force = false}) => {
-            const key = `${uid}`;
+            const key = `用户基础数据:${uid}`;
             return getCache({
                 cacheObj: state.cache, key, force,
                 requestMethod: () => getUserInfo(uid),
@@ -49,7 +50,7 @@ export default {
         getUserProfileAll: ({dispatch, commit, state}, {uid, force = false}) => {
             return getCache({
                 cacheObj: state.profile, force,
-                key: `${uid}`,
+                key: `用户profile:${uid}`,
                 requestMethod: () => getUserProfileAll(uid),
             })
         },

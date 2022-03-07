@@ -1,7 +1,7 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header>
+    <el-header height="80px">
       <div id="作者信息">
         <el-row>
           <el-col :span="6">
@@ -18,7 +18,16 @@
               <el-radio-button label="用户漫画">漫画 <span v-if="counts.manga>0">({{ counts.manga }})</span></el-radio-button>
               <el-radio-button label="用户收藏">收藏 <span v-if="counts.bookmark>0">({{ counts.bookmark }})</span></el-radio-button>
             </el-radio-group>
+            <el-pagination v-if="total>0"
+                           v-model:current-page="page"
+                           :page-size="48"
+                           :total="total"
+                           layout="prev, pager, next,jumper,total"
+                           @current-change="$router.push({params:{page:$event}})"
+
+            />
           </el-col>
+
         </el-row>
       </div>
     </el-header>
@@ -49,13 +58,17 @@ export default {
         bookmark: 0,
       },
       label: '',
+      total: 0,
+      page: 1,
     }
   },
   computed: {},
   methods: {
     ...mapActions("User", [`getUserInfo`, `getUserProfileAll`]),
     loadProfileAll(e) {
-      this.counts = Object.assign({}, this.counts, e)
+      const {illust, manga, bookmark, type} = e
+      this.counts = Object.assign({}, this.counts, {illust, manga, bookmark})
+      this.total = this.counts[type]
     },
     loadAuthorInfo(uid) {
       this.getUserInfo({uid}).then(res => {
