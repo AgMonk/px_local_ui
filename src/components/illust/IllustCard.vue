@@ -36,7 +36,7 @@
         <illust-link :pid="illust.id" type="success">{{ illust.title }}</illust-link>
       </div>
     </el-row>
-    <el-row>
+    <el-row v-if="!disableUserAvatar">
       <el-col :span="4">
         <user-avatar :size="25" :uid="illust.authorId" />
       </el-col>
@@ -121,6 +121,7 @@ export default {
   },
   props: {
     pid: {type: Number, required: true},
+    disableUserAvatar: {type: Boolean, default: false},
   },
 }
 

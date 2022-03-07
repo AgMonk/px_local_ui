@@ -42,7 +42,7 @@
             <my-copy-button :text="JSON.stringify(configuration.search.keywords)">导出</my-copy-button>
           </el-descriptions-item>
           <el-descriptions-item label="卡片懒加载">
-            <el-tooltip content="显示作品卡片的缩略图滚动进入窗口内时才进行加载" effect="light">
+            <el-tooltip content="作品卡片的缩略图滚动进入窗口内时才进行加载" effect="light">
               <el-switch v-model="configuration.search.lazy" active-text="是" inactive-color="red" inactive-text="否" inline-prompt
                          @change="setConfig({key:'search',value:configuration.search})"
               />

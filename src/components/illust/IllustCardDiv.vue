@@ -20,12 +20,12 @@
 
     </div>
     <el-scrollbar v-show="data.normal.length>0" :height="`${height}px`">
-      <illust-card v-for="pid in data.normal" :pid="pid" @image-load="threads.normal.current--;" />
+      <illust-card v-for="pid in data.normal" :disable-user-avatar="disableUserAvatar" :pid="pid" @image-load="threads.normal.current--;" />
     </el-scrollbar>
 
     <el-dialog v-for="item in modes" v-model="dialogShow[item.name]" :title="item.title" close-on-click-modal width="90%" @close="mode='normal'" @open="mode=item.name">
       <el-scrollbar :height="`${207*2.5}px`">
-        <illust-card v-for="pid in data[item.name]" :pid="pid" @image-load="threads[item.name].current--;" />
+        <illust-card v-for="pid in data[item.name]" :disable-user-avatar="disableUserAvatar" :pid="pid" @image-load="threads[item.name].current--;" />
       </el-scrollbar>
     </el-dialog>
   </div>
@@ -138,6 +138,11 @@ export default {
     },
     //  设置时间跨度
     setDateRange() {
+      if (!this.fullData || this.fullData.length === 0) {
+        this.maxDate = undefined
+        this.minDate = undefined
+        return;
+      }
       const max = Math.max(...this.fullData)
       const min = Math.min(...this.fullData)
       const maxDate = this.getIllustFromCache()(max).timestamp.create.substring(0, 16)
@@ -193,6 +198,7 @@ export default {
     disableGroup: {type: Boolean, default: false},
     height: {type: Number, default: 207 * 3},
     disableRefresh: {type: Boolean, default: false},
+    disableUserAvatar: {type: Boolean, default: false},
   },
 }
 
