@@ -1,23 +1,23 @@
 // 用户
 
 import {pixivGetRequest, pixivPostWithFormDataRequest} from "@/assets/js/request/request";
-import {replacePrefix} from "@/assets/js/request/illust";
+import {parseIllustInfo, replacePrefix} from "@/assets/js/request/illust";
 
-export const getUserInfo = (uid)=>{
+export const getUserInfo = (uid) => {
     return pixivGetRequest({
-        url:`/ajax/user/${uid}`,
-        params:{
-            full:1,
-            lang:'zh'
+        url: `/ajax/user/${uid}`,
+        params: {
+            full: 1,
+            lang: 'zh'
         }
-    }).then(res=> {
+    }).then(res => {
         const body = res.body
-        const {image,imageBig,isFollowed,name,userId,comment,following,social} = body
+        const {image, imageBig, isFollowed, name, userId, comment, following, social} = body
 
         const links = []
-        Object.keys(social).forEach(name=>{
+        Object.keys(social).forEach(name => {
             const url = social[name].url
-            links.push({name,url})
+            links.push({name, url})
         })
         links.sort((a, b) => a.name.localeCompare(b.name))
         return {
@@ -72,5 +72,21 @@ export const getUserProfileAll = (uid) => {
         const illusts = Object.keys(body.illusts).map(i => Number(i)).reverse()
         const manga = Object.keys(body.manga).map(i => Number(i)).reverse()
         return {illusts, manga}
+    })
+}
+
+//获取用户作品简略数据
+export const getUserProfileIllust = ({uid, ids, type, is_first_page, lang = 'zh'}) => {
+    return pixivGetRequest({
+        url: `/ajax/user/${uid}/profile/illusts`,
+        headers: {
+            'x-user-id': uid,
+        },
+        params: {uid, ids, work_category: type, is_first_page, lang},
+    }).then(res => {
+        const {works} = res.body
+
+        return Object.keys(works).map(i => works[i]).map(i => parseIllustInfo(i, '简略'))
+
     })
 }
