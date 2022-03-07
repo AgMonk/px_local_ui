@@ -1,9 +1,9 @@
 <template>
-  <el-button v-if="isFollowed" :disabled="loading" :size="size" type="info" @click="doUnFollow">
+  <el-button v-if="isFollowed && isNotSelf(user)" :disabled="loading" :size="size" type="info" @click="doUnFollow">
     <span v-if="loading">正在取消</span>
     <span v-else>已关注</span>
   </el-button>
-  <el-button v-else :disabled="loading" :size="size" type="success" @click="doFollow">
+  <el-button v-else-if="isNotSelf(user)" :disabled="loading" :size="size" type="success" @click="doFollow">
     <span v-if="loading">正在关注</span>
     <span v-else>关注</span>
   </el-button>
@@ -26,6 +26,9 @@ export default {
   },
   methods: {
     ...mapActions("User", [`follow`, `unfollow`]),
+    isNotSelf(user) {
+      return user.id !== this.config.uid
+    },
     doFollow() {
       this.loading = true;
       this.follow({uid: this.user.id, token: this.config.token}).then(() => {
