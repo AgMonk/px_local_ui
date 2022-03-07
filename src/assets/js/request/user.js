@@ -1,7 +1,7 @@
 // 用户
 
 import {pixivGetRequest, pixivPostWithFormDataRequest} from "@/assets/js/request/request";
-import {parseIllustInfo, replacePrefix} from "@/assets/js/request/illust";
+import {parseIllustInfo, parseSimpleIllustInfo, replacePrefix} from "@/assets/js/request/illust";
 
 export const getUserInfo = (uid) => {
     return pixivGetRequest({
@@ -89,4 +89,21 @@ export const getUserProfileIllust = ({uid, ids, type, is_first_page, lang = 'zh'
         return Object.keys(works).map(i => works[i]).map(i => parseIllustInfo(i, '简略'))
 
     })
+}
+
+/**
+ * 获取用户收藏作品
+ * @param uid uid
+ * @param rest  公开show 不公开 hide
+ * @param offset
+ * @param limit
+ * @param tag
+ * @param lang
+ * @returns {AxiosPromise}
+ */
+export const getUserBookmark = ({uid, rest = 'show', offset = 0, limit = 48, tag, lang = 'zh'}) => {
+    return pixivGetRequest({
+        url: `/ajax/user/${uid}/illusts/bookmarks`,
+        params: {rest, offset, limit, tag, lang},
+    }).then(res => parseSimpleIllustInfo(res.body.works))
 }

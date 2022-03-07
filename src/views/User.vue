@@ -22,9 +22,9 @@
                            v-model:current-page="page"
                            :page-size="48"
                            :total="total"
+                           hide-on-single-page
                            layout="prev, pager, next,jumper,total"
                            @current-change="$router.push({params:{page:$event}})"
-                           hide-on-single-page
             />
           </el-col>
 
