@@ -21,6 +21,7 @@ export default {
       data: [],
     }
   },
+  emits: ['load-profile-all'],
   computed: {},
   methods: {
     ...mapActions("User", [`getUserProfileAll`]),
@@ -28,6 +29,9 @@ export default {
       this.getUserProfileAll({uid}).then(res => {
         this.data = res.illusts
 
+        const illust = res.illusts.length
+        const manga = res.manga.length
+        this.$emit('load-profile-all', {illust, manga})
         //  todo 请求完成 返回作品数量
       }).catch(reason => autoRetry(reason, () => this.loadProfileAll(uid)))
     },

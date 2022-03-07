@@ -23,7 +23,7 @@
       </div>
     </el-header>
     <el-main>
-      <router-view />
+      <router-view @load-profile-all="loadProfileAll" />
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -54,6 +54,9 @@ export default {
   computed: {},
   methods: {
     ...mapActions("User", [`getUserInfo`, `getUserProfileAll`]),
+    loadProfileAll(e) {
+      this.counts = Object.assign({}, this.counts, e)
+    },
     loadAuthorInfo(uid) {
       this.getUserInfo({uid}).then(res => {
         this.author = res;
