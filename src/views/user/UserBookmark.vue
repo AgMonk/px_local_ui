@@ -26,6 +26,7 @@ import {mapActions, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
 import {setTitle} from "@/assets/js/request/request";
+import {getUserBookmarkTags} from "@/assets/js/request/user";
 
 export default {
   name: "UserBookmark",
@@ -61,6 +62,11 @@ export default {
         this.$emit('load-profile-all', {bookmark: res.total, type: 'bookmark'})
       }).catch(reason => autoRetry(reason, () => this.loadUserBookmark(force)))
     },
+    loadUserBookmarkTags(force) {
+      getUserBookmarkTags(this.params.uid).then(res => {
+        console.log(res)
+      })
+    },
     load(route, force) {
       if (route.name === '用户收藏') {
         this.params.uid = Number(route.params.uid)
@@ -68,6 +74,7 @@ export default {
         this.query.tag = route.query.tag ? route.query.tag : '';
         this.query.show = route.query.show ? route.query.show : 'show';
         this.loadUserBookmark(force)
+        this.loadUserBookmarkTags(force)
       }
     },
   },

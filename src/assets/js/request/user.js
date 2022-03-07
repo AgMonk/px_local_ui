@@ -66,7 +66,8 @@ export const getUserProfileAll = (uid) => {
         url: `/ajax/user/${uid}/profile/all`,
         params: {
             lang: 'zh'
-        }
+        },
+        headers: {'x-user-id': uid,}
     }).then(res => {
         const body = res.body
         const illust = Object.keys(body.illusts).map(i => Number(i)).reverse()
@@ -105,10 +106,34 @@ export const getUserBookmark = ({uid, rest = 'show', offset = 0, limit = 48, tag
     return pixivGetRequest({
         url: `/ajax/user/${uid}/illusts/bookmarks`,
         params: {rest, offset, limit, tag, lang},
+        headers: {'x-user-id': uid,}
     }).then(res => {
         return {
             total: res.body.total,
             data: parseSimpleIllustInfo(res.body.works),
         };
+    })
+}
+
+export const getUserBookmarkTags = (uid, lang = 'zh') => {
+    return pixivGetRequest({
+        url: `/ajax/user/${uid}/illusts/bookmark/tags`,
+        params: {lang},
+        headers: {'x-user-id': uid,}
+    }).then(res => {
+        const pub = res.body['public'];
+        const pri = res.body['private'];
+        const compare = (a, b) => {
+            if (a && a.tag === '未分類') {
+                return -1
+            }
+            if (b && b.tag === '未分類') {
+                return 1
+            }
+            return b.cnt - a.cnt;
+        }
+        pub.sort(compare)
+        pri.sort(compare)
+        return {pub, pri}
     })
 }

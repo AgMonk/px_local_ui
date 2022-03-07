@@ -5,6 +5,7 @@ export const pixivGetRequest = axios.create({
     timeout: 20000,
     method: "get",
     validateStatus,
+    headers: {}
 })
 
 export const pixivPostRequest = axios.create({
