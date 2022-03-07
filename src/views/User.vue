@@ -24,7 +24,7 @@
                            :total="total"
                            hide-on-single-page
                            layout="prev, pager, next,jumper,total"
-                           @current-change="$router.push({params:{page:$event}})"
+                           @current-change="$router.push({params:{page:$event},query:$route.query})"
             />
           </el-col>
 
@@ -67,7 +67,9 @@ export default {
     ...mapActions("User", [`getUserInfo`, `getUserProfileAll`]),
     loadProfileAll(e) {
       const {illust, manga, bookmark, type} = e
-      this.counts = Object.assign({}, this.counts, {illust, manga, bookmark})
+      this.counts.illust = illust ? illust : this.counts.illust
+      this.counts.manga = manga ? manga : this.counts.manga
+      this.counts.bookmark = bookmark ? bookmark : this.counts.bookmark
       this.total = this.counts[type]
     },
     loadAuthorInfo(uid) {

@@ -1,8 +1,8 @@
 // Pixiv用户信息
 // noinspection JSUnusedLocalSymbols
 
-import {follow, getUserInfo, getUserProfileAll, unfollow} from "@/assets/js/request/user";
-import {getCache} from "@/assets/js/utils/CacheUtils";
+import {follow, getUserBookmark, getUserInfo, getUserProfileAll, unfollow} from "@/assets/js/request/user";
+import {getCache, getCacheByTime} from "@/assets/js/utils/CacheUtils";
 
 export default {
     namespaced: true,
@@ -54,6 +54,23 @@ export default {
                 requestMethod: () => getUserProfileAll(uid),
             })
         },
+        getUserBookmark: ({dispatch, commit, state}, {uid, show, page, size = 48, tag, lang = 'zh', force}) => {
+            const rest = show
+            const limit = size;
+            const offset = (page - 1) * size;
+            const key = `用户${show}收藏：${uid} 第${page}页(${size}) tag:${tag}`
+            return getCacheByTime({
+                cacheObj: state.bookmark, key, force, seconds: 30 * 60,
+                requestMethod: () => getUserBookmark({uid, rest, offset, limit, tag, lang})
+            }).then(res => {
+                const now = new Date().getTimeSeconds();
+                const {authors, illusts} = res.data
+                authors.forEach(author => commit('User/saveInfo2Cache', author, {root: true}))
+                illusts.forEach(i => commit('Artworks/saveInfo2Cache', {key: `${i.id}`, value: {time: now, data: i}}, {root: true}))
+                return {illusts: illusts.map(i => i.id), total: res.total}
+            })
+        },
+
     },
     getters: {
         getUserFromCache: (state) => (uid) => {

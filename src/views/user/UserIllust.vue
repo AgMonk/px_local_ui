@@ -20,6 +20,7 @@
 import {mapActions, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import {setTitle} from "@/assets/js/request/request";
 
 export default {
   name: "UserIllust",
@@ -72,6 +73,7 @@ export default {
     },
   },
   mounted() {
+    setTitle("用户作品")
     this.load(this.$route)
   },
   watch: {

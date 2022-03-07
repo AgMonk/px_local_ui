@@ -101,9 +101,14 @@ export const getUserProfileIllust = ({uid, ids, type, is_first_page, lang = 'zh'
  * @param lang
  * @returns {AxiosPromise}
  */
-export const getUserBookmark = ({uid, rest = 'show', offset = 0, limit = 48, tag, lang = 'zh'}) => {
+export const getUserBookmark = ({uid, rest = 'show', offset = 0, limit = 48, tag = '', lang = 'zh'}) => {
     return pixivGetRequest({
         url: `/ajax/user/${uid}/illusts/bookmarks`,
         params: {rest, offset, limit, tag, lang},
-    }).then(res => parseSimpleIllustInfo(res.body.works))
+    }).then(res => {
+        return {
+            total: res.body.total,
+            data: parseSimpleIllustInfo(res.body.works),
+        };
+    })
 }
