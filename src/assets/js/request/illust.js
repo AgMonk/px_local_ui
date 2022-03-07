@@ -1,4 +1,5 @@
 import {pixivGetRequest, pixivPostRequest, pixivPostWithFormDataRequest} from "@/assets/js/request/request";
+import {distinctById} from "@/assets/js/utils/ObjUtils";
 
 
 export const getIllustInfo = (pid) => {
@@ -157,9 +158,9 @@ export const setIfExists = (src, srcKey, {des, desKey, value}) => {
 
 export const parseSimpleIllustInfo = (array, tagsMap) => {
     if (!array || array.length === 0) {
-        return []
+        return {illusts: [], authors: []}
     }
-    return array.map(body => {
+    const data = array.map(body => {
         const author = parseAuthorInfo(body)
         const illust = parseIllustInfo(body, "简略")
         if (tagsMap) {
@@ -167,4 +168,8 @@ export const parseSimpleIllustInfo = (array, tagsMap) => {
         }
         return {author, illust}
     })
+    const illusts = data.map(i => i.illust)
+    const authors = distinctById(data.map(i => i.author))
+
+    return {illusts, authors}
 }

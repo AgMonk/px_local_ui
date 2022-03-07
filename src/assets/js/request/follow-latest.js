@@ -2,7 +2,6 @@
 
 import {pixivGetRequest} from "@/assets/js/request/request";
 import {parseSimpleIllustInfo} from "@/assets/js/request/illust";
-import {distinctById} from "@/assets/js/utils/ObjUtils";
 
 export const getFollowLatest = (p) => {
     return pixivGetRequest({
@@ -23,9 +22,7 @@ export const getFollowLatest = (p) => {
             tags[tag] = {tag, translation}
         })
 
-        const illustList = parseSimpleIllustInfo(illust, tags)
-        const illusts = illustList.map(i => i.illust)
-        const authors = distinctById(illustList.map(i => i.author))
+        const {illusts, authors} = parseSimpleIllustInfo(illust, tags)
 
         return {tags, authors, illusts}
     })

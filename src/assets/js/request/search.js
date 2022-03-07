@@ -20,18 +20,17 @@ export const search = (keyword, {page = 1, scd, ecd, mode = 'all'}) => {
 
         // 受欢迎作品
         const recent = parseSimpleIllustInfo(popular.recent, tags)
-        const recentAuthors = recent.map(i => i.author)
         const permanent = parseSimpleIllustInfo(popular.permanent, tags)
-        const permanentAuthors = recent.map(i => i.author)
 
         // 作品
         const total = illustManga.total
         const illustList = parseSimpleIllustInfo(illustManga.data, tags)
-        const illusts = illustList.map(i => i.illust)
-        const illustAuthors = illustList.map(i => i.author);
+        const authors = distinctById([...(recent.authors), ...(permanent.authors), ...(illustList.authors)])
 
-        const authors = distinctById([...recentAuthors, ...permanentAuthors, ...illustAuthors])
-
-        return {tags, popular: {recent: recent.map(i => i.illust), permanent: permanent.map(i => i.illust)}, relatedTags, total, authors, illusts}
+        return {
+            tags, relatedTags, total, authors,
+            popular: {recent: recent.illusts, permanent: permanent.illusts},
+            illusts: illustList.illusts
+        }
     })
 }
