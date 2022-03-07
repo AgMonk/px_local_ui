@@ -69,9 +69,9 @@ export const getUserProfileAll = (uid) => {
         }
     }).then(res => {
         const body = res.body
-        const illusts = Object.keys(body.illusts).map(i => Number(i)).reverse()
+        const illust = Object.keys(body.illusts).map(i => Number(i)).reverse()
         const manga = Object.keys(body.manga).map(i => Number(i)).reverse()
-        return {illusts, manga}
+        return {illust, manga}
     })
 }
 

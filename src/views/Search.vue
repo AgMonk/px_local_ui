@@ -36,6 +36,7 @@
     </el-header>
     <el-main>
       <el-pagination v-if="searchCount>0"
+                     hide-on-single-page
                      v-model:current-page="page"
                      :page-size="60"
                      :total="total"

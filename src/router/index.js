@@ -7,7 +7,6 @@ import FollowLatest from "@/views/FollowLatest";
 import Search from "@/views/Search";
 import User from "@/views/User";
 import UserIllust from "@/views/user/UserIllust";
-import UserManga from "@/views/user/UserManga";
 import UserBookmark from "@/views/user/UserBookmark";
 
 const routes = [
@@ -63,7 +62,7 @@ const routes = [
         component: User,
         children: [
             {path: 'illust/:page', name: '用户插画', component: UserIllust},
-            {path: 'manga/:page', name: '用户漫画', component: UserManga},
+            {path: 'manga/:page', name: '用户漫画', component: UserIllust},
             {path: 'bookmark/:page', name: '用户收藏', component: UserBookmark},
         ],
     }

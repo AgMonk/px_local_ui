@@ -39,7 +39,7 @@ export default {
             })
         },
         getUserInfo: ({dispatch, commit, state}, {uid, force = false}) => {
-            const key = `用户基础数据:${uid}`;
+            const key = `${uid}`;
             return getCache({
                 cacheObj: state.cache, key, force,
                 requestMethod: () => getUserInfo(uid),

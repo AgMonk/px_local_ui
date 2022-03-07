@@ -8,6 +8,7 @@
     <el-header>
       <el-pagination v-model:current-page="page"
                      :total="655350"
+                     hide-on-single-page
                      layout="prev, pager, next,jumper"
                      @current-change="$router.push({params:{page:$event}})"
 
