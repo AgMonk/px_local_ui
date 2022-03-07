@@ -140,8 +140,13 @@ export default {
     setDateRange() {
       const max = Math.max(...this.fullData)
       const min = Math.min(...this.fullData)
-      this.maxDate = this.getIllustFromCache()(max).timestamp.create.substring(5, 16)
-      this.minDate = this.getIllustFromCache()(min).timestamp.create.substring(5, 16)
+      const maxDate = this.getIllustFromCache()(max).timestamp.create.substring(0, 16)
+      const minDate = this.getIllustFromCache()(min).timestamp.create.substring(0, 16)
+      const maxYear = maxDate.substring(0, 4)
+      const minYear = minDate.substring(0, 4)
+      const index = maxYear === minYear ? 5 : 0;
+      this.maxDate = maxDate.substring(index)
+      this.minDate = minDate.substring(index)
     },
     addQuery(array) {
       this.fullData.push(...array)
