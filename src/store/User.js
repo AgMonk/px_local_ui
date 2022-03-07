@@ -1,13 +1,14 @@
 // Pixiv用户信息
 // noinspection JSUnusedLocalSymbols
 
-import {follow, getUserInfo, unfollow} from "@/assets/js/request/user";
+import {follow, getUserInfo, getUserProfileAll, unfollow} from "@/assets/js/request/user";
 import {getCache} from "@/assets/js/utils/CacheUtils";
 
 export default {
     namespaced: true,
     state: {
-        cache: {}
+        cache: {},
+        profile: {},
     },
     mutations: {
         method(state, payload) {
@@ -36,17 +37,22 @@ export default {
                 state.cache[key].isFollowed = false
             })
         },
-        getUserInfo: ({dispatch, commit, state}, {uid, force}) => {
+        getUserInfo: ({dispatch, commit, state}, {uid, force = false}) => {
             const key = `${uid}`;
             return getCache({
-                cacheObj: state.cache, key,
+                cacheObj: state.cache, key, force,
                 requestMethod: () => getUserInfo(uid),
                 useCache: (cache) => cache.hasOwnProperty("following") && cache.hasOwnProperty("isFollowed"),
                 saveCache: (cacheObj, key, body) => commit("saveInfo2Cache", body),
             })
         },
-
-
+        getUserProfileAll: ({dispatch, commit, state}, {uid, force = false}) => {
+            return getCache({
+                cacheObj: state.profile, force,
+                key: `${uid}`,
+                requestMethod: () => getUserProfileAll(uid),
+            })
+        },
     },
     getters: {
         getUserFromCache: (state) => (uid) => {

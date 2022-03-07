@@ -11,16 +11,41 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+import {autoRetry} from "@/assets/js/utils/RequestUtils";
+
 export default {
   name: "UserIllust",
   data() {
-    return {}
+    return {
+      data: [],
+    }
   },
   computed: {},
-  methods: {},
-  mounted() {
+  methods: {
+    ...mapActions("User", [`getUserProfileAll`]),
+    loadProfileAll(uid) {
+      this.getUserProfileAll({uid}).then(res => {
+        this.data = res.illusts
+
+        //  todo 请求完成 返回作品数量
+      }).catch(reason => autoRetry(reason, () => this.loadProfileAll(uid)))
+    },
+    load(route) {
+      if (route.name === '用户插画') {
+        const uid = Number(route.params.uid)
+        this.loadProfileAll(uid)
+      }
+    },
   },
-  watch: {},
+  mounted() {
+    this.load(this.$route)
+  },
+  watch: {
+    $route(to) {
+      this.load(to)
+    }
+  },
   props: {},
 }
 
