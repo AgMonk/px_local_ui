@@ -1,6 +1,6 @@
 <template>
   <el-tooltip>
-    <router-link :to="{name:'用户插画',params:{uid,page:1}}">
+    <router-link :to="{name:'用户插画',params:{uid,page:1},query:{from:$route.fullPath}}">
       <el-link :style="`font-size: ${size}px;`" :type="type" :underline="false">
         {{ name }}
       </el-link>

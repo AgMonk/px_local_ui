@@ -13,7 +13,7 @@
             <div v-else v-loading="!author" style="height:60px"></div>
           </el-col>
           <el-col :span="18" style="text-align: left">
-            <el-radio-group v-model="label" size="large" @change="$router.push({name:$event,params:{page:1}})">
+            <el-radio-group v-model="label" size="large" @change="$router.push({name:$event,params:{page:1},query:$route.query})">
               <el-radio-button label="用户插画">插画 <span v-if="counts.illust>0">({{ counts.illust }})</span></el-radio-button>
               <el-radio-button label="用户漫画">漫画 <span v-if="counts.manga>0">({{ counts.manga }})</span></el-radio-button>
               <el-radio-button label="用户收藏">收藏 <span v-if="counts.bookmark>0">({{ counts.bookmark }})</span></el-radio-button>
@@ -66,7 +66,6 @@ export default {
   methods: {
     ...mapActions("User", [`getUserInfo`, `getUserProfileAll`]),
     loadProfileAll(e) {
-      console.log(e)
       const {illust, manga, bookmark, type} = e
       this.counts = Object.assign({}, this.counts, {illust, manga, bookmark})
       this.total = this.counts[type]
@@ -78,7 +77,6 @@ export default {
     },
     load(route) {
       if (route.path.startsWith('/user')) {
-        console.log(route)
         this.page = Number(route.params.page)
         this.label = route.name
         this.author = undefined;
