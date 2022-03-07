@@ -5,6 +5,10 @@ import Artworks from "@/views/Artworks";
 import ArtworkDetail from "@/views/ArtworkDetail";
 import FollowLatest from "@/views/FollowLatest";
 import Search from "@/views/Search";
+import User from "@/views/User";
+import UserIllust from "@/views/user/UserIllust";
+import UserManga from "@/views/user/UserManga";
+import UserBookmark from "@/views/user/UserBookmark";
 
 const routes = [
     {
@@ -48,11 +52,21 @@ const routes = [
         children: [
             {
                 path: ":pid",
-                name:"作品详情",
-                component:ArtworkDetail,
+                name: "作品详情",
+                component: ArtworkDetail,
             }
         ],
     },
+    {
+        path: '/user/:uid',
+        name: "用户主页",
+        component: User,
+        children: [
+            {path: 'illust/:page', name: '用户插画', component: UserIllust},
+            {path: 'manga/:page', name: '用户漫画', component: UserManga},
+            {path: 'bookmark/:page', name: '用户收藏', component: UserBookmark},
+        ],
+    }
 
 
 ]

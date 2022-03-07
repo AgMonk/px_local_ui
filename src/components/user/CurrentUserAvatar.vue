@@ -39,7 +39,7 @@ export default {
         this.getUserInfo({uid}).then(() => {
           this.showAvatar = true;
           this.dropdownItems = [
-            {name: "我的收藏", route: {/*todo*/}},
+            {name: "我的收藏", route: {name: '用户插画', params: {uid, page: 1}}},
             {name: "配置", route: {name: "配置"}},
           ]
         }).catch(() => {

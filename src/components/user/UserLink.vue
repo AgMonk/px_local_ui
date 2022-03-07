@@ -1,13 +1,12 @@
 <template>
   <el-tooltip>
-    <!--    todo 用户作品链接-->
-    <!--    <router-link :to="`/user/${uid}/illust/1`">-->
-    <el-link :style="`font-size: ${size}px;`" :type="type" :underline="false">
-      {{ name }}
-    </el-link>
-    <!--    </router-link>-->
+    <router-link :to="{name:'用户插画',params:{uid,page:1}}">
+      <el-link :style="`font-size: ${size}px;`" :type="type" :underline="false">
+        {{ name }}
+      </el-link>
+    </router-link>
     <template #content>
-      <el-link type="primary" :href="`https://www.pixiv.net/users/${uid}/artworks`" target="_blank">
+      <el-link :href="`https://www.pixiv.net/users/${uid}/artworks`" target="_blank" type="primary">
         官方地址
       </el-link>
       <br>
@@ -36,8 +35,7 @@ export default {
       name: "",
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     ...mapGetters("User", [`getUserFromCache`]),
     ...mapGetters("Config", [`isFilterExists`]),
@@ -85,13 +83,13 @@ export default {
       type: Number,
       required: true,
     },
-    size:{
-      type:Number,
-      default:15,
+    size: {
+      type: Number,
+      default: 15,
     },
-    type:{
-      type:String,
-      default:'primary'
+    type: {
+      type: String,
+      default: 'primary'
     }
   },
 }

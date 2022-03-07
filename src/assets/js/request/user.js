@@ -45,6 +45,7 @@ export const follow = (uid, token) => {
         }
     })
 }
+
 export const unfollow = (uid, token) => {
     return pixivPostWithFormDataRequest({
         url: '/rpc_group_setting.php',
@@ -56,5 +57,18 @@ export const unfollow = (uid, token) => {
         headers: {
             'x-csrf-token': token,
         }
+    })
+}
+
+//获取用户所有作品情况
+export const getUserProfileAll = (uid) => {
+    return pixivGetRequest({
+        url: `/ajax/user/${uid}/profile/all`,
+        params: {
+            lang: 'zh'
+        }
+    }).then(res => {
+        const body = res.body
+        console.log(body)
     })
 }
