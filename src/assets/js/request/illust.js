@@ -5,7 +5,7 @@ import {distinctById} from "@/assets/js/utils/ObjUtils";
 export const getIllustInfo = (pid) => {
     return pixivGetRequest({url: `/ajax/illust/${pid}`}).then(res => {
         const {body} = res
-        console.log(body)
+        // console.log(body)
         //处理作者信息
         const author = parseAuthorInfo(body)
         const illust = parseIllustInfo(body)
