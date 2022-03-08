@@ -11,7 +11,7 @@
         <el-form-item>
           <el-input id="输入框" v-model="keyword" clearable size="small" style="max-width: 70%" @keyup.enter="route2Search(keyword)" />
           <el-button size="small" style="margin-left: 5px" type="primary" @click="route2Search(keyword)">搜索</el-button>
-          <el-dropdown size="small" split-button style="margin-left: 5px" type="primary" @click="addKeyword(keyword)" @command="route2Search($event)">
+          <el-dropdown size="small" split-button style="margin-left: 5px" trigger="click" type="primary" @click="addKeyword(keyword)" @command="route2Search($event)">
             保存
             <template #dropdown>
               <el-dropdown-menu>
@@ -154,7 +154,6 @@ export default {
       if (!route.path.startsWith('/search')) {
         return;
       }
-      console.log(route)
       const {keyword, page} = route.params
       const {scd, ecd} = route.query;
       this.dateRange = [scd, ecd]
