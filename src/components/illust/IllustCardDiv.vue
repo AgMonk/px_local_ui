@@ -157,24 +157,29 @@ export default {
       this.fullData.push(...array)
       this.setDateRange();
 
-      if (this.disableGroup) {
-        this.query.normal.push(...array)
-        console.log(`添加作品卡队列 ${array.length} 个`)
+      const fullData = array.map(id => this.getIllustFromCache()(id))
+
+      //已屏蔽作品
+      const blockedData = fullData.filter(item => this.isFilter(item))
+      this.query.filter.push(...blockedData.map(i => i.id))
+      this.counts.filter = this.data.filter.length + this.query.filter.length;
+      //未屏蔽作品
+      const availableData = fullData.filter(item => !this.isFilter(item))
+
+      if (this.disableGroup || !this.config.search.group) {
+        //不分组
+        this.query.normal.push(...availableData.map(i => i.id))
+        console.log(`添加作品卡队列 ${availableData.length} 个 已屏蔽 ${blockedData.length} 个`)
       } else {
-        const fullData = array.map(id => this.getIllustFromCache()(id))
-        const normalData = fullData.filter(item => !this.isBookmarked(item)).filter(item => !this.isFilter(item))
-        const bookmarkedData = fullData.filter(item => this.isBookmarked(item)).filter(item => !this.isFilter(item))
-        const filterData = fullData.filter(item => this.isFilter(item))
+        //分组
+        const normalData = availableData.filter(item => !this.isBookmarked(item))
+        const bookmarkedData = availableData.filter(item => this.isBookmarked(item))
 
         this.query.normal.push(...normalData.map(i => i.id))
         this.query.bookmarked.push(...bookmarkedData.map(i => i.id))
-        this.query.filter.push(...filterData.map(i => i.id))
-
-        console.log(`添加作品卡队列 ${array.length} 个 其中 常规 ${normalData.length} 个 已收藏 ${bookmarkedData.length} 个 已屏蔽 ${filterData.length} 个`)
-
-        this.counts.bookmarked = this.data.bookmarked.length + this.query.bookmarked.length;
-        this.counts.filter = this.data.filter.length + this.query.filter.length;
+        console.log(`添加作品卡队列 ${array.length} 个 其中 常规 ${normalData.length} 个 已收藏 ${bookmarkedData.length} 个 已屏蔽 ${blockedData.length} 个`)
       }
+      this.counts.bookmarked = this.data.bookmarked.length + this.query.bookmarked.length;
     },
   },
   mounted() {

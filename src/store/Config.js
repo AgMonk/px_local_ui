@@ -29,6 +29,7 @@ export default {
                 popular: false,
                 relatedTags: false,
                 lazy: true,
+                group: true,
             },
             aria2: {
                 dir: 'D:/download/aria2/plu/'

@@ -52,6 +52,13 @@
               />
             </el-tooltip>
           </el-descriptions-item>
+          <el-descriptions-item label="分组已收藏">
+            <el-tooltip content="在搜索结果中将已收藏的作品卡片放入‘已收藏’按钮中" effect="light">
+              <el-switch v-model="configuration.search.group" active-text="是" inactive-color="red" inactive-text="否" inline-prompt
+                         @change="setConfig({key:'search',value:configuration.search})"
+              />
+            </el-tooltip>
+          </el-descriptions-item>
 
         </el-descriptions>
       </div>
@@ -148,6 +155,7 @@ export default {
           popular: false,
           relatedTags: false,
           lazy: true,
+          group: true,
         },
         aria2: {
           dir: ''

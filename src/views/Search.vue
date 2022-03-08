@@ -29,7 +29,6 @@
                           type="daterange"
                           unlink-panels
                           value-format="YYYY-MM-DD"
-                          @change="change"
           />
         </el-form-item>
       </el-form>
@@ -112,9 +111,6 @@ export default {
     ...mapActions('Search', [`getSearchResult`]),
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapMutations('Config', [`setConfig`, `addKeyword`, `delKeyword`]),
-    change(e) {
-      console.log(e)
-    },
     getDateShortcuts(days) {
       const end = new Date()
       const start = end.minusDays(days)
