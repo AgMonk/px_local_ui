@@ -1,7 +1,9 @@
 // Aria2管理模块
 // noinspection JSUnusedLocalSymbols
 
-import {addTask, deleteQuest, getPixivUrls, tellStop} from "@/assets/js/request/aria2";
+import {addTask, deleteQuest, getPixivUrlsParams, tellStop} from "@/assets/js/request/aria2";
+import {autoRetry} from "@/assets/js/utils/RequestUtils";
+import {ElMessage} from "element-plus";
 
 export default {
     namespaced: true,
@@ -49,25 +51,24 @@ export default {
             })
 
         },
-        addFirst: ({dispatch, commit, state}) => {
-            const param = state.query[0]
-            if (param) {
-                dispatch("addTask", param).then(res => {
-                    state.query.splice(0, 1)
-                    dispatch("addFirst")
-                })
-            }
-        },
-        addTask: ({dispatch, commit, state}, {url, count}) => {
-            return addTask({urls: getPixivUrls(url, count)}).then(res => {
-                state.downloading.push(res)
-            })
-        },
-        addQuery: ({dispatch, commit, state}, {url, count}) => {
+        downloadIllust({dispatch, commit, state}, {data, dir}) {
+            console.log(data)
+            const url = data.type === 2 ? data.urls.zip : data.urls.original
+            const count = data.counts.page
             for (let i = 0; i < count; i++) {
-                state.query.push({url, count: i})
+                const param = getPixivUrlsParams(url, i, dir, data.id);
+                dispatch('startDownload', param)
             }
-            return null;
+        },
+        startDownload: ({dispatch, commit, state}, param) => {
+            if (!param) {
+                return
+            }
+            const id = param.id
+            return addTask(param).then(gid => {
+                state.downloading.push(gid)
+                ElMessage.success(`${id} 开始下载`)
+            }).catch(reason => autoRetry(reason, () => dispatch('startDownload', param)))
         },
     },
     getters: {},

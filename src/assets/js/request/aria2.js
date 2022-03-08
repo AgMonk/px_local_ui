@@ -16,7 +16,7 @@ function validateStatus(status) {
     return status >= 200 && status < 600; // default
 }
 
-export const getPixivUrls = (original, count) => {
+export const getPixivUrlsParams = (original, count, dir, pid) => {
     if (original.includes('ugoira')) {
         //    动图
         return [
@@ -24,28 +24,33 @@ export const getPixivUrls = (original, count) => {
             prefix_pxre + original,
         ]
     }
-    return [
-        prefix_pximg + original.replace("_p0",`_p${count}`),
-        prefix_pxre + original.replace("_p0",`_p${count}`),
-    ]
+    return {
+        urls: [
+            prefix_pximg + original.replace("_p0", `_p${count}`),
+            prefix_pxre + original.replace("_p0", `_p${count}`),
+        ],
+        dir,
+        id: `${pid}_p${count}`,
+    }
+
 }
 
-export const addTask = ({filename, urls, dir}) => {
-    const id = uuid();
-    const data = {
-        method: 'aria2.addUri',
-        id,
-        jsonrpc: 2.0,
-        params: [
-            urls,
-            {
-                dir,
-                fileName: filename ? filename : urls[0].split('/').reverse()[0],
-                referer: "*",
-            },
-        ],
-    }
-    return aria2Request({data}).then(res=>{
+export const addTask = ({filename, urls, dir, id = uuid()}) => {
+    return aria2Request({
+        data: {
+            method: 'aria2.addUri',
+            id,
+            jsonrpc: 2.0,
+            params: [
+                urls,
+                {
+                    dir,
+                    fileName: filename ? filename : urls[0].split('/').reverse()[0],
+                    referer: "*",
+                },
+            ],
+        }
+    }).then(res => {
         return res.result
     })
 }

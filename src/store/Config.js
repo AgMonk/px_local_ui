@@ -30,6 +30,9 @@ export default {
                 relatedTags: false,
                 lazy: true,
             },
+            aria2: {
+                dir: 'D:/download/aria2/plu/'
+            }
         },
     },
     mutations: {

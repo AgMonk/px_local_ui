@@ -21,6 +21,10 @@
               <el-switch v-model="configuration.detail" active-text="是" inactive-color="red" inactive-text="否" inline-prompt @change="setConfig({key:'detail',value:$event})" />
             </el-tooltip>
           </el-descriptions-item>
+          <el-descriptions-item label="Aria2下载目录">
+            <el-input v-model="configuration.aria2.dir" @change="setConfig({key:'aria2',value:$event})" />
+          </el-descriptions-item>
+
         </el-descriptions>
       </div>
       <div>
@@ -145,6 +149,9 @@ export default {
           relatedTags: false,
           lazy: true,
         },
+        aria2: {
+          dir: ''
+        }
       },
     }
   },

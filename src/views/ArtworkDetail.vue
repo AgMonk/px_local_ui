@@ -111,7 +111,7 @@
               </el-descriptions-item>
               <el-descriptions-item v-if="data.counts && data.counts.page>1" label="图片数" label-class-name="des-label">{{ data.counts.page }}</el-descriptions-item>
               <el-descriptions-item label="下载" label-class-name="des-label">
-                <el-button type="primary" @click="downloadAll">Aria2下载所有</el-button>
+                <el-button type="primary" @click="downloadIllust({data,dir:config.aria2.dir})">Aria2下载所有</el-button>
               </el-descriptions-item>
               <el-descriptions-item label="描述" label-class-name="des-label">
                 {{ data.description }}
@@ -168,16 +168,8 @@ export default {
   methods: {
     ...mapActions("Artworks", [`getIllustInfo`]),
     ...mapActions("User", [`getUserInfo`]),
-    ...mapActions("Aria2", [`addQuery`, `addFirst`]),
+    ...mapActions("Aria2", [`downloadIllust`]),
     ...mapMutations("User", [`saveInfo2Cache`]),
-    downloadAll() {
-      const url = this.data.type === 2 ? this.data.urls.zip : this.data.urls.original
-      const count = this.data.counts.page
-      this.addQuery({url, count}).then(() => {
-        ElMessage.success(`已添加 ${count} 个任务到队列`)
-        this.addFirst()
-      })
-    },
     loadSingleThumbs() {
       let i = this.thumbsList.length;
       if (i < this.thumbs.length) {
