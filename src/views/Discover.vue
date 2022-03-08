@@ -7,7 +7,7 @@
                 element-loading-text="加载中..."
   >
     <el-main style="text-align: left">
-      <illust-card-div ref="card-div" @refresh="refresh" @scroll-to-bottom="scroll2bottom" />
+      <illust-card-div ref="card-div" @click="click" @refresh="refresh" @scroll-to-bottom="scroll2bottom" />
       <div v-if="loading" style="height:300px"></div>
     </el-main>
   </el-container>
@@ -19,6 +19,7 @@ import {mapActions, mapState} from "vuex";
 import IllustCardDiv from "@/components/illust/IllustCardDiv";
 import {ElMessage} from "element-plus";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
+import {setTitle} from "@/assets/js/request/request";
 
 export default {
   name: "Discover",
@@ -35,6 +36,15 @@ export default {
   },
   methods: {
     ...mapActions('Discover', [`discover`, 'clear']),
+    click(e) {
+      //todo 收藏响应 临时解决方案
+      const parent = e.srcElement.parentElement
+      console.log(parent)
+      if (parent.id.startsWith('bookmark-add-')) {
+        const pid = Number(parent.id.replace('bookmark-add-', ''))
+        this.addIllusts(15, pid)
+      }
+    },
     add(array) {
       this.$refs['card-div'].addQuery(array)
     },

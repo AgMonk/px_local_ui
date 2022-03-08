@@ -5,7 +5,7 @@
   <el-icon v-else-if="bookmarked" :size="size" class="clickable" color="red" @click="del">
     <star-filled />
   </el-icon>
-  <el-icon v-else :color="starColor" :size="size" class="clickable" @click="add">
+  <el-icon v-else :id="`bookmark-add-${pid}`" :color="starColor" :size="size" class="clickable" @click="add">
     <star />
   </el-icon>
 </template>
