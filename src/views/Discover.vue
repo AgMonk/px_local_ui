@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import {discover} from "@/assets/js/request/discover";
+
 export default {
   name: "Discover",
   data() {
@@ -20,6 +22,9 @@ export default {
   computed: {},
   methods: {},
   mounted() {
+    discover({}).then(res => {
+      console.log(res)
+    })
   },
   watch: {},
   props: {},

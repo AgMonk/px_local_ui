@@ -1,10 +1,10 @@
 <template>
   <el-container direction="vertical">
     <el-main>
-      <el-form style="margin-left: 30px">
+      <el-form style="margin-left: 30px" @submit.prevent>
         <el-form-item>
           <template #label><span class="common-text">解析</span></template>
-          <el-input v-model="value" class="home-input" />
+          <el-input ref="input" v-model="value" class="home-input" @keyup="parse(value)" />
           <el-button type="primary" @click="parse(value)">识别</el-button>
           <el-button type="primary" @click="parse(value,'pid')">pid</el-button>
           <el-button type="primary" @click="parse(value,'uid')">uid</el-button>
@@ -55,6 +55,9 @@ export default {
   mounted() {
     setTitle("首页")
     console.log(getScreenInfo())
+    this.$nextTick(() => {
+      this.$refs['input'].focus()
+    })
   }
 }
 </script>
