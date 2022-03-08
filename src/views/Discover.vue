@@ -59,6 +59,7 @@ export default {
     }
   },
   mounted() {
+    setTitle("发现")
     if (this.illusts.length > 0) {
       this.add(this.illusts.map(i => i.id));
     } else {

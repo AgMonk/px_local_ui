@@ -17,6 +17,7 @@ import {ElMessage} from "element-plus";
 
 export default {
   name: "IllustBookmarkButton",
+  emits: ['bookmark-add'],
   components: {StarFilled, Star, AlarmClock},
   data() {
     return {
@@ -37,6 +38,7 @@ export default {
       this.bookmarkAdd({pid: this.pid, token: this.config.token}).then(res => {
         ElMessage.success("收藏成功")
         this.bookmarked = res
+        this.$emit('bookmark-add', this.pid)
         this.loading = false;
         if (!res) {
           this.getIllustInfo({pid: this.pid, force: true}).then(res => this.update(res.bmkData))

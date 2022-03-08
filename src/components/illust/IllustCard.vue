@@ -19,6 +19,7 @@
         <!--        收藏按钮-->
         <span v-if="loadCompleted" class="b1" style="position: absolute; top: 120px ; right: 0;border-radius:15px">
           <illust-bookmark-button :bmk-data="illust.bmkData" :pid="illust.id" clock-color="white" star-color="white"
+                                  @bookmark-add="test"
           />
         </span>
         <!--        图片数量-->
@@ -80,6 +81,9 @@ export default {
   methods: {
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapActions("Artworks", [`getIllustInfo`]),
+    test(e) {
+      console.log(e)
+    },
     avatarLoad() {
       this.loadCompleted = true;
       if (this.config.detail) {
