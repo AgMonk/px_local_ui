@@ -76,6 +76,13 @@
           </el-container>
         </el-main>
         <el-aside id="信息">
+          <div>
+            <el-descriptions :column="1" border>
+              <el-descriptions-item label="操作">
+                <el-button size="small" type="danger" @click="closeAllTabs">关闭全部标签</el-button>
+              </el-descriptions-item>
+            </el-descriptions>
+          </div>
           <div v-if="author" id="作者信息">
             <el-descriptions :column="1" border>
               <el-descriptions-item>
@@ -131,7 +138,7 @@
 
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
 import {Lock} from '@element-plus/icons-vue';
 import {getRootComment} from "@/assets/js/request/comment";
@@ -170,6 +177,19 @@ export default {
     ...mapActions("User", [`getUserInfo`]),
     ...mapActions("Aria2", [`downloadIllust`]),
     ...mapMutations("User", [`saveInfo2Cache`]),
+    ...mapMutations("Artworks", [`delAllTabs`]),
+    closeAllTabs() {
+      ElMessageBox.confirm('确认关闭所有标签？').then(() => {
+        this.delAllTabs()
+        const path = this.$route.query.from
+        if (path) {
+          this.$router.push(path)
+        }
+      }).catch(reason => {
+        console.log(reason)
+        ElMessage.info("已取消")
+      })
+    },
     loadSingleThumbs() {
       let i = this.thumbsList.length;
       if (i < this.thumbs.length) {

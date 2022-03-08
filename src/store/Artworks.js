@@ -22,6 +22,9 @@ export default {
         delTab(state, id) {
             state.artworks = state.artworks.filter(i => i.id !== id)
         },
+        delAllTabs(state) {
+            state.artworks = []
+        },
         saveInfo2Cache(state, {key, value}) {
             //如果缓存不存在 或者 value的层级更高
             if (!state.cache[key] || value.data.level === '详情') {
