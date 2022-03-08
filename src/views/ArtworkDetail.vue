@@ -184,6 +184,8 @@ export default {
         const path = this.$route.query.from
         if (path) {
           this.$router.push(path)
+        } else {
+          this.$router.push('/home')
         }
       }).catch(reason => {
         console.log(reason)

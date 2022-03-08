@@ -8,6 +8,7 @@ import Search from "@/views/Search";
 import User from "@/views/User";
 import UserIllust from "@/views/user/UserIllust";
 import UserBookmark from "@/views/user/UserBookmark";
+import Discover from "@/views/Discover";
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
         path: '/search',
         name: '搜索',
         component: Search,
+    },
+    {
+        path: '/discover',
+        name: '发现',
+        component: Discover,
     },
     {
         path: '/search/:keyword/:page',

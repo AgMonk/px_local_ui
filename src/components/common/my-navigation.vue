@@ -24,6 +24,7 @@ export default {
         {path: '/home', name: '首页'},
         {path: "/artworks", name: "作品"},
         {path: "/search", name: "搜索"},
+        {path: "/discover", name: "发现"},
         {path: "/follow-latest", name: "关注"},
         {path: "/config", name: "配置"},
       ],
