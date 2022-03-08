@@ -10,7 +10,6 @@ export const discover = ({mode = 'all', limit = 60, lang = 'zh', sampleIllustId}
         params: {mode, limit, lang, sampleIllustId},
     }).then(res => {
         const body = res.body
-        console.log(body)
         const {recommendedIllusts, tagTranslation, thumbnails} = body
         const illustInfo = parseSimpleIllustInfo(thumbnails.illust)
         const tags = parseTagTranslation(tagTranslation)

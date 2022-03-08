@@ -20,12 +20,21 @@
 
     </div>
     <el-scrollbar v-show="data.normal.length>0" :height="`${height}px`">
-      <illust-card v-for="pid in data.normal" :disable-user-avatar="disableUserAvatar" :pid="pid" @image-load="threads.normal.current--;" />
+      <div v-infinite-scroll="infiniteScroll">
+        <illust-card v-for="pid in data.normal" :disable-user-avatar="disableUserAvatar" :pid="pid" @image-load="threads.normal.current--;" />
+      </div>
+      <div v-if="query.normal.length===0 && $route.params.hasOwnProperty('page')" style="text-align: center">
+        <el-button size="small" type="primary" @click="route2NextPage">下一页</el-button>
+      </div>
     </el-scrollbar>
 
     <el-dialog v-for="item in modes" v-model="dialogShow[item.name]" :title="item.title" close-on-click-modal width="90%" @close="mode='normal'" @open="mode=item.name">
       <el-scrollbar :height="`${207*2.5}px`">
-        <illust-card v-for="pid in data[item.name]" :disable-user-avatar="disableUserAvatar" :pid="pid" @image-load="threads[item.name].current--;" />
+        <illust-card v-for="pid in data[item.name]"
+                     :disable-user-avatar="disableUserAvatar"
+                     :pid="pid"
+                     @image-load="threads[item.name].current--;"
+        />
       </el-scrollbar>
     </el-dialog>
   </div>
@@ -35,11 +44,12 @@
 <script>
 import IllustCard from "@/components/illust/IllustCard";
 import {mapGetters, mapState} from "vuex";
+import {copyObj} from "@/assets/js/utils/ObjUtils";
 
 export default {
   name: "IllustCardDiv",
   components: {IllustCard},
-  emits: ['load-image', 'refresh'],
+  emits: ['load-image', 'refresh', 'scroll-to-bottom'],
   data() {
     return {
       //显示的作品pid: 常规、已收藏、已屏蔽
@@ -98,6 +108,17 @@ export default {
   methods: {
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapGetters("User", [`getUserFromCache`]),
+    route2NextPage() {
+      const {params, query, name} = copyObj(this.$route)
+      params.page++
+      this.$router.push({params, query, name})
+    },
+    infiniteScroll() {
+      if (this.query.normal.length > 0) {
+        return
+      }
+      this.$emit('scroll-to-bottom')
+    },
     dataInit() {
       this.data = {normal: [], bookmarked: [], filter: [],}
       this.query = {normal: [], bookmarked: [], filter: [],}

@@ -18,7 +18,8 @@
         <el-tag v-if="loadCompleted&&isGif" effect="dark" style="position: absolute; top: 63px; left: 55px;">GIF</el-tag>
         <!--        收藏按钮-->
         <span v-if="loadCompleted" class="b1" style="position: absolute; top: 120px ; right: 0;border-radius:15px">
-          <illust-bookmark-button :bmk-data="illust.bmkData" :pid="illust.id" clock-color="white" star-color="white" />
+          <illust-bookmark-button :bmk-data="illust.bmkData" :pid="illust.id" clock-color="white" star-color="white"
+          />
         </span>
         <!--        图片数量-->
         <el-tag v-if="loadCompleted&&page>1" effect="dark" style="color:white;position: absolute; top: 0; right: 0;border-radius:10px;padding: 0 2px;">
