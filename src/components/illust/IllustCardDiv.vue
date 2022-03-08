@@ -44,7 +44,6 @@
 <script>
 import IllustCard from "@/components/illust/IllustCard";
 import {mapGetters, mapState} from "vuex";
-import {copyObj} from "@/assets/js/utils/ObjUtils";
 
 export default {
   name: "IllustCardDiv",
@@ -109,7 +108,7 @@ export default {
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapGetters("User", [`getUserFromCache`]),
     route2NextPage() {
-      const {params, query, name} = copyObj(this.$route)
+      const {params, query, name} = this.$route
       params.page++
       this.$router.push({params, query, name})
     },
