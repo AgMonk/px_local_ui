@@ -40,7 +40,7 @@
               <div v-if="data.tags && data.tags.length>0" id="标签区" style="text-align: left">
                 <el-divider content-position="left">标签</el-divider>
                 <span v-for="tag in data.tags" style="margin-left: 2px">
-                  <el-tag size="small" style="padding: 0 2px;">
+                  <el-tag class="clickable" size="small" style="padding: 0 2px;" @click="$router.push({name: '搜索结果',params:{page:1,keyword:tag.tag}})">
                     <el-icon v-if="tag.locked">
                       <lock />
                     </el-icon>
@@ -112,11 +112,15 @@
                                                                                                                                                     }}
               </el-descriptions-item>
               <el-descriptions-item label="尺寸" label-class-name="des-label">{{ data.width }}x{{ data.height }}</el-descriptions-item>
+            </el-descriptions>
+            <el-descriptions :column="2" border>
               <el-descriptions-item v-if="data.counts" label="喜欢" label-class-name="des-label">{{ data.counts.like }}</el-descriptions-item>
               <el-descriptions-item v-if="data.counts" label="浏览" label-class-name="des-label">{{ data.counts.view }}</el-descriptions-item>
               <el-descriptions-item v-if="data.counts" label="收藏" label-class-name="des-label">{{ data.counts.bookmark }}
               </el-descriptions-item>
               <el-descriptions-item v-if="data.counts && data.counts.page>1" label="图片数" label-class-name="des-label">{{ data.counts.page }}</el-descriptions-item>
+            </el-descriptions>
+            <el-descriptions :column="1" border>
               <el-descriptions-item label="下载" label-class-name="des-label">
                 <el-button type="primary" @click="downloadIllust({data,dir:config.aria2.dir})">Aria2下载所有</el-button>
               </el-descriptions-item>
