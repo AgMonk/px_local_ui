@@ -40,12 +40,9 @@ export default {
         this.bookmarked = res
         this.$emit('bookmark-add', this.pid)
         this.loading = false;
-        if (!res) {
-          this.getIllustInfo({pid: this.pid, force: true}).then(res => this.update(res.bmkData))
-        }
       }).catch(reason => {
         this.loading = false;
-        console.log(reason)
+        this.getIllustInfo({pid: this.pid, force: true}).then(res => this.update(res.bmkData))
         const {message, status,} = reason
         const m = `${status}: ${message}`
         console.log(m)
