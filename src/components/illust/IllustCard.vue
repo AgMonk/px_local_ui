@@ -6,9 +6,9 @@
           <div style="display:inline-block;width:150px;height:150px">
             <el-image :lazy="config.search.lazy"
                       :size="150"
-                      :src="config.domain+illust.urls.thumb"
+                      :src="domain+illust.urls.thumb"
                       style="border-radius:15px"
-                      @error="avatarLoad"
+                      @error="imageLoadError"
                       @load="avatarLoad"
             />
           </div>
@@ -70,6 +70,7 @@ export default {
       page: undefined,
       loadCompleted: false,
       isGif: false,
+      domain: undefined,
     }
   },
   emits: ['image-load'],
@@ -79,6 +80,10 @@ export default {
   methods: {
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapActions("Artworks", [`getIllustInfo`]),
+    imageLoadError(e) {
+      console.log("图片加载失败自动切换图片服务器重试", e)
+      this.domain = this.domain === "/pximg" ? "/pxre" : "/pximg";
+    },
     avatarLoad() {
       this.loadCompleted = true;
       if (this.config.detail) {
@@ -104,6 +109,7 @@ export default {
       }
     },
     load(pid) {
+      this.domain = this.config.domain
       this.illust = this.getIllustFromCache()(pid)
       const {tags, counts, type} = this.illust
       this.isR_18 = tags.map(i => i.tag).includes("R-18") || tags.map(i => i.tag).includes("r-18")
