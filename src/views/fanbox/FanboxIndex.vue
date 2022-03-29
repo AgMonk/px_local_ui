@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "FanboxIndex",
   data() {
@@ -32,8 +34,14 @@ export default {
     }
   },
   computed: {},
-  methods: {},
+  methods: {
+    ...mapActions("Fanbox", [`listFollowing`]),
+
+  },
   mounted() {
+    this.listFollowing().then(res => {
+      console.log(res)
+    })
   },
   watch: {},
   props: {},

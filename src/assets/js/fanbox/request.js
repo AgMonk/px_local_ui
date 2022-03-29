@@ -32,6 +32,10 @@ export const listCreator = (creatorId, limit = 300) => fanboxRequest({
     return item;
 }))
 
+export const listFollowing = () => fanboxRequest({
+    url: '/creator.listFollowing'
+}).then(res => res.data.body)
+
 
 export const handleTimestamp = (item) => {
     item.timestamp = {

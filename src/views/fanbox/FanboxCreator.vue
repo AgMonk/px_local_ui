@@ -48,6 +48,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {setTitle} from "@/assets/js/request/request";
 
 export default {
   name: "FanboxCreator",
@@ -90,6 +91,7 @@ export default {
         this.total = res.length;
         this.showPage()
         this.loading = false;
+        setTitle(`${res[0].user.name} 作品`, `Fanbox`)
       })
     }
   },
