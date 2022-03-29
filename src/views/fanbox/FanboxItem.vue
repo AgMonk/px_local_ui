@@ -1,7 +1,13 @@
 <template>
   <el-container v-loading="loading" direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header style="color:white">作品数 ({{ files.images.length }})</el-header>
+    <el-header style="color:white">作品数 ({{ files.images.length }})
+      <router-link v-if="data.user" :to="{name:'fanbox创作者作品',params:{id:data.creatorId}}">
+        <el-link type="success">
+          {{ data.user.name }}
+        </el-link>
+      </router-link>
+    </el-header>
     <el-main>
       <el-button type="success" @click="downloadImages">下载</el-button>
     </el-main>

@@ -12,6 +12,7 @@ import Discover from "@/views/Discover";
 import Fanbox from "@/views/Fanbox";
 import FanboxItem from "@/views/fanbox/FanboxItem";
 import FanboxIndex from "@/views/fanbox/FanboxIndex";
+import FanboxCreator from "@/views/fanbox/FanboxCreator";
 
 const routes = [
     {
@@ -81,6 +82,7 @@ const routes = [
         component: Fanbox,
         children: [
             {path: 'item/:id', name: 'fanbox作品详情', component: FanboxItem},
+            {path: 'creator/:id', name: 'fanbox创作者作品', component: FanboxCreator},
             {path: 'index', name: 'fanbox主页', component: FanboxIndex},
         ]
     }

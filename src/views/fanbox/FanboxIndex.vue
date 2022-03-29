@@ -5,9 +5,14 @@
     <el-main>
       <el-form label-width="90px" @submit.prevent>
         <el-form-item label="单个作品ID">
-          <el-input v-model="form.id" style="width:180px" />
-          <el-button type="primary" @click="$router.push({name:'fanbox作品详情',params:{id:form.id}})">跳转</el-button>
+          <el-input v-model="form.itemId" style="width:180px" />
+          <el-button type="primary" @click="$router.push({name:'fanbox作品详情',params:{id:form.itemId}})">跳转</el-button>
         </el-form-item>
+        <el-form-item label="作者ID">
+          <el-input v-model="form.userId" style="width:180px" />
+          <el-button type="primary" @click="$router.push({name:'fanbox创作者作品',params:{id:form.userId}})">跳转</el-button>
+        </el-form-item>
+
       </el-form>
     </el-main>
     <el-footer></el-footer>
@@ -21,7 +26,8 @@ export default {
   data() {
     return {
       form: {
-        id: undefined,
+        itemId: undefined,
+        userId: undefined,
       }
     }
   },

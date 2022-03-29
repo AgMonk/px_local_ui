@@ -7,6 +7,7 @@ import User from "@/store/User";
 import FollowLatest from "@/store/FollowLatest";
 import Search from "@/store/Search";
 import Discover from "@/store/Discover";
+import Fanbox from "@/store/Fanbox";
 
 export default createStore({
   state: {
@@ -16,6 +17,6 @@ export default createStore({
   actions: {
   },
   modules: {
-    Config, Artworks, Aria2, Loading, User, FollowLatest, Search, Discover
+    Config, Artworks, Aria2, Loading, User, FollowLatest, Search, Discover, Fanbox,
   }
 })
