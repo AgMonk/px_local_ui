@@ -2,7 +2,7 @@
   <el-container v-loading="loading" direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <el-header style="color:white">作品数 ({{ files.images.length }})
-      <router-link v-if="data.user" :to="{name:'fanbox创作者作品',params:{id:data.creatorId}}">
+      <router-link v-if="data.user" :to="{name:'fanbox创作者作品',params:{id:data.creatorId,page:1}}">
         <el-link type="success">
           {{ data.user.name }}
         </el-link>

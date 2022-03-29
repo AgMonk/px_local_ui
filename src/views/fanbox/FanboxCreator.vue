@@ -2,7 +2,7 @@
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <el-header></el-header>
-    <el-main>
+    <el-main v-loading="loading">
 
       <el-row>
         <el-col :span="12">
@@ -12,7 +12,7 @@
               :total="filterTotal"
               hide-on-single-page
               layout="total, prev, pager, next, jumper"
-              @current-change="showPage"
+              @current-change="$router.push({params:{page:$event}})"
 
           />
         </el-col>
@@ -25,7 +25,7 @@
                      inline-prompt
                      size="large"
                      style="margin-left: 5px"
-                     @change="$router.push({query:{filterAvailable:$event}})"
+                     @change="$router.push({query:{filterAvailable:$event?'1':'0'}})"
           />
         </el-col>
       </el-row>
@@ -38,6 +38,7 @@
             </router-link>
           </template>
         </el-table-column>
+        <el-table-column v-if="!filterAvailable" label="方案费用" prop="feeRequired" width="80px" />
       </el-table>
     </el-main>
     <el-footer></el-footer>
@@ -58,6 +59,7 @@ export default {
       },
       total: 100,
       filterAvailable: false,
+      loading: false,
       filterTotal: 100,
       query: [],
       data: [],
@@ -79,12 +81,15 @@ export default {
       console.log(this.data)
     },
     load(route, force) {
-      const id = route.params.id
-      this.filterAvailable = Boolean(route.query.filterAvailable)
+      const {id, page} = route.params
+      this.params.page = Number(page)
+      this.filterAvailable = route.query.filterAvailable === '1'
+      this.loading = true;
       this.listCreator({id, force}).then(res => {
         this.query = res;
         this.total = res.length;
         this.showPage()
+        this.loading = false;
       })
     }
   },
@@ -93,7 +98,10 @@ export default {
   },
   watch: {
     $route(to) {
-
+      if (to.name === 'fanbox创作者作品') {
+        console.log(to)
+        this.load(to)
+      }
     }
   },
   props: {},

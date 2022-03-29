@@ -82,7 +82,7 @@ const routes = [
         component: Fanbox,
         children: [
             {path: 'item/:id', name: 'fanbox作品详情', component: FanboxItem},
-            {path: 'creator/:id', name: 'fanbox创作者作品', component: FanboxCreator},
+            {path: 'creator/:id/:page', name: 'fanbox创作者作品', component: FanboxCreator},
             {path: 'index', name: 'fanbox主页', component: FanboxIndex},
         ]
     }
