@@ -14,6 +14,10 @@
         </el-form-item>
 
       </el-form>
+
+      <div>
+        <fanbox-list-home />
+      </div>
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -22,9 +26,12 @@
 
 <script>
 import {mapActions} from "vuex";
+import {setTitle} from "@/assets/js/request/request";
+import FanboxListHome from "@/views/fanbox/FanboxListHome";
 
 export default {
   name: "FanboxIndex",
+  components: {FanboxListHome},
   data() {
     return {
       form: {
@@ -39,9 +46,7 @@ export default {
 
   },
   mounted() {
-    this.listFollowing().then(res => {
-      console.log(res)
-    })
+    setTitle("首页", 'Fanbox')
   },
   watch: {},
   props: {},

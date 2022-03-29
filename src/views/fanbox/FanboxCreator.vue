@@ -87,11 +87,12 @@ export default {
       this.filterAvailable = route.query.filterAvailable === '1'
       this.loading = true;
       this.listCreator({id, force}).then(res => {
-        this.query = res;
-        this.total = res.length;
+        const {items, nextUrl} = res
+        this.query = items;
+        this.total = items.length;
         this.showPage()
         this.loading = false;
-        setTitle(`${res[0].user.name} 作品`, `Fanbox`)
+        setTitle(`${items[0].user.name} 作品`, `Fanbox`)
       })
     }
   },
