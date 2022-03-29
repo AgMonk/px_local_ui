@@ -32,37 +32,43 @@
 
    ```nginx
    server {
-           listen       8082;
-           server_name  localhost;
-   
-           location / {
-               root   plu;
-               index  index.html index.htm;
-               try_files $uri $uri/ /index.html;
-           }
-           location ^~ /pixiv-net/ {
-               proxy_pass https://www.pixiv.net/;
-               proxy_set_header referer https://www.pixiv.net/;
-           }
-           location ^~ /pximg/ {
-               proxy_pass https://i.pximg.net/;
-               proxy_set_header referer https://i.pximg.net/;
-           }
-           location ^~ /pxre/ {
-               proxy_ssl_server_name on;
-               proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-               proxy_pass https://i.pixiv.re/;
-               proxy_set_header referer https://i.pixiv.re/;
-           }
-            # aira2路径
-           location ^~ /aria2 {
-               proxy_pass http://localhost:6800/jsonrpc;
-          }
-           error_page   500 502 503 504  /50x.html;
-           location = /50x.html {
-               root   html;
-           }
+        listen       8082;
+        server_name  localhost;
+
+        location / {
+            root   plu;
+            index  index.html index.htm;
+            try_files $uri $uri/ /index.html;
+        }
+        location ^~ /fanbox-api/ {
+            proxy_pass https://api.fanbox.cc/;
+            proxy_set_header Referer https://www.fanbox.cc;
+            proxy_set_header Origin https://www.fanbox.cc;
+        }
+        
+        location ^~ /pixiv-net/ {
+            proxy_pass https://www.pixiv.net/;
+            proxy_set_header referer https://www.pixiv.net/;
+        }
+        location ^~ /pximg/ {
+            proxy_pass https://i.pximg.net/;
+            proxy_set_header referer https://i.pximg.net/;
+        }
+        location ^~ /pxre/ {
+            proxy_ssl_server_name on;
+            proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+            proxy_pass https://i.pixiv.re/;
+            proxy_set_header referer https://i.pixiv.re/;
+        }
+         # aira2路径
+        location ^~ /aria2 {
+            proxy_pass http://localhost:6800/jsonrpc;
        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
    ```
 
    (该文件里应该已有其他的 `server {xxxxx}` 他们的位置应该是平行的)

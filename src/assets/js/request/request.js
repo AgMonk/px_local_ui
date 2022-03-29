@@ -58,11 +58,11 @@ function onFulfilled(res) {
     return data;
 }
 
-function validateStatus(status) {
+export const validateStatus = (status) => {
     return status >= 200 && status < 600; // default
 }
 
 
-export const setTitle = (title)=>{
-    document.title = `${title} - PLU`
+export const setTitle = (title, suffix = 'PLU') => {
+    document.title = `${title} - ${suffix}`
 }

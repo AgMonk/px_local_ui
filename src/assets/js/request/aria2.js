@@ -19,10 +19,14 @@ function validateStatus(status) {
 export const getPixivUrlsParams = (original, count, dir, pid) => {
     if (original.includes('ugoira')) {
         //    动图
-        return [
-            prefix_pximg + original,
-            prefix_pxre + original,
-        ]
+        return {
+            urls: [
+                prefix_pximg + original,
+                prefix_pxre + original,
+            ],
+            dir,
+            id: `${pid}_p0`,
+        }
     }
     return {
         urls: [
@@ -45,7 +49,7 @@ export const addTask = ({filename, urls, dir, id = uuid()}) => {
                 urls,
                 {
                     dir,
-                    fileName: filename ? filename : urls[0].split('/').reverse()[0],
+                    out: filename ? filename : urls[0].split('/').reverse()[0],
                     referer: "*",
                 },
             ],
@@ -55,20 +59,20 @@ export const addTask = ({filename, urls, dir, id = uuid()}) => {
     })
 }
 
-export const tellStop = ()=>{
+export const tellStop = () => {
     const id = uuid();
     const data = {
         method: 'aria2.tellStopped',
         id,
         jsonrpc: 2.0,
-        params: [-1,1000],
+        params: [-1, 1000],
     }
-    return aria2Request({data}).then(res=>{
+    return aria2Request({data}).then(res => {
         return res.result
     })
 }
 
-export const deleteQuest =(gid)=>{
+export const deleteQuest = (gid) => {
     const id = uuid();
     const data = {
         method: 'aria2.removeDownloadResult',
@@ -76,7 +80,7 @@ export const deleteQuest =(gid)=>{
         jsonrpc: 2.0,
         params: [gid],
     }
-    return aria2Request({data}).then(res=>{
+    return aria2Request({data}).then(res => {
         return res.result
     })
 }
@@ -95,7 +99,7 @@ function onFulfilled(res) {
     const {message} = data;
     const {url} = config
     if (status >= 500) {
-        throw {message:'网络错误', status, url, data: config.data}
+        throw {message: '网络错误', status, url, data: config.data}
     }
     if (status >= 400) {
         throw {message, status, url, data: config.data}

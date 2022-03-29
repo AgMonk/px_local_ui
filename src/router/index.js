@@ -9,6 +9,9 @@ import User from "@/views/User";
 import UserIllust from "@/views/user/UserIllust";
 import UserBookmark from "@/views/user/UserBookmark";
 import Discover from "@/views/Discover";
+import Fanbox from "@/views/Fanbox";
+import FanboxItem from "@/views/fanbox/FanboxItem";
+import FanboxIndex from "@/views/fanbox/FanboxIndex";
 
 const routes = [
     {
@@ -71,6 +74,15 @@ const routes = [
             {path: 'manga/:page', name: '用户漫画', component: UserIllust},
             {path: 'bookmark/:page', name: '用户收藏', component: UserBookmark},
         ],
+    },
+    {
+        path: '/fanbox',
+        name: 'fanbox',
+        component: Fanbox,
+        children: [
+            {path: 'item/:id', name: 'fanbox作品详情', component: FanboxItem},
+            {path: 'index', name: 'fanbox主页', component: FanboxIndex},
+        ]
     }
 
 

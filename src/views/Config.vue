@@ -9,6 +9,7 @@
         <el-descriptions :column="3" border>
           <el-descriptions-item label="设置Cooke和Token">
             <el-button type="primary" @click="openDialogCookie">设置Cooke和Token</el-button>
+            <el-button type="primary" @click="setFanboxCookie">设置Fanbox Cookie</el-button>
           </el-descriptions-item>
           <el-descriptions-item label="图片服务器">
             <el-radio-group v-model="configuration.domain" size="large" @change="setConfig({key:'domain',value:$event})">
@@ -125,6 +126,7 @@ import {mapGetters, mapMutations, mapState} from "vuex";
 import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
+import {setCookies} from "@/assets/js/utils/CookieUtils";
 
 export default {
   name: "Config",
@@ -169,6 +171,13 @@ export default {
   methods: {
     ...mapGetters("User", [`getUserFromCache`]),
     ...mapMutations('Config', [`setAccounts`, `setConfig`, `addFilter`, `delFilter`, `importArray`]),
+    setFanboxCookie() {
+      ElMessageBox.prompt("设置FanboxCookie").then(res => {
+        const value = res.value
+        setCookies(value, 30, '/fanbox-api')
+        ElMessage.success("设置成功")
+      })
+    },
     openDialogCookie() {
       this.dialogShow.cookie = true
       setTimeout(() => this.$refs['token-input'].focus(), 500)

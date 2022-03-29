@@ -26,6 +26,7 @@ export default {
         {path: "/search", name: "搜索"},
         {path: "/discover", name: "发现"},
         {path: "/follow-latest", name: "关注"},
+        {path: "/fanbox/index", name: "Fanbox"},
         {path: "/config", name: "配置"},
       ],
       activeIndex: "",
