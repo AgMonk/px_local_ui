@@ -20,6 +20,7 @@
 import {findItem} from "@/assets/js/fanbox/request";
 import {mapActions, mapState} from "vuex";
 import {setTitle} from "@/assets/js/request/request";
+import {getCache} from "@/assets/js/utils/StorageUtils";
 
 export default {
   name: "FanboxItem",
@@ -42,8 +43,10 @@ export default {
       index = index + ''
       const filename = `[${index.padStart(3, '0')}][${id}][${width}x${height}].${extension}`
       const urls = [originalUrl]
+      const cookie = getCache('Fanbox_Cookie')
+      const header = `cookie:${cookie}`
       return {
-        urls, id, dir, filename
+        urls, id, dir, filename, header
       }
     },
     load(route, force) {

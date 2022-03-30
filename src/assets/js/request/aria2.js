@@ -39,7 +39,7 @@ export const getPixivUrlsParams = (original, count, dir, pid) => {
 
 }
 
-export const addTask = ({filename, urls, dir, id = uuid()}) => {
+export const addTask = ({filename, urls, dir, id = uuid(), header}) => {
     return aria2Request({
         data: {
             method: 'aria2.addUri',
@@ -51,6 +51,7 @@ export const addTask = ({filename, urls, dir, id = uuid()}) => {
                     dir,
                     out: filename ? filename : urls[0].split('/').reverse()[0],
                     referer: "*",
+                    header,
                 },
             ],
         }

@@ -127,6 +127,7 @@ import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
 import MyCopyButton from "@/components/common/my-copy-button";
 import {setCookies} from "@/assets/js/utils/CookieUtils";
+import {putCache} from "@/assets/js/utils/StorageUtils";
 
 export default {
   name: "Config",
@@ -175,6 +176,7 @@ export default {
       ElMessageBox.prompt("设置FanboxCookie").then(res => {
         const value = res.value
         setCookies(value, 30, '/fanbox-api')
+        putCache('Fanbox_Cookie', value)
         ElMessage.success("设置成功")
       })
     },

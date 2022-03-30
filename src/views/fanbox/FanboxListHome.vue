@@ -13,11 +13,16 @@
             </template>
           </el-table-column>
           <el-table-column label="方案费用" prop="feeRequired" width="80px" />
-          <el-table-column label="标题">
+          <el-table-column label="标题" width="300px">
             <template #default="s">
               <router-link :to="{name: 'fanbox作品详情',params:{id:s.row.id}}">
                 <el-link type="primary">{{ s.row.title }}</el-link>
               </router-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="标签">
+            <template #default="s">
+              <el-tag v-for="tag in s.row.tags" effect="dark">{{ tag }}</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -81,5 +86,7 @@ export default {
 </script>
 
 <style scoped>
-
+.el-tag {
+  margin-left: 5px;
+}
 </style>
