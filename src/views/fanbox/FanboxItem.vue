@@ -56,9 +56,12 @@ export default {
         console.log(res)
         this.data = res;
         const {id, body, user} = res
-        const imageMap = body.imageMap ? body.imageMap : body.images
-        if (imageMap) {
-          this.files.images = Object.keys(imageMap).map(i => imageMap[i])
+        if (body) {
+          const imageMap = body.imageMap ? body.imageMap : body.images
+          if (imageMap) {
+            this.files.images = Object.keys(imageMap).map(i => imageMap[i]
+            )
+          }
         }
         this.loading = false;
       })

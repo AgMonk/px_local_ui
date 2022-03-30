@@ -1,15 +1,15 @@
 <template>
-  <el-container v-loading="loading" direction="vertical">
+  <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <!--    <el-header></el-header>-->
     <el-main>
-        <el-table :data="data">
-          <el-table-column label="时间" prop="timestamp.updated" width="170px" />
-          <el-table-column label="作者" width="130px">
-            <template #default="s">
-              <router-link :to="{name: 'fanbox创作者作品',params:{id:s.row.user.userId,page:1}}">
-                <el-link type="primary">{{ s.row.user.name }}</el-link>
-              </router-link>
+      <el-table :data="data">
+        <el-table-column label="时间" prop="timestamp.updated" width="170px" />
+        <el-table-column label="作者" width="130px">
+          <template #default="s">
+            <router-link :to="{name: 'fanbox创作者作品',params:{id:s.row.creatorId,page:1}}">
+              <el-link type="primary">{{ s.row.user.name }}</el-link>
+            </router-link>
             </template>
           </el-table-column>
           <el-table-column label="方案费用" prop="feeRequired" width="80px" />
@@ -26,9 +26,9 @@
             </template>
           </el-table-column>
         </el-table>
-        <div style="color:white">
-          <el-button type="primary" @click="scrollLoad">加载更多</el-button>
-        </div>
+      <div v-loading="loading" style="color:white">
+        <el-button type="primary" @click="scrollLoad">加载更多</el-button>
+      </div>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
