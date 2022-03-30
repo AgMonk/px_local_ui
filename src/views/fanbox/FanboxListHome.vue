@@ -3,7 +3,6 @@
     <!--  <el-container direction="horizontal">-->
     <!--    <el-header></el-header>-->
     <el-main>
-      <el-scrollbar height="500px">
         <el-table :data="data">
           <el-table-column label="时间" prop="timestamp.updated" width="170px" />
           <el-table-column label="作者" width="130px">
@@ -23,9 +22,8 @@
           </el-table-column>
         </el-table>
         <div style="color:white">
-          加载中...
+          <el-button type="primary" @click="scrollLoad">加载更多</el-button>
         </div>
-      </el-scrollbar>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -53,17 +51,19 @@ export default {
     ...mapActions("Fanbox", [`listHome`]),
     scrollLoad() {
       if (this.loading) {
-        return
+        return;
       }
+      console.log(this.loading)
       this.load(this.$route)
     },
     load(route, force) {
       this.loading = true;
-      this.listHome({force, ...this.params}).then(res => {
-        this.loading = false;
+      this.listHome(force).then(res => {
         console.log(res)
-        this.params = res.params;
-        this.data.push(...res.items);
+        this.data = res;
+        this.$nextTick(() => {
+          this.loading = false;
+        })
       })
     }
   },

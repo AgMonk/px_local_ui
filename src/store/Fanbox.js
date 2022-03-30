@@ -8,6 +8,14 @@ export default {
     namespaced: true,
     state: {
         cache: {},
+        home: {
+            data: [],
+            params: {
+                maxId: undefined,
+                maxPublishedDatetime: undefined,
+                limit: 10,
+            }
+        }
     },
     mutations: {
         method(state, payload) {
@@ -18,12 +26,27 @@ export default {
         method: ({dispatch, commit, state}, payload) => {
 
         },
-        listHome: ({dispatch, commit, state}, {limit = 10, maxId, force, maxPublishedDatetime}) => {
+        listHome: ({dispatch, commit, state}, force) => {
+            const key = JSON.stringify(state.home.params)
+            if (force) {
+                state.home = {
+                    data: [],
+                    params: {
+                        maxId: undefined,
+                        maxPublishedDatetime: undefined,
+                        limit: 10,
+                    }
+                }
+            }
             return getCacheByTime({
-                cacheObj: state.cache,
-                key: `主页时间流 ${limit} - ${maxId} - ${maxPublishedDatetime}`,
-                requestMethod: () => listHome({limit, maxId, maxPublishedDatetime}),
+                cacheObj: state.cache, force,
+                key: `主页时间流 ${key}`,
+                requestMethod: () => listHome(state.home.params),
                 seconds: 30 * 60,
+            }).then(res => {
+                state.home.data.push(...res.items)
+                state.home.params = res.params
+                return state.home.data
             })
         },
         listFollowing: ({dispatch, commit, state},) => {

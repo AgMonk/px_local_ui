@@ -1,15 +1,15 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header></el-header>
+    <!--    <el-header></el-header>-->
     <el-main>
-      <el-form label-width="90px" @submit.prevent>
+      <el-form inline label-width="90px" @submit.prevent>
         <el-form-item label="单个作品ID">
-          <el-input v-model="form.itemId" style="width:180px" />
+          <el-input v-model="form.itemId" />
           <el-button type="primary" @click="$router.push({name:'fanbox作品详情',params:{id:form.itemId}})">跳转</el-button>
         </el-form-item>
         <el-form-item label="作者ID">
-          <el-input v-model="form.userId" style="width:180px" />
+          <el-input v-model="form.userId" />
           <el-button type="primary" @click="$router.push({name:'fanbox创作者作品',params:{id:form.userId}})">跳转</el-button>
         </el-form-item>
 
