@@ -40,7 +40,7 @@
                      :page-size="60"
                      :total="total"
                      layout="prev, pager, next,jumper,total"
-                     @current-change="$router.push({params:{page:$event}})"
+                     @current-change="$router.push({params:{page:$event},query:$route.query})"
 
       />
       <div v-if="relatedTags.length>0" v-show="config.search.relatedTags" id="相关标签" style="text-align: left">
