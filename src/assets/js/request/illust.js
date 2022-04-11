@@ -173,3 +173,11 @@ export const parseSimpleIllustInfo = (array, tagsMap) => {
 
     return {illusts, authors}
 }
+
+//todo  给作品追加标签
+//
+// https://www.pixiv.net/ajax/tags/illust/97552748/add
+//
+// body:{
+// 	tag:"标签内容"
+// }
