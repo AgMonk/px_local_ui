@@ -3,7 +3,7 @@ import {validateStatus} from "@/assets/js/request/request";
 
 export const fanboxRequest = axios.create({
     baseURL: "/fanbox-api/",
-    timeout: 20000,
+    timeout: 30000,
     method: "get",
     validateStatus,
     headers: {}

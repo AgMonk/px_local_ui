@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const pixivGetRequest = axios.create({
     baseURL: "/pixiv-net/",
-    timeout: 20000,
+    timeout: 30000,
     method: "get",
     validateStatus,
     headers: {}
@@ -10,14 +10,14 @@ export const pixivGetRequest = axios.create({
 
 export const pixivPostRequest = axios.create({
     baseURL: "/pixiv-net/",
-    timeout: 20000,
+    timeout: 30000,
     method: "post",
     validateStatus,
 })
 
 export const pixivPostWithFormDataRequest = axios.create({
     baseURL: "/pixiv-net/",
-    timeout: 20000,
+    timeout: 30000,
     method: "post",
     transformRequest: [
         function (data) {
