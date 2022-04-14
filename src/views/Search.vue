@@ -96,10 +96,12 @@ export default {
       relatedTags: [],
       dateRange: [],
       dateShortcuts: [
-        {text: "3天前", value: () => this.getDateShortcuts(3)},
-        {text: "7天前", value: () => this.getDateShortcuts(7)},
-        {text: "14天前", value: () => this.getDateShortcuts(14)},
-        {text: "30天前", value: () => this.getDateShortcuts(30)},
+        {text: "今天", value: () => this.getDateShortcuts(0)},
+        {text: "最近2天", value: () => this.getDateShortcuts(1)},
+        {text: "最近3天", value: () => this.getDateShortcuts(2)},
+        {text: "最近7天", value: () => this.getDateShortcuts(6)},
+        {text: "最近14天", value: () => this.getDateShortcuts(13)},
+        {text: "最近30天", value: () => this.getDateShortcuts(29)},
       ],
     }
   },
@@ -113,6 +115,7 @@ export default {
     ...mapMutations('Config', [`setConfig`, `addKeyword`, `delKeyword`]),
     getDateShortcuts(days) {
       const end = new Date()
+      end.plusHours(1)
       const start = end.minusDays(days)
       return [start.toDate(), end.toDate()]
     },
