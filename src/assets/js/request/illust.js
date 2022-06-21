@@ -47,7 +47,7 @@ export const parseIllustInfo = (body, level = '详情') => {
         id, title, description, width, height, illustType, userId
         , createDate, uploadDate, urls, updateDate
         , pageCount, bookmarkCount, likeCount, commentCount, responseCount, viewCount
-        , bookmarkData, url
+        , bookmarkData, url, request
     } = body
 
     const illust = {id: Number(id), title, description, width, height, level, authorId: Number(userId)}
@@ -72,6 +72,18 @@ export const parseIllustInfo = (body, level = '详情') => {
                 + "_ugoira1920x1080.zip";
         }
         illust.urls = urls
+
+        //处理约稿
+        if (request) {
+            console.log(request)
+            const {userId, userName, profileImg} = request.fan
+            illust.commssionFrom = {
+                userId: Number(userId),
+                name: userName,
+                profileImg: replacePrefix(profileImg),
+                requestId: Number(request.request.requestId)
+            }
+        }
     }
 
     if (level === '简略') {

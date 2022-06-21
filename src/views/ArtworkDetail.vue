@@ -124,6 +124,12 @@
               <el-descriptions-item label="下载" label-class-name="des-label">
                 <el-button type="primary" @click="downloadIllust({data,dir:config.aria2.dir})">Aria2下载所有</el-button>
               </el-descriptions-item>
+              <el-descriptions-item v-if="data.commssionFrom && !loadingFan" label="约稿方" label-class-name="des-label">
+                <user-avatar :size="15" :uid="data.commssionFrom.userId" />
+                <user-link :size="15" :uid="data.commssionFrom.userId" />
+                :
+                <el-link :href="'https://www.pixiv.net/requests/'+data.commssionFrom.requestId" target="_blank">约稿内容</el-link>
+              </el-descriptions-item>
               <el-descriptions-item label="描述" label-class-name="des-label">
                 {{ data.description }}
               </el-descriptions-item>
@@ -170,6 +176,7 @@ export default {
       },
       author: undefined,
       loadingThumb: true,
+      loadingFan: true,
     }
   },
   computed: {
@@ -231,6 +238,13 @@ export default {
         }
         this.loadSingleThumbs()
         this.loadAuthorInfo(res.authorId)
+
+        if (res.commssionFrom) {
+          this.loadingFan = true
+          this.getUserInfo({uid: res.commssionFrom.userId}).then(res => {
+            this.loadingFan = false
+          })
+        }
 
       }).catch(reason => {
         console.log(reason)

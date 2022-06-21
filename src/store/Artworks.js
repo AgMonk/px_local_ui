@@ -76,9 +76,10 @@ export default {
 
                 commit("saveInfo2Cache", {key, value: {time: now, data: illust}});
                 userIllusts.forEach(i => commit("saveInfo2Cache", {key: `${i.id}`, value: {time: now, data: i}}))
-
                 commit('User/saveInfo2Cache', author, {root: true})
-
+                if (res.commssionFrom) {
+                    commit('User/saveInfo2Cache', res.commssionFrom, {root: true})
+                }
                 // console.log(state.cache)
                 return illust
             })
