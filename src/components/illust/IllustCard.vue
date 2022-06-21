@@ -15,6 +15,7 @@
         </illust-link>
         <!--        r-18标记-->
         <el-tag v-if="loadCompleted&&isR_18" effect="dark" style="position: absolute; top: 0; left: 0;padding: 0 2px;" type="danger">R-18</el-tag>
+        <el-tag v-if="loadCompleted&&isR_18G" effect="dark" size="large" style="position: absolute; top: 0; left: 0;padding: 0 2px;" type="danger">R-18G</el-tag>
         <el-tag v-if="loadCompleted&&isGif" effect="dark" style="position: absolute; top: 63px; left: 55px;">GIF</el-tag>
         <!--        收藏按钮-->
         <span v-if="loadCompleted" class="b1" style="position: absolute; top: 120px ; right: 0;border-radius:15px">
@@ -66,6 +67,7 @@ export default {
     return {
       illust: undefined,
       isR_18: false,
+      isR_18G: false,
       bookmark: undefined,
       page: undefined,
       loadCompleted: false,
@@ -112,7 +114,9 @@ export default {
       this.domain = this.config.domain
       this.illust = this.getIllustFromCache()(pid)
       const {tags, counts, type} = this.illust
-      this.isR_18 = tags.map(i => i.tag).includes("R-18") || tags.map(i => i.tag).includes("r-18")
+      const tagList = tags.map(i => i.tag);
+      this.isR_18 = tagList.includes("R-18") || tagList.includes("r-18")
+      this.isR_18G = tagList.includes("R-18G") || tagList.includes("r-18g")
       this.isGif = type === 2
       this.page = counts.page;
       this.bmk()
