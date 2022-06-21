@@ -11,6 +11,7 @@
               <user-follow-button :user="author" style="margin-left: 5px" />
             </div>
             <div v-else v-loading="!author" style="height:60px"></div>
+
           </el-col>
           <el-col :span="18" style="text-align: left">
             <el-radio-group v-model="label" size="large" @change="$router.push({name:$event,params:{page:1},query:$route.query})">
@@ -18,20 +19,24 @@
               <el-radio-button label="用户漫画">漫画 <span v-if="counts.manga>0">({{ counts.manga }})</span></el-radio-button>
               <el-radio-button label="用户收藏">收藏 <span v-if="counts.bookmark>0">({{ counts.bookmark }})</span></el-radio-button>
             </el-radio-group>
-            <el-pagination v-if="total>0"
-                           v-model:current-page="page"
-                           :page-size="48"
-                           :total="total"
-                           hide-on-single-page
-                           layout="prev, pager, next,jumper,total"
-                           @current-change="$router.push({params:{page:$event},query:$route.query})"
-            />
+
           </el-col>
 
         </el-row>
       </div>
     </el-header>
     <el-main>
+      <div v-if="author && author.links&& author.links.length>0" style="text-align: left;margin-left: 30px">
+        <el-link v-for="link in author.links" :href="link.url" style="margin-right: 3px;font-size: 20px" target="_blank" type="success">{{ link.name }}</el-link>
+      </div>
+      <el-pagination v-if="total>0"
+                     v-model:current-page="page"
+                     :page-size="48"
+                     :total="total"
+                     hide-on-single-page
+                     layout="prev, pager, next,jumper,total"
+                     @current-change="$router.push({params:{page:$event},query:$route.query})"
+      />
       <router-view @load-profile-all="loadProfileAll" />
     </el-main>
     <!--    <el-footer></el-footer>-->
@@ -75,6 +80,7 @@ export default {
     loadAuthorInfo(uid) {
       this.getUserInfo({uid}).then(res => {
         this.author = res;
+        console.log(res)
       }).catch(reason => autoRetry(reason, () => this.loadAuthorInfo(uid)))
     },
     load(route) {
