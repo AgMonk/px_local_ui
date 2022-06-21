@@ -119,10 +119,11 @@ export default {
       this.$emit('scroll-to-bottom')
     },
     dataInit() {
+      const max = this.config.domain === '/pximg' ? 5 : 2;
       this.data = {normal: [], bookmarked: [], filter: [],}
       this.query = {normal: [], bookmarked: [], filter: [],}
       this.fullData = []
-      this.threads = {normal: {current: 0, max: 2,}, bookmarked: {current: 0, max: 2,}, filter: {current: 0, max: 2,},}
+      this.threads = {normal: {current: 0, max}, bookmarked: {current: 0, max}, filter: {current: 0, max},}
     },
     clear(array) {
       this.dataInit();
