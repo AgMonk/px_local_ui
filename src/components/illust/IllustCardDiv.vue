@@ -23,9 +23,9 @@
       <div v-infinite-scroll="infiniteScroll">
         <illust-card v-for="pid in data.normal" :disable-user-avatar="disableUserAvatar" :pid="pid" @image-load="threads.normal.current--;" />
       </div>
-      <div v-if="query.normal.length===0 && $route.params.hasOwnProperty('page')" style="text-align: center">
-        <el-button size="small" type="primary" @click="route2NextPage">下一页</el-button>
-      </div>
+      <!--      <div v-if="query.normal.length===0 && $route.params.hasOwnProperty('page')" style="text-align: center">-->
+      <!--        <el-button size="small" type="primary" @click="route2NextPage">下一页</el-button>-->
+      <!--      </div>-->
     </el-scrollbar>
 
     <el-dialog v-for="item in modes" v-model="dialogShow[item.name]" :title="item.title" close-on-click-modal width="90%" @close="mode='normal'" @open="mode=item.name">
