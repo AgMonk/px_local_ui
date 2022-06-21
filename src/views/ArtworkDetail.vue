@@ -38,6 +38,8 @@
               </div>
 
               <div v-if="data.tags && data.tags.length>0" id="标签区" style="text-align: left">
+                <el-divider content-position="left">描述</el-divider>
+                <div v-if="data.description && data.description.length>0" style="color:white" v-html="data.description"></div>
                 <el-divider content-position="left">标签</el-divider>
                 <span v-for="tag in data.tags" style="margin-left: 2px">
                   <el-tag class="clickable" size="small" style="padding: 0 2px;" @click="$router.push({name: '搜索结果',params:{page:1,keyword:tag.tag}})">
@@ -130,9 +132,9 @@
                 :
                 <el-link :href="'https://www.pixiv.net/requests/'+data.commssionFrom.requestId" target="_blank">约稿内容</el-link>
               </el-descriptions-item>
-              <el-descriptions-item label="描述" label-class-name="des-label">
-                {{ data.description }}
-              </el-descriptions-item>
+              <!--              <el-descriptions-item label="描述" label-class-name="des-label">-->
+              <!--                {{ data.description }}-->
+              <!--              </el-descriptions-item>-->
             </el-descriptions>
           </div>
           <div id="描述区">
