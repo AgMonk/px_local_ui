@@ -127,9 +127,8 @@ export const replacePrefix = (s) => s ? s.replace("https://i.pximg.net", '') : u
 
 export const bookmarkDel = (id, token) => {
     return pixivPostWithFormDataRequest({
-        url: '/rpc/index.php',
+        url: '/ajax/illusts/bookmarks/delete',
         data: {
-            mode: 'delete_illust_bookmark',
             bookmark_id: id
         },
         headers: {
