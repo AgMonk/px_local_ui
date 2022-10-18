@@ -83,8 +83,8 @@ export default {
     ...mapGetters("Artworks", [`getIllustFromCache`]),
     ...mapActions("Artworks", [`getIllustInfo`]),
     imageLoadError(e) {
-      console.log("图片加载失败自动切换图片服务器重试", e)
-      this.domain = this.domain === "/pximg" ? "/pxre" : "/pximg";
+      // console.log("图片加载失败自动切换图片服务器重试", e)
+      // this.domain = this.domain === "/pximg" ? "https://i.pximg.net" : "/pximg";
     },
     avatarLoad() {
       this.loadCompleted = true;

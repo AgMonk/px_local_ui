@@ -22,7 +22,7 @@ export const getPixivUrlsParams = (original, count, dir, pid) => {
         return {
             urls: [
                 prefix_pximg + original,
-                prefix_pxre + original,
+                // prefix_pxre + original,
             ],
             dir,
             id: `${pid}_p0`,
@@ -31,7 +31,7 @@ export const getPixivUrlsParams = (original, count, dir, pid) => {
     return {
         urls: [
             prefix_pximg + original.replace("_p0", `_p${count}`),
-            prefix_pxre + original.replace("_p0", `_p${count}`),
+            // prefix_pxre + original.replace("_p0", `_p${count}`),
         ],
         dir,
         id: `${pid}_p${count}`,
