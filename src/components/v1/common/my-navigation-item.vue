@@ -1,7 +1,7 @@
 <template>
   <el-sub-menu v-if="route&&route.children" :index="path">
     <template #title>{{ route.name }}</template>
-    <my-navigation-item v-for="(child,i) in route.children" :key="i" :route="child" :parent-path="path"/>
+    <my-navigation-item v-for="(child,i) in route.children" :key="i" :parent-path="path" :route="child" />
   </el-sub-menu>
   <el-menu-item v-else-if="route && (!route.permission || isPermitted(route.permission))" :index="path">
     {{ route.name }}
@@ -18,8 +18,7 @@ export default {
       path: this.parentPath + (this.route.path.startsWith(`/`) ? `` : `/`) + this.route.path
     }
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     ...mapGetters({
       isPermitted: `user/isPermitted`,

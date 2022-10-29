@@ -7,11 +7,14 @@ import Config from "@/store/v2/Config";
 export default createStore({
     state: {
         api: undefined,
-    }, mutations: {
+    },
+    mutations: {
         setApi(state, api) {
             state.api = api;
         }
-    }, actions: {}, modules: {
+    },
+    actions: {},
+    modules: {
         Illust, User, Account, Config
     }, getters: {
         getApi(state) {

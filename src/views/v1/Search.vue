@@ -35,10 +35,10 @@
     </el-header>
     <el-main>
       <el-pagination v-if="searchCount>0"
-                     hide-on-single-page
                      v-model:current-page="page"
                      :page-size="60"
                      :total="total"
+                     hide-on-single-page
                      layout="prev, pager, next,jumper,total"
                      @current-change="$router.push({params:{page:$event},query:$route.query})"
 
@@ -79,7 +79,7 @@
 import {setTitle} from "@/assets/js/request/request";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
-import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import IllustCardDiv from "@/components/v1/illust/IllustCardDiv";
 import {CirclePlusFilled, DArrowRight} from "@element-plus/icons-vue";
 
 export default {

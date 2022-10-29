@@ -16,7 +16,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
-import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import IllustCardDiv from "@/components/v1/illust/IllustCardDiv";
 import {ElMessage} from "element-plus";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 import {setTitle} from "@/assets/js/request/request";

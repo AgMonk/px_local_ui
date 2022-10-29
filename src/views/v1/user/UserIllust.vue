@@ -19,7 +19,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
-import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import IllustCardDiv from "@/components/v1/illust/IllustCardDiv";
 import {setTitle} from "@/assets/js/request/request";
 
 export default {

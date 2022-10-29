@@ -53,10 +53,10 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
-import UserAvatar from "@/components/user/UserAvatar";
-import UserLink from "@/components/user/UserLink";
-import IllustBookmarkButton from "@/components/illust/IllustBookmarkButton";
-import IllustLink from "@/components/illust/IllustLink";
+import UserAvatar from "@/components/v1/user/UserAvatar";
+import UserLink from "@/components/v1/user/UserLink";
+import IllustBookmarkButton from "@/components/v1/illust/IllustBookmarkButton";
+import IllustLink from "@/components/v1/illust/IllustLink";
 import {DocumentCopy} from "@element-plus/icons-vue";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 

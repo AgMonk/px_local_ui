@@ -75,10 +75,10 @@ export default {
           if (action === 'confirm') {
             if (!isNaN(value)) {
               this.getInfo(value)
-            }else{
+            } else {
               const pattern = /artworks\/(\d+)/
               const match = pattern.exec(value)
-              if (match){
+              if (match) {
                 this.getInfo(Number(match[1]))
               }
             }
@@ -94,7 +94,7 @@ export default {
       }
     },
     getInfo(pid) {
-      if (isNaN(pid)){
+      if (isNaN(pid)) {
         return;
       }
       pid = Number(pid)
@@ -123,7 +123,7 @@ export default {
         this.currentTab = 0;
       }
     },
-    routeToPid(pid){
+    routeToPid(pid) {
       this.currentTab = pid;
       this.show = true
       this.$router.push({name: '作品详情', params: {pid}, query: this.$route.query})

@@ -27,7 +27,7 @@
 <script>
 import {mapActions} from "vuex";
 import {setTitle} from "@/assets/js/request/request";
-import FanboxListHome from "@/views/fanbox/FanboxListHome";
+import FanboxListHome from "@/views/v1/fanbox/FanboxListHome";
 
 export default {
   name: "FanboxIndex",

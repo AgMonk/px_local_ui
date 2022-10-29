@@ -1,5 +1,5 @@
 <template>
-  <el-avatar :size="size" :src="src" @error="src=empty"/>
+  <el-avatar :size="size" :src="src" @error="src=empty" />
 </template>
 
 <script>
@@ -9,8 +9,8 @@ export default {
   name: "UserAvatar",
   data() {
     return {
-      src:"",
-      empty:"https://s.pximg.net/common/images/no_profile_s.png",
+      src: "",
+      empty: "https://s.pximg.net/common/images/no_profile_s.png",
     }
   },
   computed: {
@@ -31,18 +31,18 @@ export default {
     this.load(this.uid)
   },
   watch: {
-    uid(to){
+    uid(to) {
       this.load(to)
     }
   },
   props: {
-    uid:{
-      type:Number,
+    uid: {
+      type: Number,
       required: true,
     },
-    size:{
-      type:Number,
-      default:60,
+    size: {
+      type: Number,
+      default: 60,
     },
 
   },

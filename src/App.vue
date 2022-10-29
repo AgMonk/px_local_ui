@@ -40,8 +40,8 @@
 
 </style>
 <script>
-import MyNavigation from "@/components/common/my-navigation";
-import CurrentUserAvatar from "@/components/user/CurrentUserAvatar";
+import MyNavigation from "@/components/v1/common/my-navigation";
+import CurrentUserAvatar from "@/components/v1/user/CurrentUserAvatar";
 import MyNavi from "@/components/v2/navi/my-navi";
 import {mapGetters} from "vuex";
 import {Api} from "pixiv-web-api-for-browser/dist";

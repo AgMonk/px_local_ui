@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import MyCopyButton from "@/components/common/my-copy-button";
+import MyCopyButton from "@/components/v1/common/my-copy-button";
 import {mapGetters, mapMutations} from "vuex";
 import {ElMessage, ElMessageBox} from "element-plus";
 

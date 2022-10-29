@@ -16,7 +16,14 @@
         </el-form-item>
         <el-form-item>
           <el-tooltip content="默认只显示数量最多的前20个标签，请输入关键字搜索" placement="top">
-            <el-select v-if="tags.pub.length>0 && query.show==='show'" v-model="query.tag" :filter-method="tagFilter" clearable filterable placeholder="公开标签" @change="pushRoute">
+            <el-select v-if="tags.pub.length>0 && query.show==='show'"
+                       v-model="query.tag"
+                       :filter-method="tagFilter"
+                       clearable
+                       filterable
+                       placeholder="公开标签"
+                       @change="pushRoute"
+            >
               <el-option
                   v-for="item in tagSelector.pub"
                   :key="item.tag"
@@ -50,7 +57,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
-import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import IllustCardDiv from "@/components/v1/illust/IllustCardDiv";
 import {setTitle} from "@/assets/js/request/request";
 
 export default {

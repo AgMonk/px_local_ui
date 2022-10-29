@@ -1,19 +1,20 @@
 <template>
   <el-menu
       :default-active.sync="activeIndex"
+      active-text-color="#ffd04b"
+      background-color="#545c64"
       class="el-menu-demo"
       mode="horizontal"
-      background-color="#545c64"
+      router
       text-color="#fff"
       @select="select"
-      router
-      active-text-color="#ffd04b">
-    <my-navigation-item v-for="(route,i) in routes" :key="i" :route="route" parent-path=""/>
+  >
+    <my-navigation-item v-for="(route,i) in routes" :key="i" :route="route" parent-path="" />
   </el-menu>
 </template>
 
 <script>
-import MyNavigationItem from "@/components/common/my-navigation-item";
+import MyNavigationItem from "@/components/v1/common/my-navigation-item";
 
 export default {
   name: "my-navigation",

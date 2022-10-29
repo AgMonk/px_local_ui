@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import IllustCard from "@/components/illust/IllustCard";
+import IllustCard from "@/components/v1/illust/IllustCard";
 import {mapGetters, mapState} from "vuex";
 
 export default {

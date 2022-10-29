@@ -111,7 +111,7 @@
               <el-descriptions-item v-if="data.timestamp" label="创建时间" label-class-name="des-label">{{ data.timestamp.create }}</el-descriptions-item>
               <el-descriptions-item v-if="data.timestamp&& data.timestamp.create!==data.timestamp.upload" label="上传时间" label-class-name="des-label">{{
                   data.timestamp.upload
-                                                                                                                                                    }}
+                                                                                                                                                        }}
               </el-descriptions-item>
               <el-descriptions-item label="尺寸" label-class-name="des-label">{{ data.width }}x{{ data.height }}</el-descriptions-item>
             </el-descriptions>
@@ -151,14 +151,14 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
 import {ElMessage, ElMessageBox} from "element-plus";
-import MyCopyButton from "@/components/common/my-copy-button";
+import MyCopyButton from "@/components/v1/common/my-copy-button";
 import {Lock} from '@element-plus/icons-vue';
 import {getRootComment} from "@/assets/js/request/comment";
-import IllustComment from "@/components/illust/IllustComment";
-import UserAvatar from "@/components/user/UserAvatar";
-import UserLink from "@/components/user/UserLink";
-import UserFollowButton from "@/components/user/UserFollowButton";
-import IllustBookmarkButton from "@/components/illust/IllustBookmarkButton";
+import IllustComment from "@/components/v1/illust/IllustComment";
+import UserAvatar from "@/components/v1/user/UserAvatar";
+import UserLink from "@/components/v1/user/UserLink";
+import UserFollowButton from "@/components/v1/user/UserFollowButton";
+import IllustBookmarkButton from "@/components/v1/illust/IllustBookmarkButton";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
 
 export default {

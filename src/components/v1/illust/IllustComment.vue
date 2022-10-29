@@ -22,8 +22,8 @@
 <script>
 import {getRepliesOfComment} from "@/assets/js/request/comment";
 import {mapMutations} from "vuex";
-import UserAvatar from "@/components/user/UserAvatar";
-import UserLink from "@/components/user/UserLink";
+import UserAvatar from "@/components/v1/user/UserAvatar";
+import UserLink from "@/components/v1/user/UserLink";
 
 export default {
   name: "IllustComment",

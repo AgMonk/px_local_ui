@@ -125,7 +125,7 @@
 import {mapGetters, mapMutations, mapState} from "vuex";
 import {setTitle} from "@/assets/js/request/request";
 import {ElMessage, ElMessageBox} from "element-plus";
-import MyCopyButton from "@/components/common/my-copy-button";
+import MyCopyButton from "@/components/v1/common/my-copy-button";
 import {setCookies} from "@/assets/js/utils/CookieUtils";
 import {putCache} from "@/assets/js/utils/StorageUtils";
 

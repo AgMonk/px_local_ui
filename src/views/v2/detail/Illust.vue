@@ -9,7 +9,7 @@
       </div>
       <div v-else style="min-height: 500px;max-height: 800px">
         <el-container v-if="data" direction="horizontal">
-          <!--   todo       主界面-->
+          <!--          主界面-->
           <el-main style="background-color: rgba(1,48,133,0.3)">
             <el-tabs v-if="showTabs" v-model="activeIndex" stretch tab-position="left">
               <el-tab-pane v-for="index in data.pageCount" :name="index-1" lazy>
@@ -38,7 +38,7 @@
               </el-tab-pane>
             </el-tabs>
           </el-main>
-          <!--    todo      右侧边-->
+          <!--          右侧边-->
           <el-aside style="width: 280px">
             <div>
               <!--   todo           用户头像-->

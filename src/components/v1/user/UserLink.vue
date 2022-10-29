@@ -23,7 +23,7 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import MyCopyButton from "@/components/common/my-copy-button";
+import MyCopyButton from "@/components/v1/common/my-copy-button";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {

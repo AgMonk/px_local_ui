@@ -35,9 +35,15 @@ export default {
         }
     },
     actions: {
-        method: ({dispatch, commit, state}, payload) => {
+        method: ({dispatch, commit, state, rootGetters}, payload) => {
 
         },
+        userInfo: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+            return rootGetters["getApi"].user.userInfo(uid, 1, "zh").then(res => {
+                return res
+            })
+        },
+
     },
     getters: {
         getUser: (state) => (id) => {

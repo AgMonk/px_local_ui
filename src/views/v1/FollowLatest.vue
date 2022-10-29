@@ -26,9 +26,9 @@
 <script>
 import {setTitle} from "@/assets/js/request/request";
 import {mapActions, mapGetters, mapState} from "vuex";
-import IllustCard from "@/components/illust/IllustCard";
+import IllustCard from "@/components/v1/illust/IllustCard";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
-import IllustCardDiv from "@/components/illust/IllustCardDiv";
+import IllustCardDiv from "@/components/v1/illust/IllustCardDiv";
 
 export default {
   name: "FollowLatest",

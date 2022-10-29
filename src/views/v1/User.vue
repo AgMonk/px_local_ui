@@ -47,9 +47,9 @@
 <script>
 import {mapActions} from "vuex";
 import {autoRetry} from "@/assets/js/utils/RequestUtils";
-import UserAvatar from "@/components/user/UserAvatar";
-import UserLink from "@/components/user/UserLink";
-import UserFollowButton from "@/components/user/UserFollowButton";
+import UserAvatar from "@/components/v1/user/UserAvatar";
+import UserLink from "@/components/v1/user/UserLink";
+import UserFollowButton from "@/components/v1/user/UserFollowButton";
 
 export default {
   name: "User",

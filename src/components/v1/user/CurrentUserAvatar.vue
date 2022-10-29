@@ -13,7 +13,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
-import UserAvatar from "@/components/user/UserAvatar";
+import UserAvatar from "@/components/v1/user/UserAvatar";
 
 export default {
   name: "CurrentUserAvatar",
