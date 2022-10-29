@@ -53,7 +53,7 @@ export const clearIllustDetail = function (item) {
 
     clearIllust(item);
 
-    const {request, userIllusts, createDate, uploadDate} = item
+    const {request, userIllusts, createDate, uploadDate, description} = item
     //约稿信息
     if (request) {
         item.isCommission = true;
@@ -70,6 +70,11 @@ export const clearIllustDetail = function (item) {
     }
     if (uploadDate) {
         item.uploadDate = DateUtils.format(new Date(uploadDate), "yyyy-MM-dd hh:mm")
+    }
+    if (description) {
+        item.description = item.description.replace(/\/jump.php\?/g, '')
+        item.description = item.description.replace(/%3A/g, ':')
+        item.description = item.description.replace(/%2F/g, '/')
     }
 
 
