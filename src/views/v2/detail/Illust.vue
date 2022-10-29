@@ -2,12 +2,13 @@
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <!--    <el-header>{{ pid }}</el-header>-->
-    <el-main v-loading="loading" style="min-height: 500px;max-height: 800px">
+    <el-main v-loading="loading" style="min-height: 500px;">
       <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
         <h3>请求失败</h3>
         <h4>点击刷新</h4>
       </div>
-      <div v-else style="min-height: 500px;max-height: 800px">
+      <div v-else style="min-height: 500px;">
+        <!--        主界面和右侧边-->
         <el-container v-if="data" direction="horizontal">
           <!--          主界面-->
           <el-main style="background-color: rgba(1,48,133,0.3)">
@@ -76,16 +77,30 @@
                 </el-icon>
                 ({{ data.likeCount }})
               </el-descriptions-item>
+              <el-descriptions-item label="创建时间">
+                {{ data.createDate }}
+              </el-descriptions-item>
+              <el-descriptions-item v-if="data.createDate!==data.uploadDate" label="上传时间">
+                {{ data.uploadDate }}
+              </el-descriptions-item>
+
 
             </el-descriptions>
           </el-aside>
 
         </el-container>
 
-        <div v-if="data">
+        <div v-if="data" style="padding: 0 20px">
 
           <!--       todo 标题和描述 -->
-          <div></div>
+          <div style="color: white;text-align: left">
+            <h4>
+              <illust-link :pid="pid"><span style="color: white;">{{ data.title }}</span></illust-link>
+            </h4>
+            <div v-html="data.description">
+
+            </div>
+          </div>
           <!--        todo 标签-->
           <div></div>
           <!--        todo 数据统计-->
@@ -93,7 +108,7 @@
           <!--        todo 时间戳-->
           <div></div>
           <!--        todo 评论区-->
-          <div></div>
+          <div v-if="data.commentCount>0"></div>
         </div>
       </div>
     </el-main>
@@ -110,10 +125,11 @@ import IllustImage from "@/components/v2/illust/illust-image";
 import {Loading, QuestionFilled, SuccessFilled} from "@element-plus/icons-vue";
 import UserTitle from "@/components/v2/user/user-title";
 import IllustBookmarkButton from "@/components/v2/illust/illust-bookmark-button";
+import IllustLink from "@/components/v2/illust/illust-link";
 
 export default {
   name: "Illust",
-  components: {IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
+  components: {IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
   data() {
     return {
       activeIndex: 0,
@@ -132,6 +148,7 @@ export default {
     ...mapActions("Illust", ['detail']),
     ...mapGetters("User", ['getUser']),
     like() {
+
       this.liking = true;
       this.$store.getters.getApi.bookmark.like(this.pid).then(res => {
         this.data.likeData = true;
@@ -149,7 +166,7 @@ export default {
     },
     load(route, force) {
       const {pid} = route.params
-      this.pid = pid
+      this.pid = Number(pid)
       this.loading = true
       this.detail({pid, force}).then(res => {
         console.log(res)

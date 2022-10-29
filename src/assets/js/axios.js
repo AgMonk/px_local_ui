@@ -1,4 +1,5 @@
 import axios from "axios";
+import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
 export const PIXIV_PATH = "/pixiv-net";
 
@@ -52,7 +53,7 @@ export const clearIllustDetail = function (item) {
 
     clearIllust(item);
 
-    const {request, userIllusts} = item
+    const {request, userIllusts, createDate, uploadDate} = item
     //约稿信息
     if (request) {
         item.isCommission = true;
@@ -63,6 +64,14 @@ export const clearIllustDetail = function (item) {
             }
         }
     }
+
+    if (createDate) {
+        item.createDate = DateUtils.format(new Date(createDate), "yyyy-MM-dd hh:mm")
+    }
+    if (uploadDate) {
+        item.uploadDate = DateUtils.format(new Date(uploadDate), "yyyy-MM-dd hh:mm")
+    }
+
 
     //用户作品
     if (userIllusts) {

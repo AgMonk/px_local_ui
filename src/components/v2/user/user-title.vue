@@ -85,7 +85,7 @@ export default {
         this.loading = true;
         this.failed = false;
         this.userInfo({uid, force}).then(res => {
-          console.log(res)
+          console.debug(res)
           this.data = res;
         }).catch(e => {
           console.error(e)
