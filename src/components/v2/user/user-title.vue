@@ -1,15 +1,15 @@
 <template>
   <div v-if="failed" style="color: white;cursor: pointer" @click="refresh">
-    <h3>请求失败</h3>
+    <h3>用户信息加载失败</h3>
     <h4>点击刷新</h4>
   </div>
-  <el-row v-else v-loading="loading" :style="{height:avatarSize+20+'px'}" class="user-title">
+  <div v-else v-loading="loading" :style="{height:avatarSize+20+'px'}" class="user-title">
     <!--   作者头像-->
-    <el-col v-if="!loading" :span="4">
+    <span v-if="!loading">
       <user-avatar :size="avatarSize" :uid="uid" big />
-    </el-col>
+    </span>
     <!--作者-->
-    <el-col :span="20">
+    <span>
       <user-link :size="fontSize" :uid="uid" />
       <span v-if="data" style="margin-left: 10px">
         <el-button v-if="data.isFollowed" :disabled="unfollowing" size="small" type="info" @click="unfollow">
@@ -25,8 +25,8 @@
           <span v-else>关注</span>
         </el-button>
       </span>
-    </el-col>
-  </el-row>
+    </span>
+  </div>
 </template>
 
 <script>
@@ -125,5 +125,6 @@ export default {
 <style scoped>
 .user-title {
   text-align: left;
+
 }
 </style>

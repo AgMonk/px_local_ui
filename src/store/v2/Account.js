@@ -27,6 +27,7 @@ export default {
             state.current = uid;
             const account = state.accounts.filter(item => item.uid === uid)[0]
             Api.setCookie(account.cookie, PIXIV_PATH)
+            this.commit("setApi", new Api(instance, account.token), {root: true})
             this.commit("Account/saveAccounts")
         },
         logout(state, uid) {

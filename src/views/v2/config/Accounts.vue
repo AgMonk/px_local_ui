@@ -37,7 +37,7 @@ export default {
   methods: {
     ...mapMutations("Account", ['logout', 'changeCurrent']),
     ...mapGetters("Account", ["getCurrent"]),
-    ...mapActions("Account", ["login", 'init']),
+    ...mapActions("Account", ["login",]),
     confirmLogout() {
       ElMessageBox.confirm(`确认登出: ${this.data.name}`, "确认",).then(() => {
         this.logout(this.uid)

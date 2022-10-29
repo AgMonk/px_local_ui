@@ -30,7 +30,8 @@ export default {
   components: {CopySpan},
   data() {
     return {
-      data: {}
+      data: {},
+      interval: undefined,
     }
   },
   computed: {},
@@ -38,6 +39,13 @@ export default {
     ...mapGetters("User", ['getUser']),
     load(uid) {
       this.data = this.getUser()(uid)
+      if (!this.data) {
+        this.interval = setInterval(() => {
+          this.load(uid)
+        }, 1000)
+        return
+      }
+      clearInterval(this.interval);
     }
   },
   mounted() {

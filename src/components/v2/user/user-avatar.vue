@@ -1,5 +1,5 @@
 <template>
-  <el-avatar :size="size" :src="big?data.avatarBig:data.avatar" />
+  <el-avatar v-if="data" :size="size" :src="big?data.avatarBig:data.avatar" />
 </template>
 
 <script>

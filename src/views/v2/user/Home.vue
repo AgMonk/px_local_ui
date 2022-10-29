@@ -2,7 +2,7 @@
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <el-header>
-      <h3 style="color:white">{{ uid }}</h3>
+      <user-title v-if="uid" :avatar-size="50" :font-size="30" :uid="uid" />
     </el-header>
     <el-main>
       <router-view />
@@ -13,8 +13,12 @@
 </template>
 
 <script>
+import UserTitle from "@/components/v2/user/user-title";
+import {Title} from "gin-utils/dist/utils/DomUtils";
+
 export default {
   name: "Home",
+  components: {UserTitle},
   data() {
     return {
       uid: undefined,
@@ -23,11 +27,13 @@ export default {
   computed: {},
   methods: {
     load(route, force) {
+      console.log(route)
       const {uid} = route.params
-      this.uid = uid;
+      this.uid = Number(uid);
     }
   },
   mounted() {
+    Title.set("用户主页")
     this.load(this.$route)
   },
   watch: {
