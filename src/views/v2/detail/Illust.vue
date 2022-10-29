@@ -59,23 +59,42 @@
               <illust-image v-for="info in others" :info="info" :size="80" />
               <!--              <illust-card v-for="info in others" :info="info" :size="80" disable-author disable-title />-->
             </div>
+            <el-descriptions :column="1" border style="margin-top: 10px">
+              <el-descriptions-item label="收藏">
+                <illust-bookmark-button :pid="data.id" />
+                ({{ data.bookmarkCount }})
+              </el-descriptions-item>
+              <el-descriptions-item label="喜欢">
+                <el-icon v-if="liking" :size="25" class="is-loading">
+                  <Loading />
+                </el-icon>
+                <el-icon v-else-if="data.likeData" :size="25" color="red">
+                  <SuccessFilled />
+                </el-icon>
+                <el-icon v-else :size="25" style="cursor: pointer" @click="like">
+                  <QuestionFilled />
+                </el-icon>
+                ({{ data.likeCount }})
+              </el-descriptions-item>
 
+            </el-descriptions>
           </el-aside>
 
         </el-container>
 
-        <!--  todo       操作栏 喜欢、收藏-->
-        <div></div>
-        <!--       todo 标题和描述 -->
-        <div></div>
-        <!--        todo 标签-->
-        <div></div>
-        <!--        todo 数据统计-->
-        <div></div>
-        <!--        todo 时间戳-->
-        <div></div>
-        <!--        todo 评论区-->
-        <div></div>
+        <div v-if="data">
+
+          <!--       todo 标题和描述 -->
+          <div></div>
+          <!--        todo 标签-->
+          <div></div>
+          <!--        todo 数据统计-->
+          <div></div>
+          <!--        todo 时间戳-->
+          <div></div>
+          <!--        todo 评论区-->
+          <div></div>
+        </div>
       </div>
     </el-main>
     <el-footer></el-footer>
@@ -88,16 +107,18 @@ import {mapActions, mapGetters} from "vuex";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import IllustCard from "@/components/v2/illust/illust-card";
 import IllustImage from "@/components/v2/illust/illust-image";
-import {Loading} from "@element-plus/icons-vue";
+import {Loading, QuestionFilled, SuccessFilled} from "@element-plus/icons-vue";
 import UserTitle from "@/components/v2/user/user-title";
+import IllustBookmarkButton from "@/components/v2/illust/illust-bookmark-button";
 
 export default {
   name: "Illust",
-  components: {UserTitle, IllustImage, IllustCard, Loading},
+  components: {IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
   data() {
     return {
       activeIndex: 0,
       loading: false,
+      liking: false,
       showTabs: false,
       failed: false,
       data: undefined,
@@ -110,6 +131,16 @@ export default {
   methods: {
     ...mapActions("Illust", ['detail']),
     ...mapGetters("User", ['getUser']),
+    like() {
+      this.liking = true;
+      this.$store.getters.getApi.bookmark.like(this.pid).then(res => {
+        this.data.likeData = true;
+      }).catch(e => {
+        console.error(e)
+      }).finally(() => {
+        this.liking = false;
+      })
+    },
     refresh() {
       this.load(this.$route)
     },
