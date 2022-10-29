@@ -52,7 +52,6 @@ export default {
                         res.avatar = res.image
                         res.avatarBig = res.imageBig
                         res.id = Number(res.userId)
-
                         delete res.image
                         delete res.imageBig
                         delete res.userId

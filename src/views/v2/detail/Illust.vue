@@ -39,7 +39,7 @@
             </el-tabs>
           </el-main>
           <!--          右侧边-->
-          <el-aside style="width: 280px">
+          <el-aside style="width: 280px;padding-left: 20px;padding-right: 20px">
             <div>
               <!--            用户头像-->
               <user-title :uid="data.userId" />

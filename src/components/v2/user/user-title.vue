@@ -11,6 +11,20 @@
     <!--作者-->
     <el-col :span="20">
       <user-link :size="fontSize" :uid="uid" />
+      <span v-if="data" style="margin-left: 10px">
+        <el-button v-if="data.isFollowed" :disabled="unfollowing" size="small" type="info" @click="unfollow">
+          <el-icon v-if="unfollowing" class="is-loading" color="blue">
+            <Loading />
+          </el-icon>
+          <span v-else>已关注</span>
+        </el-button>
+        <el-button v-else :disabled="following" size="small" type="success" @click="follow">
+          <el-icon v-if="following" class="is-loading" color="blue">
+            <Loading />
+          </el-icon>
+          <span v-else>关注</span>
+        </el-button>
+      </span>
     </el-col>
   </el-row>
 </template>
@@ -20,15 +34,19 @@
 import UserLink from "@/components/v2/user/user-link";
 import UserAvatar from "@/components/v2/user/user-avatar";
 import {mapActions, mapGetters} from "vuex";
+import {ElMessage} from "element-plus";
+import {Loading} from "@element-plus/icons-vue";
 
 export default {
   name: "user-title",
-  components: {UserLink, UserAvatar},
+  components: {UserLink, UserAvatar, Loading},
   data() {
     return {
       failed: false,
       loading: false,
-
+      data: undefined,
+      unfollowing: false,
+      following: false,
     }
   },
   computed: {},
@@ -38,6 +56,28 @@ export default {
     refresh() {
       this.load(this.uid, true)
     },
+    follow() {
+      this.following = true;
+      this.$store.getters.getApi.follow.add(this.uid, 0, '').then(() => {
+        this.data.isFollowed = true
+      }).catch(e => {
+        console.error(e)
+        ElMessage.error("关注失败,请重试")
+      }).finally(() => {
+        this.following = false;
+      })
+    },
+    unfollow() {
+      this.unfollowing = true;
+      this.$store.getters.getApi.follow.del(this.uid).then(() => {
+        this.data.isFollowed = false
+      }).catch(e => {
+        console.error(e)
+        ElMessage.error("取关失败,请重试")
+      }).finally(() => {
+        this.unfollowing = false;
+      })
+    },
     load(uid, force) {
       this.data = this.getUser()(uid)
       if (!this.data || !this.data.avatarBig) {
@@ -46,6 +86,7 @@ export default {
         this.failed = false;
         this.userInfo({uid, force}).then(res => {
           console.log(res)
+          this.data = res;
         }).catch(e => {
           console.error(e)
           this.failed = true;
