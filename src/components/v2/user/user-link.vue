@@ -1,8 +1,8 @@
 <template>
   <el-tooltip placement="right">
     <router-link :to="{name:'用户主页',params:{uid}}">
-      <el-link :underline="false" type="primary">
-        {{ data.name }}
+      <el-link :style="{'font-size':size+'px'}" :underline="false" type="primary">
+        {{ data && data.name }}
       </el-link>
     </router-link>
     <template #content>
@@ -45,13 +45,17 @@ export default {
   },
   watch: {
     uid(to) {
-
+      this.load(to)
     }
   },
   props: {
     uid: {
       type: Number,
       required: true,
+    },
+    size: {
+      type: Number,
+      default: 15,
     },
   },
 }

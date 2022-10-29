@@ -1,5 +1,5 @@
 <template>
-  <el-avatar v-show="src" :size="size" :src="src" />
+  <el-avatar :size="size" :src="big?data.avatarBig:data.avatar" />
 </template>
 
 <script>
@@ -11,6 +11,7 @@ export default {
     return {
       data: {},
       src: "",
+      interval: undefined,
     }
   },
   computed: {},
@@ -19,14 +20,12 @@ export default {
     load(uid) {
       this.data = this.getUser()(uid)
       if (!this.data) {
-        this.src = ""
+        this.interval = setInterval(() => {
+          this.load(uid)
+        }, 1000)
         return
       }
-      if (this.data.avatarBig && this.big) {
-        this.src = this.data.avatarBig;
-      } else {
-        this.src = this.data.avatar;
-      }
+      clearInterval(this.interval);
     }
   },
   mounted() {
@@ -34,7 +33,7 @@ export default {
   },
   watch: {
     uid(to) {
-
+      this.load(to)
     }
   },
   props: {

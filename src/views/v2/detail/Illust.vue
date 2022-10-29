@@ -41,8 +41,8 @@
           <!--          右侧边-->
           <el-aside style="width: 280px">
             <div>
-              <!--   todo           用户头像-->
-
+              <!--            用户头像-->
+              <user-title :uid="data.userId" />
             </div>
 
             <div style="display: flex; justify-content: space-between">
@@ -84,15 +84,16 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import IllustCard from "@/components/v2/illust/illust-card";
 import IllustImage from "@/components/v2/illust/illust-image";
 import {Loading} from "@element-plus/icons-vue";
+import UserTitle from "@/components/v2/user/user-title";
 
 export default {
   name: "Illust",
-  components: {IllustImage, IllustCard, Loading},
+  components: {UserTitle, IllustImage, IllustCard, Loading},
   data() {
     return {
       activeIndex: 0,
@@ -108,6 +109,7 @@ export default {
   computed: {},
   methods: {
     ...mapActions("Illust", ['detail']),
+    ...mapGetters("User", ['getUser']),
     refresh() {
       this.load(this.$route)
     },
@@ -132,12 +134,12 @@ export default {
         for (let i = 0; i < this.data.pageCount; i++) {
           this.original.push(this.getUrl("original", i))
         }
-
         //等渲染完成了再加载tabs 避免从图片多的作品切换到少的作品时无畏的404请求
         this.$nextTick(() => {
           this.showTabs = true;
         })
-      }).catch(() => {
+      }).catch(e => {
+        console.error(e)
         this.failed = true
       }).finally(() => {
         this.loading = false
