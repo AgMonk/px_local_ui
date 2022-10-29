@@ -1,22 +1,21 @@
 import {createStore} from 'vuex'
-import Config from "@/store/Config";
-import Artworks from "@/store/Artworks";
-import Aria2 from "@/store/Aria2";
-import Loading from "@/store/Loading";
-import User from "@/store/User";
-import FollowLatest from "@/store/FollowLatest";
-import Search from "@/store/Search";
-import Discover from "@/store/Discover";
-import Fanbox from "@/store/Fanbox";
+import Illust from "@/store/v2/Illust"
+import User from "@/store/v2/User"
+import Account from "@/store/v2/Account";
+import Config from "@/store/v2/Config";
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-    Config, Artworks, Aria2, Loading, User, FollowLatest, Search, Discover, Fanbox,
-  }
+    state: {
+        api: undefined,
+    }, mutations: {
+        setApi(state, api) {
+            state.api = api;
+        }
+    }, actions: {}, modules: {
+        Illust, User, Account, Config
+    }, getters: {
+        getApi(state) {
+            return state.api;
+        }
+    },
 })

@@ -1,93 +1,40 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Home from '../views/Home.vue'
-import Config from "@/views/Config";
-import Artworks from "@/views/Artworks";
-import ArtworkDetail from "@/views/ArtworkDetail";
-import FollowLatest from "@/views/FollowLatest";
-import Search from "@/views/Search";
-import User from "@/views/User";
-import UserIllust from "@/views/user/UserIllust";
-import UserBookmark from "@/views/user/UserBookmark";
-import Discover from "@/views/Discover";
-import Fanbox from "@/views/Fanbox";
-import FanboxItem from "@/views/fanbox/FanboxItem";
-import FanboxIndex from "@/views/fanbox/FanboxIndex";
-import FanboxCreator from "@/views/fanbox/FanboxCreator";
 
 const routes = [
     {
         path: '/',
-        redirect: "/home",
+        redirect: "/follow/latest/illust/1"
     },
     {
-        path: '/home',
-        name: '首页',
-        component: Home
+        path: "/follow/latest",
+        redirect: "/follow/latest/illust/1"
     },
     {
-        path: '/search',
-        name: '搜索',
-        component: Search,
-    },
-    {
-        path: '/discover',
-        name: '发现',
-        component: Discover,
-    },
-    {
-        path: '/search/:keyword/:page',
-        name: '搜索结果',
-        component: Search,
-    },
-
-    {
-        path: '/follow-latest',
-        redirect: "/follow-latest/1",
-    },
-    {
-        path: '/follow-latest/:page',
-        name: '关注作品',
-        component: FollowLatest
-    },
-    {
-        path: '/config',
-        name: '配置',
-        component: Config,
-    },
-    {
-        path: '/artworks',
-        name: '作品详情组',
-        component: Artworks,
+        path: '/follow/latest',
+        name: '最新作品',
+        component: () => import("../views/v2/follow_latest/Home"),
         children: [
-            {
-                path: ":pid",
-                name: "作品详情",
-                component: ArtworkDetail,
-            }
-        ],
+            {path: "illust/:page", name: "最新绘画", component: () => import("../views/v2/follow_latest/Illust"),},
+            {path: "novel/:page", name: "最新小说", component: () => import("../views/v2/follow_latest/Novel"),},
+        ]
     },
     {
         path: '/user/:uid',
-        name: "用户主页",
-        component: User,
-        children: [
-            {path: 'illust/:page', name: '用户插画', component: UserIllust},
-            {path: 'manga/:page', name: '用户漫画', component: UserIllust},
-            {path: 'bookmark/:page', name: '用户收藏', component: UserBookmark},
-        ],
+        name: '用户主页',
+        component: () => import("../views/v2/user/Home"),
+        children: []
+    },
+
+    {
+        path: "/illust/:pid",
+        name: "绘画详情",
+        component: () => import("../views/v2/detail/Illust")
     },
     {
-        path: '/fanbox',
-        name: 'fanbox',
-        component: Fanbox,
-        children: [
-            {path: 'item/:id', name: 'fanbox作品详情', component: FanboxItem},
-            {path: 'creator/:id/:page', name: 'fanbox创作者作品', component: FanboxCreator},
-            {path: 'index', name: 'fanbox主页', component: FanboxIndex},
-        ]
-    }
-
-
+        path: "/config",
+        name: "配置",
+        component: () => import("../views/v2/config/Config")
+    },
 ]
 
 const router = createRouter({

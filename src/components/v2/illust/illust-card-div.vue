@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <!--    卡片size 从config中取 todo -->
+    <illust-card v-for="(item,index) in data" :key="index" :info="item" :size="150" style="margin-right: 5px" @success="imageCompleted" />
+  </div>
+</template>
+
+<script>
+import {mapState} from "vuex";
+import IllustCard from "@/components/v2/illust/illust-card";
+
+export default {
+  name: "illust-card-div",
+  components: {IllustCard},
+  data() {
+    return {
+      threads: 5,
+      current: 0,
+    }
+  },
+  computed: {
+    ...mapState("Config", ['config']),
+  },
+  emits: ["success", "error"],
+  methods: {
+    imageCompleted() {
+      this.current--;
+      this.loadImage()
+    },
+    loadImage() {
+      //加载图片
+      let d = this.data.filter(i => !i.showImage);
+      //如果线程数未到上限，且还有作品未加载完成
+      if (this.current < this.threads && d.length > 0) {
+        d[0].showImage = true;
+        this.current++;
+      }
+    },
+    load() {
+      for (let i = 0; i < Math.min(this.threads - this.current, this.data.length); i++) {
+        this.loadImage()
+      }
+    }
+  },
+  mounted() {
+    this.load()
+  },
+  watch: {
+    data() {
+      this.load()
+    }
+  },
+  props: {
+    data: {
+      type: Array,
+      required: true
+    }
+  },
+}
+
+</script>
+
+<style scoped>
+
+</style>
