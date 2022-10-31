@@ -77,12 +77,16 @@
                 </el-icon>
                 ({{ data.likeCount }})
               </el-descriptions-item>
+              <el-descriptions-item label="浏览">
+                {{ data.viewCount }}
+              </el-descriptions-item>
               <el-descriptions-item label="创建时间">
                 {{ data.createDate }}
               </el-descriptions-item>
               <el-descriptions-item v-if="data.createDate!==data.uploadDate" label="上传时间">
                 {{ data.uploadDate }}
               </el-descriptions-item>
+              <el-descriptions-item label="尺寸">{{ data.size.width }}x{{ data.size.height }}</el-descriptions-item>
               <el-descriptions-item v-if="data.isCommission" label="约稿人">
                 <user-avatar :uid="data.commissionFrom.id" />
                 <user-link :uid="data.commissionFrom.id" />
