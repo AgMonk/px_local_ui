@@ -2,7 +2,8 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
-import {emoji} from "@/assets/js/emoji";
+import {emoji} from "@/assets/v2/emoji";
+import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
 export default {
     namespaced: true, state: {
@@ -20,6 +21,7 @@ export default {
                 item.commentUserId = Number(item.commentUserId)
                 item.commentRootId && (item.commentRootId = Number(item.commentRootId))
                 item.commentParentId && (item.commentParentId = Number(item.commentParentId))
+                item.replyToUserId && (item.replyToUserId = Number(item.replyToUserId))
                 //保存用户数据
                 this.commit("User/update", {avatar: item.img, name: item.userName, id: Number(item.userId)}, {root: true})
 
@@ -31,17 +33,38 @@ export default {
                         let s = matcher[0]
                         let key = matcher[1]
                         if (emoji.hasOwnProperty(key)) {
-                            item.comment = item.comment.replace(s, `<img style="width: 30px" src="https://s.pximg.net/common/images/emoji/${emoji[key]}.png" alt=""/>`)
+                            item.comment = item.comment.replace(s, `<img style="width: 50px" src="https://s.pximg.net/common/images/emoji/${emoji[key]}.png" alt=""/>`)
                         }
                     }
                 }
                 delete item.userName;
                 delete item.img;
+                delete item.replyToUserName;
+                delete item.stampLink;
             })
         },
     }, actions: {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
+        },
+        commentStamp: ({dispatch, commit, state, rootGetters}, {illustId, authorUserId, stampId, parentId}) => {
+            return rootGetters["getApi"].comments.commentStamp(illustId, authorUserId, stampId, parentId).then(res => {
+                console.log(res)
+                const {comment, comment_id, parent_id, stamp_id, user_id} = res
+
+                //获得当前时区偏移
+                let offset = 540 + new Date().getTimezoneOffset()
+                let date = DateUtils.plusMinutes(new Date(), offset);
+                return {
+                    comment,
+                    id: Number(comment_id),
+                    commentParentId: Number(parent_id),
+                    stampId: stamp_id,
+                    userId: Number(user_id),
+                    editable: true,
+                    commentDate: DateUtils.format(date, "yyyy-MM-dd hh:mm"),
+                }
+            })
         },
         delComment: ({dispatch, commit, state, rootGetters}, {commentId, pid}) => {
             return rootGetters["getApi"].comments.delComment(pid, commentId).then(() => {

@@ -1,11 +1,12 @@
 <template>
   <div style="color: white;text-align: left;background-color: rgba(1,48,133,0.3)">
-    <h2>评论区</h2>
-    <!--todo 回复作者-->
+    <h2>评论区
+      <comment-stamp :pid="pid" @success="commentSuccess" />
+    </h2>
     <div>
       <!--        评论内容-->
       <el-scrollbar v-infinite-scroll="refresh" :infinite-scroll-disabled="loading" height="300px">
-        <illust-comment v-for="comment in data" :data="comment" :pid="pid" style="margin-bottom: 2px" @deleted="deleted" />
+        <illust-comment v-for="comment in data" :data="comment" :pid="pid" is-root style="margin-bottom: 2px" @deleted="deleted" />
 
         <div v-if="!hasNext" style="text-align: center">到底了</div>
         <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
@@ -21,10 +22,11 @@
 <script>
 import {mapActions} from "vuex";
 import IllustComment from "@/components/v2/illust/comment/illust-comment";
+import CommentStamp from "@/components/v2/illust/comment/comment-stamp";
 
 export default {
   name: "illust-comment-area",
-  components: {IllustComment},
+  components: {IllustComment, CommentStamp},
   data() {
     return {
       data: [],
@@ -37,6 +39,10 @@ export default {
   computed: {},
   methods: {
     ...mapActions("IllustComment", ['illustsRoots']),
+    commentSuccess(res) {
+      //回复成功
+      this.data = [res, ...this.data];
+    },
     //删除回复回调
     deleted(commentId) {
       this.data = this.data.filter(i => i.id !== commentId)
@@ -74,7 +80,7 @@ export default {
   },
   watch: {
     pid(to) {
-
+      this.load(to)
     }
   },
   props: {

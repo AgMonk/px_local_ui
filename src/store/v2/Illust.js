@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
-import {clearIllustDetail, clearIllustInfo} from "@/assets/js/axios";
+import {clearIllustDetail, clearIllustInfo} from "@/assets/v2/axios";
 
 export default {
     namespaced: true,

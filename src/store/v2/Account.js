@@ -3,7 +3,7 @@
 
 import {Api} from "pixiv-web-api-for-browser/dist";
 import {StorageUtils} from "gin-utils/dist/utils/StorageUtils";
-import {instance, PIXIV_PATH} from "@/assets/js/axios";
+import {instance, PIXIV_PATH} from "@/assets/v2/axios";
 
 const key = "accounts";
 export default {

@@ -45,7 +45,7 @@ import CurrentUserAvatar from "@/components/v1/user/CurrentUserAvatar";
 import MyNavi from "@/components/v2/navi/my-navi";
 import {mapGetters} from "vuex";
 import {Api} from "pixiv-web-api-for-browser/dist";
-import {instance} from "@/assets/js/axios";
+import {instance} from "@/assets/v2/axios";
 import {ElMessage} from "element-plus";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 
