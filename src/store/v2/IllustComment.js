@@ -18,6 +18,8 @@ export default {
                 item.id = Number(item.id)
                 item.userId = Number(item.userId)
                 item.commentUserId = Number(item.commentUserId)
+                item.commentRootId && (item.commentRootId = Number(item.commentRootId))
+                item.commentParentId && (item.commentParentId = Number(item.commentParentId))
                 //保存用户数据
                 this.commit("User/update", {avatar: item.img, name: item.userName, id: Number(item.userId)}, {root: true})
 
@@ -40,6 +42,14 @@ export default {
     }, actions: {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
+        },
+        delComment: ({dispatch, commit, state, rootGetters}, {commentId, pid}) => {
+            return rootGetters["getApi"].comments.delComment(pid, commentId).then(() => {
+                //清理root
+                [...state.roots.keys()].filter(key => key.startsWith(pid + "_")).forEach(key => state.roots.delete(key));
+                //清理replies
+                state.replies.clear();
+            })
         },
         illustsRoots: ({dispatch, commit, state, rootGetters}, {force, pid, page}) => {
             return CacheUtils.getCacheByTime({

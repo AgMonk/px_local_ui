@@ -5,7 +5,7 @@
     <div>
       <!--        评论内容-->
       <el-scrollbar v-infinite-scroll="refresh" :infinite-scroll-disabled="loading" height="300px">
-        <illust-comment v-for="comment in data" :data="comment" :pid="pid" style="margin-bottom: 2px" />
+        <illust-comment v-for="comment in data" :data="comment" :pid="pid" style="margin-bottom: 2px" @deleted="deleted" />
 
         <div v-if="!hasNext" style="text-align: center">到底了</div>
         <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
@@ -37,6 +37,10 @@ export default {
   computed: {},
   methods: {
     ...mapActions("IllustComment", ['illustsRoots']),
+    //删除回复回调
+    deleted(commentId) {
+      this.data = this.data.filter(i => i.id !== commentId)
+    },
     refresh() {
       this.roots(this.pid)
     },

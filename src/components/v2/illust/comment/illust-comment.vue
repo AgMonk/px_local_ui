@@ -5,15 +5,18 @@
     <span style="color: rgba(240,248,255,0.65)">@{{ data.commentDate }}</span>:
     <span v-if="data.comment" v-html="data.comment"></span>
     <el-image v-else :src="`https://s.pximg.net/common/images/stamp/generated-stamps/${data.stampId}_s.jpg`" style="width: 30px" />
-                                                                              <!--todo 删除-->
-    <el-button v-if="data.editable" size="small" style="margin-left: 20px" type="danger" @click="delComment">删除</el-button>
+                                                                              <!--删除-->
+    <el-button v-if="data.editable" :disabled="deleting" :type="deleting?'info':'danger'" size="small" style="margin-left: 20px" @click="del">
+      {{ deleting ? '删除中..' : '删除' }}
+    </el-button>
                                                                               <!--todo 回复-->
-                                                                              <!--      楼中楼-->
+
+                                                                              <!--楼中楼-->
     <div v-if="data.hasReplies" style="padding-left: 40px">
       <el-button v-if="children.length===0 && !loading" size="small" type="primary" @click="loadReplies">查看回复</el-button>
       <el-button v-if="children.length===0 && loading" :disabled="true" size="small" type="info">加载中..</el-button>
       <el-scrollbar v-if="children.length>0" v-infinite-scroll="loadReplies" :infinite-scroll-disabled="loading" :infinite-scroll-immediate="false" :max-height="300">
-        <illust-comment v-for="comment in children" :data="comment" :pid="pid" />
+        <illust-comment v-for="comment in children" :data="comment" :pid="pid" @deleted="deleted" />
         <div v-if="!hasNext">~到底了~</div>
         <div v-if="failed" style="color:white;cursor: pointer" @click="loadReplies">
           <h3>请求失败</h3>
@@ -34,9 +37,11 @@ import {ElMessage, ElMessageBox} from "element-plus";
 export default {
   name: "illust-comment",
   components: {UserAvatar, UserLink},
+  emits: ['deleted'],
   data() {
     return {
       loading: false,
+      deleting: false,
       failed: false,
       hasNext: true,
       page: 1,
@@ -45,10 +50,27 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions("IllustComment", ['illustsReplies']),
-    delComment() {
+    ...mapActions("IllustComment", ['illustsReplies', 'delComment']),
+    //删除回复回调
+    deleted(commentId) {
+      this.children = this.children.filter(i => i.id !== commentId)
+      if (this.children.length === 0) {
+        this.data.hasReplies = false
+      }
+    },
+    del() {
       ElMessageBox.confirm("删除评论?", "确认删除").then(res => {
         console.log(res)
+        this.deleting = true;
+        this.delComment({pid: this.pid, commentId: this.data.id,}).then(() => {
+          ElMessage.success("删除成功");
+          this.$emit('deleted', this.data.id)
+          this.deleting = false;
+        }).catch(e => {
+          ElMessage.error("删除失败,请重试");
+          this.deleting = false;
+          console.error(e)
+        })
       }).catch(e => {
         if (e === 'cancel') {
           ElMessage.info("已取消")
@@ -71,6 +93,7 @@ export default {
       }).catch(e => {
         console.error(e)
         this.failed = true;
+        ElMessage.error("加载失败,请重试")
       }).finally(() => {
         this.loading = false;
       })
