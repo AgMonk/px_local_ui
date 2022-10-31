@@ -83,6 +83,10 @@
               <el-descriptions-item v-if="data.createDate!==data.uploadDate" label="上传时间">
                 {{ data.uploadDate }}
               </el-descriptions-item>
+              <el-descriptions-item v-if="data.isCommission" label="约稿人">
+                <user-avatar :uid="data.commissionFrom.id" />
+                <user-link :uid="data.commissionFrom.id" />
+              </el-descriptions-item>
 
 
             </el-descriptions>
@@ -92,11 +96,13 @@
 
         <div v-if="data" style="padding: 0 20px">
 
-          <!--       todo 标题和描述 -->
+          <!--       标题和描述 -->
           <div style="color: white;text-align: left">
-            <h4>
-              <illust-link :pid="pid"><span style="color: white;">{{ data.title }}</span></illust-link>
-            </h4>
+            <illust-link :pid="pid">
+              <h2 style="color: white;">
+                {{ data.title }}
+              </h2>
+            </illust-link>
             <div v-html="data.description">
 
             </div>
@@ -126,10 +132,12 @@ import {Loading, QuestionFilled, SuccessFilled} from "@element-plus/icons-vue";
 import UserTitle from "@/components/v2/user/user-title";
 import IllustBookmarkButton from "@/components/v2/illust/illust-bookmark-button";
 import IllustLink from "@/components/v2/illust/illust-link";
+import UserAvatar from "@/components/v2/user/user-avatar";
+import UserLink from "@/components/v2/user/user-link";
 
 export default {
   name: "Illust",
-  components: {IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
+  components: {UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
   data() {
     return {
       activeIndex: 0,
