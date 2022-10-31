@@ -5,12 +5,15 @@
     <span style="color: rgba(240,248,255,0.65)">@{{ data.commentDate }}</span>:
     <span v-if="data.comment" v-html="data.comment"></span>
     <el-image v-else :src="`https://s.pximg.net/common/images/stamp/generated-stamps/${data.stampId}_s.jpg`" style="width: 30px" />
+                                                                              <!--todo 删除-->
+    <el-button v-if="data.editable" size="small" style="margin-left: 20px" type="danger" @click="delComment">删除</el-button>
+                                                                              <!--todo 回复-->
                                                                               <!--      楼中楼-->
     <div v-if="data.hasReplies" style="padding-left: 40px">
       <el-button v-if="children.length===0 && !loading" size="small" type="primary" @click="loadReplies">查看回复</el-button>
       <el-button v-if="children.length===0 && loading" :disabled="true" size="small" type="info">加载中..</el-button>
       <el-scrollbar v-if="children.length>0" v-infinite-scroll="loadReplies" :infinite-scroll-disabled="loading" :infinite-scroll-immediate="false" :max-height="300">
-        <illust-comment v-for="comment in children" :data="comment" />
+        <illust-comment v-for="comment in children" :data="comment" :pid="pid" />
         <div v-if="!hasNext">~到底了~</div>
         <div v-if="failed" style="color:white;cursor: pointer" @click="loadReplies">
           <h3>请求失败</h3>
@@ -26,6 +29,7 @@
 import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
 import {mapActions} from "vuex";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
   name: "illust-comment",
@@ -42,6 +46,17 @@ export default {
   computed: {},
   methods: {
     ...mapActions("IllustComment", ['illustsReplies']),
+    delComment() {
+      ElMessageBox.confirm("删除评论?", "确认删除").then(res => {
+        console.log(res)
+      }).catch(e => {
+        if (e === 'cancel') {
+          ElMessage.info("已取消")
+        } else {
+          console.error(e)
+        }
+      })
+    },
     loadReplies(force) {
       if (!this.hasNext) {
         return;
@@ -79,6 +94,10 @@ export default {
   props: {
     data: {
       type: Object
+    },
+    pid: {
+      type: Number,
+      required: true,
     }
   },
 }
