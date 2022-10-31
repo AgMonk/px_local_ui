@@ -91,7 +91,9 @@
                 <user-avatar :uid="data.commissionFrom.id" />
                 <user-link :uid="data.commissionFrom.id" />
               </el-descriptions-item>
-
+              <el-descriptions-item label="Aria2">
+                <!--                todo 下载原图-->
+              </el-descriptions-item>
 
             </el-descriptions>
           </el-aside>
@@ -113,12 +115,10 @@
           <div style="text-align: left;margin-top: 20px">
             <illust-tag v-for="item in data.tags" :tag="item" />
           </div>
-          <!--        todo 数据统计-->
-          <div></div>
-          <!--        todo 时间戳-->
-          <div></div>
           <!--        todo 评论区-->
-          <div v-if="data.commentCount>0"></div>
+          <div v-if="data.commentCount>0" style="color: white;text-align: left">
+            <h2>评论区</h2>
+          </div>
         </div>
       </div>
     </el-main>
@@ -195,6 +195,9 @@ export default {
         for (let i = 0; i < this.data.pageCount; i++) {
           this.original.push(this.getUrl("original", i))
         }
+        //如果有标题 修改浏览器标题
+        res.title && Title.set(res.title)
+
         //等渲染完成了再加载tabs 避免从图片多的作品切换到少的作品时无畏的404请求
         this.$nextTick(() => {
           this.showTabs = true;

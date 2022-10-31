@@ -27,7 +27,6 @@ export default {
   computed: {},
   methods: {
     load(tag) {
-      console.log(tag)
       if ((typeof tag) === 'string') {
         this.text = tag;
         this.locked = false;
