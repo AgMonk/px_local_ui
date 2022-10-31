@@ -19,7 +19,7 @@
 <script>
 import {mapActions} from "vuex";
 import {Title} from "gin-utils/dist/utils/DomUtils";
-import IllustCardGroup from "@/components/v2/illust/illust-card-group";
+import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 import {ElMessage} from "element-plus";
 
 export default {

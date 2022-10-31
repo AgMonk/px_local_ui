@@ -7,11 +7,11 @@
         <h3>请求失败</h3>
         <h4>点击刷新</h4>
       </div>
-      <div v-else style="min-height: 500px;">
+      <div v-else style="min-height: 500px;margin-left: 20px;margin-right: 20px">
         <!--        主界面和右侧边-->
         <el-container v-if="data" direction="horizontal">
           <!--          主界面-->
-          <el-main style="background-color: rgba(1,48,133,0.3)">
+          <el-main style="background-color: rgba(1,48,133,0.3);">
             <el-tabs v-if="showTabs" v-model="activeIndex" stretch tab-position="left">
               <el-tab-pane v-for="index in data.pageCount" :name="index-1" lazy>
                 <template #label>
@@ -40,7 +40,7 @@
             </el-tabs>
           </el-main>
           <!--          右侧边-->
-          <el-aside style="width: 280px;padding-left: 20px;padding-right: 20px">
+          <el-aside style="width: 280px;padding-left: 20px;">
             <div>
               <!--            用户头像-->
               <user-title :uid="data.userId" />
@@ -100,7 +100,8 @@
 
         </el-container>
 
-        <div v-if="data" style="padding: 0 20px">
+        <!--        底部信息-->
+        <div v-if="data">
 
           <!--       标题和描述 -->
           <div style="color: white;text-align: left">
@@ -115,9 +116,9 @@
           <div style="text-align: left;margin-top: 20px">
             <illust-tag v-for="item in data.tags" :tag="item" />
           </div>
-          <!--        todo 评论区-->
-          <div v-if="data.commentCount>0" style="color: white;text-align: left">
-            <h2>评论区</h2>
+          <!--        评论区-->
+          <div v-if="data.commentCount>0">
+            <illust-comment-area :pid="data.id" />
           </div>
         </div>
       </div>
@@ -130,7 +131,7 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import {Title} from "gin-utils/dist/utils/DomUtils";
-import IllustCard from "@/components/v2/illust/illust-card";
+import IllustCard from "@/components/v2/illust/card/illust-card";
 import IllustImage from "@/components/v2/illust/illust-image";
 import {Loading, QuestionFilled, SuccessFilled} from "@element-plus/icons-vue";
 import UserTitle from "@/components/v2/user/user-title";
@@ -139,10 +140,11 @@ import IllustLink from "@/components/v2/illust/illust-link";
 import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
 import IllustTag from "@/components/v2/illust/illust-tag";
+import IllustCommentArea from "@/components/v2/illust/comment/illust-comment-area";
 
 export default {
   name: "Illust",
-  components: {IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
+  components: {IllustCommentArea, IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
   data() {
     return {
       activeIndex: 0,

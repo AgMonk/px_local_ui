@@ -36,7 +36,7 @@
 
 <script>
 import {mapState} from "vuex";
-import IllustCardDiv from "@/components/v2/illust/illust-card-div";
+import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
 
 export default {
   name: "illust-card-group",

@@ -3,6 +3,7 @@ import Illust from "@/store/v2/Illust"
 import User from "@/store/v2/User"
 import Account from "@/store/v2/Account";
 import Config from "@/store/v2/Config";
+import IllustComment from "@/store/v2/IllustComment";
 
 export default createStore({
     state: {
@@ -15,7 +16,7 @@ export default createStore({
     },
     actions: {},
     modules: {
-        Illust, User, Account, Config
+        Illust, User, Account, Config, IllustComment
     }, getters: {
         getApi(state) {
             return state.api;
