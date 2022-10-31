@@ -107,12 +107,12 @@
                 {{ data.title }}
               </h2>
             </illust-link>
-            <div v-html="data.description">
-
-            </div>
+            <div v-html="data.description" />
           </div>
-          <!--        todo 标签-->
-          <div></div>
+          <!--         标签-->
+          <div style="text-align: left;margin-top: 20px">
+            <illust-tag v-for="item in data.tags" :tag="item" />
+          </div>
           <!--        todo 数据统计-->
           <div></div>
           <!--        todo 时间戳-->
@@ -138,10 +138,11 @@ import IllustBookmarkButton from "@/components/v2/illust/illust-bookmark-button"
 import IllustLink from "@/components/v2/illust/illust-link";
 import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
+import IllustTag from "@/components/v2/illust/illust-tag";
 
 export default {
   name: "Illust",
-  components: {UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
+  components: {IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
   data() {
     return {
       activeIndex: 0,
