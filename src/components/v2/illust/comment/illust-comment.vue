@@ -14,7 +14,7 @@
       <comment-del v-if="data.editable" :comment-id="data.id" :pid="pid" style="margin-right: 5px" @deleted="$emit('deleted',data.id)" />
       <!--表情贴图回复-->
       <comment-stamp :parent-id="data.id" :pid="pid" :reply-to-user-id="data.userId" style="margin-right: 5px" @success="commentSuccess" />
-      <!--    todo 文字回复-->
+      <comment-text :parent-id="data.id" :pid="pid" :reply-to-user-id="data.userId" style="margin-right: 5px" @success="commentSuccess" />
     </div>
 
     <!--    回复正文-->
@@ -48,10 +48,11 @@ import {mapActions} from "vuex";
 import {ElMessage} from "element-plus";
 import CommentStamp from "@/components/v2/illust/comment/comment-stamp";
 import CommentDel from "@/components/v2/illust/comment/comment-del";
+import CommentText from "@/components/v2/illust/comment/comment-text";
 
 export default {
   name: "illust-comment",
-  components: {CommentDel, CommentStamp, UserAvatar, UserLink},
+  components: {CommentText, CommentDel, CommentStamp, UserAvatar, UserLink},
   emits: ['deleted', "comment-success"],
   data() {
     return {
@@ -68,11 +69,13 @@ export default {
     ...mapActions("IllustComment", ['illustsReplies', 'delComment']),
     //回复成功回调
     commentSuccess(res) {
+      console.log(res)
       //如果当前回复为根回复，在本级处理
       if (this.isRoot) {
         this.data.hasReplies = true
         if (this.children.length === 0) {
           //如果还未请求楼中楼，执行请求
+          this.hasNext = true
           this.loadReplies()
         } else {
           //如果已经有楼中楼，添加到最前
@@ -88,6 +91,7 @@ export default {
       this.children = this.children.filter(i => i.id !== commentId)
       if (this.children.length === 0) {
         this.data.hasReplies = false
+        this.page = 1;
       }
     },
     loadReplies(force) {

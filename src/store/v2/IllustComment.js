@@ -5,16 +5,38 @@ import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {emoji} from "@/assets/v2/emoji";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
+//处理发表回复的响应
+function handleCommentRes(res) {
+    const {comment, comment_id, parent_id, stamp_id, user_id} = res
+    //获得当前时区偏移
+    let offset = 540 + new Date().getTimezoneOffset()
+    let date = DateUtils.plusMinutes(new Date(), offset);
+    return {
+        comment,
+        id: Number(comment_id),
+        commentParentId: Number(parent_id),
+        stampId: stamp_id,
+        userId: Number(user_id),
+        editable: true,
+        commentDate: DateUtils.format(date, "yyyy-MM-dd hh:mm"),
+    }
+}
+
 export default {
-    namespaced: true, state: {
+    namespaced: true,
+    state: {
         //根评论
         roots: new Map(), //楼中楼
         replies: new Map(),
-    }, mutations: {
+    },
+    mutations: {
         method(state, payload) {
 
         },
         handleComments(state, comments) {
+            if (!comments) {
+                return;
+            }
             comments.forEach(item => {
                 item.id = Number(item.id)
                 item.userId = Number(item.userId)
@@ -49,21 +71,12 @@ export default {
         },
         commentStamp: ({dispatch, commit, state, rootGetters}, {illustId, authorUserId, stampId, parentId}) => {
             return rootGetters["getApi"].comments.commentStamp(illustId, authorUserId, stampId, parentId).then(res => {
-                console.log(res)
-                const {comment, comment_id, parent_id, stamp_id, user_id} = res
-
-                //获得当前时区偏移
-                let offset = 540 + new Date().getTimezoneOffset()
-                let date = DateUtils.plusMinutes(new Date(), offset);
-                return {
-                    comment,
-                    id: Number(comment_id),
-                    commentParentId: Number(parent_id),
-                    stampId: stamp_id,
-                    userId: Number(user_id),
-                    editable: true,
-                    commentDate: DateUtils.format(date, "yyyy-MM-dd hh:mm"),
-                }
+                return handleCommentRes(res);
+            })
+        },
+        commentText: ({dispatch, commit, state, rootGetters}, {illustId, authorUserId, text, parentId}) => {
+            return rootGetters["getApi"].comments.commentText(illustId, authorUserId, text, parentId).then(res => {
+                return handleCommentRes(res);
             })
         },
         delComment: ({dispatch, commit, state, rootGetters}, {commentId, pid}) => {

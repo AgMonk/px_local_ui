@@ -107,7 +107,7 @@
           <div style="color: white;text-align: left">
             <illust-link :pid="pid">
               <h2 style="color: white;">
-                {{ data.title }}
+                {{ data.title ? data.title : '无标题' }}
               </h2>
             </illust-link>
             <div v-html="data.description" />

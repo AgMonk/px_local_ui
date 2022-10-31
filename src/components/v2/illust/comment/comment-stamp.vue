@@ -26,9 +26,9 @@ import {ElMessage} from "element-plus";
 export default {
   name: "comment-stamp",
   components: {Grid, Loading},
+  emits: ['success'],
   data() {
     return {
-      iconSize: 20,
       stampId,
       loading: false,
       authorUserId: undefined,
@@ -66,13 +66,14 @@ export default {
   },
   watch: {
     pid(to) {
-
+      this.load(to)
     }
   },
   props: {
     pid: {type: Number, required: true},
     parentId: {type: Number},
     replyToUserId: {type: Number},
+    iconSize: {type: Number, default: 20},
   },
 }
 

@@ -18,7 +18,6 @@ export default {
   emits: ['deleted'],
   data() {
     return {
-      iconSize: 20,
       loading: false,
     }
   },
@@ -52,6 +51,7 @@ export default {
   props: {
     pid: {type: Number, required: true},
     commentId: {type: Number, required: true},
+    iconSize: {type: Number, default: 20},
   },
 }
 

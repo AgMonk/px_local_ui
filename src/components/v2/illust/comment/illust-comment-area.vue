@@ -2,6 +2,7 @@
   <div style="color: white;text-align: left;background-color: rgba(1,48,133,0.3)">
     <h2>评论区
       <comment-stamp :pid="pid" @success="commentSuccess" />
+      <comment-text :pid="pid" @success="commentSuccess" />
     </h2>
     <div>
       <!--        评论内容-->
@@ -23,10 +24,11 @@
 import {mapActions} from "vuex";
 import IllustComment from "@/components/v2/illust/comment/illust-comment";
 import CommentStamp from "@/components/v2/illust/comment/comment-stamp";
+import CommentText from "@/components/v2/illust/comment/comment-text";
 
 export default {
   name: "illust-comment-area",
-  components: {IllustComment, CommentStamp},
+  components: {CommentText, IllustComment, CommentStamp},
   data() {
     return {
       data: [],
