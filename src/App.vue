@@ -1,13 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <!--      <my-navigation />-->
       <my-navi :routes="routes" />
-      <!--      <div style="text-align: left;margin:2px 0">-->
-      <!--        <el-button size="small" type="primary" @click="back">&lt;</el-button>-->
-      <!--        <el-button size="small" type="primary" @click="forward">></el-button>-->
-      <!--        <el-button v-if="$route.query.from" size="small" type="primary" @click="$router.push($route.query.from)">↑</el-button>-->
-      <!--      </div>-->
     </div>
     <router-view />
     <el-backtop />
@@ -40,8 +34,6 @@
 
 </style>
 <script>
-import MyNavigation from "@/components/v1/common/my-navigation";
-import CurrentUserAvatar from "@/components/v1/user/CurrentUserAvatar";
 import MyNavi from "@/components/v2/navi/my-navi";
 import {mapGetters} from "vuex";
 import {Api} from "pixiv-web-api-for-browser/dist";
@@ -50,7 +42,7 @@ import {ElMessage} from "element-plus";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 
 export default {
-  components: {MyNavi, CurrentUserAvatar, MyNavigation},
+  components: {MyNavi,},
   data() {
     return {
       routes: [
