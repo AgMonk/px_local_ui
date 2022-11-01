@@ -4,6 +4,38 @@
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {clearIllustDetail, clearIllustInfo} from "@/assets/v2/axios";
 
+/**
+ * 精简作品的字段
+ * @param array
+ * @returns {*}
+ */
+const simplify = (array) => {
+    return array.map(item => {
+        return {
+            id: item.id,
+            uid: item.uid,
+        }
+    })
+}
+/**
+ * 处理一个作品列表
+ * @param commit commit方法
+ * @param item 作品
+ */
+const handleIllust = function (commit, item) {
+    //保存收藏数据
+    commit("updateBmkData", item);
+    clearIllustInfo(item)
+    //保存用户数据
+    commit("User/update", item.author, {root: true})
+    commit("updateIllust", item)
+    delete item.author
+}
+
+const handleIllusts = function (commit, array) {
+    array.forEach(item => handleIllust(commit, item))
+}
+
 export default {
     namespaced: true,
     state: {
@@ -117,20 +149,9 @@ export default {
                     return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
                         const {tagTranslation, thumbnails} = res
                         const {illust} = thumbnails
-                        illust.forEach(item => {
-                            //保存收藏数据
-                            commit("updateBmkData", item);
-                            clearIllustInfo(item)
-                            //保存用户数据
-                            commit("User/update", item.author, {root: true})
-                            delete item.author
-                            commit("updateIllust", item)
-                        })
+                        handleIllusts(commit, illust)
                         return {
-                            data: illust.map(item => {
-                                const {bookmarked, id, uid} = item
-                                return {bookmarked, id, uid};
-                            }), tagTranslation
+                            data: simplify(illust), tagTranslation
                         }
                     })
                 }
@@ -149,27 +170,19 @@ export default {
                     }).then(res => {
                         const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res
 
-                        let handleIllusts = function (array) {
-                            array.forEach(item => {
-                                //保存收藏数据
-                                commit("updateBmkData", item);
-                                clearIllustInfo(item)
-                                //保存用户数据
-                                commit("User/update", item.author, {root: true})
-                                delete item.author
-                                commit("updateIllust", item)
-                            })
-                        }
-
-                        handleIllusts(illustManga.data)
-                        handleIllusts(popular.permanent)
-                        handleIllusts(popular.recent)
+                        handleIllusts(commit, illustManga.data)
+                        handleIllusts(commit, popular.permanent)
+                        handleIllusts(commit, popular.recent)
 
 
-                        delete res.extraData
-                        delete res.illustManga.bookmarkRanges
-                        delete res.zoneConfig
-                        return res;
+                        const data = simplify(illustManga.data)
+                        const total = illustManga.total
+                        const permanent = simplify(popular.permanent)
+                        const recent = simplify(popular.recent)
+
+                        return {
+                            data, total, popular: {permanent, recent}, relatedTags, tagTranslation
+                        };
                     })
                 }
             })

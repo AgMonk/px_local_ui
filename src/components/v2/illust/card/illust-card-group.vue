@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
 
 export default {
@@ -58,6 +58,7 @@ export default {
     ...mapState("Config", ['config']),
   },
   methods: {
+    ...mapGetters("Illust", ['getBookmarkData']),
     //清空数据
     clear(illusts) {
       this.normal = []
@@ -65,6 +66,9 @@ export default {
       this.blocked = []
       console.debug("清空作品组")
       this.add(illusts)
+    },
+    isBookmarked(id) {
+      return !!this.getBookmarkData()(id)
     },
     //添加数据
     add(illusts) {
@@ -79,8 +83,8 @@ export default {
       const {groupBookmarked} = ui;
       if (groupBookmarked) {
         //如果需要分组
-        this.normal.push(...illusts.filter(i => !i.bookmarked))
-        this.bookmarked.push(...illusts.filter(i => i.bookmarked))
+        this.normal.push(...illusts.filter(i => !this.isBookmarked(i.id)))
+        this.bookmarked.push(...illusts.filter(i => this.isBookmarked(i.id)))
         console.debug(`常规:${this.normal.length}个 已收藏:${this.bookmarked.length}`)
       } else {
         this.normal.push(...illusts);

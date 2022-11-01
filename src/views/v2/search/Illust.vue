@@ -11,7 +11,6 @@
       </div>
     </el-main>
   </el-container>
-
 </template>
 
 <script>
@@ -36,16 +35,15 @@ export default {
     load(route, force) {
       const query = route.query
       const keyword = route.params.keyword
-      console.log(keyword, query)
       this.failed = false;
       this.loading = true;
       this.search({keyword, params: query, force}).then(res => {
         console.log(res)
-        const {illustManga, popular, relatedTags} = res
+        const {data, total, popular, relatedTags} = res
         this.failed = false;
-        this.$emit("change-total", illustManga.total);
+        this.$emit("change-total", total);
         this.$nextTick(() => {
-          this.$refs.cardGroup.clear(illustManga.data)
+          this.$refs.cardGroup.clear(data)
         })
         // todo 显示相关标签
         // todo 显示热门作品
