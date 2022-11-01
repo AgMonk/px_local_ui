@@ -19,12 +19,12 @@ const routes = [
         ]
     },
     {
-        path: '/search',
+        path: '/search/:type',
         name: '搜索',
         component: () => import("../views/v2/search/Home"),
         children: [
-            {path: "illust/:keyword/:page", name: "搜索绘画", component: () => import("../views/v2/search/Illust"),},
-            {path: "novel/:keyword/:page", name: "搜索小说", component: () => import("../views/v2/search/Novel"),},
+            {params: {type: 'illust'}, path: ":keyword/:page", name: "搜索绘画", component: () => import("../views/v2/search/Illust"),},
+            {params: {type: 'novel'}, path: ":keyword/:page", name: "搜索小说", component: () => import("../views/v2/search/Novel"),},
         ]
     },
     {
