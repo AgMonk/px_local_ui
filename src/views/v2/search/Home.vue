@@ -6,72 +6,22 @@
       <div style="text-align: left">
 
         <el-row>
-          <el-col :span="12" style="text-align: left">
+          <el-col :span="8" style="text-align: left">
             <el-radio-group v-model="type" size="small" type="primary" @change="pushRoute">
               <el-radio-button label="illust">绘画</el-radio-button>
               <el-radio-button label="novel">小说</el-radio-button>
             </el-radio-group>
           </el-col>
-          <el-col :span="12" style="text-align: right">
+          <el-col :span="8">
+            <span v-if="params.common.scd || params.common.ecd" style="color: white ;margin: 0;">日期范围: {{ params.common.scd }} ~ {{ params.common.ecd }}</span>
+          </el-col>
+          <el-col :span="8" style="text-align: right">
+            <el-button size="small" type="primary" @click="showDialog ">筛选条件</el-button>
             <el-button size="small" type="primary" @click="pushRoute">搜索</el-button>
           </el-col>
         </el-row>
         <!--      搜索框-->
         <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="pushRoute" />
-        <!--        搜索条件 -->
-        <div style="margin-top: 5px">
-          <!--          通用条件-->
-          <el-form inline label-position="left" size="small">
-            <el-form-item>
-              <template #label><span class="form-label">模式</span></template>
-              <el-select v-model="params.common.mode" effect="dark" style="width: 80px">
-                <el-option v-for="item in modes" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <template #label><span class="form-label">日期范围</span></template>
-              <el-date-picker
-                  v-model="dateRange"
-                  :shortcuts="dateRangeShortCuts"
-                  end-placeholder="结束日期"
-                  range-separator="到"
-                  start-placeholder="起始日期"
-                  type="daterange"
-                  unlink-panels
-                  value-format="YYYY-MM-DD"
-                  @change="dateRangeChanged"
-              />
-            </el-form-item>
-          </el-form>
-          <!--        todo  小说条件-->
-          <el-form v-if="type==='novel'" inline size="small">
-            <el-form-item>
-              <template #label><span class="form-label">检索范围</span></template>
-              <el-select v-model="params.novel.s_mode" effect="dark" style="width: 120px">
-                <el-option v-for="item in s_modes" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <template #label><span class="form-label">按系列分组</span></template>
-              <el-radio-group v-model="params.novel.gs" size="small" type="primary">
-                <el-radio-button :label="1">是</el-radio-button>
-                <el-radio-button :label="0">否</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-              <template #label><span class="form-label">最小字数</span></template>
-              <el-select v-model="params.novel.tlt" :clearable="true" effect="dark" style="width: 120px">
-                <el-option v-for="item in tlts" :label="item" :value="item" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <template #label><span class="form-label">最大字数</span></template>
-              <el-select v-model="params.novel.tgt" :clearable="true" effect="dark" style="width: 120px">
-                <el-option v-for="item in tgts" :label="item" :value="item" />
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </div>
       </div>
       <div>
         <!--      todo 已保存的搜索 -->
@@ -96,6 +46,62 @@
                        @current-change="changePage"
         />
       </div>
+
+
+      <el-dialog v-model="dialog.filter" append-to-body title="筛选条件">
+        <!--          通用条件-->
+        <el-form label-position="left" size="small">
+          <el-form-item>
+            <template #label><span class="form-label">模式</span></template>
+            <el-select v-model="tempParams.common.mode" effect="dark" style="width: 80px">
+              <el-option v-for="item in modes" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">日期范围</span></template>
+            <el-date-picker
+                v-model="dateRange"
+                :shortcuts="dateRangeShortCuts"
+                end-placeholder="结束日期"
+                range-separator="到"
+                start-placeholder="起始日期"
+                type="daterange"
+                unlink-panels
+                value-format="YYYY-MM-DD"
+                @change="dateRangeChanged"
+            />
+          </el-form-item>
+        </el-form>
+        <!--          小说条件-->
+        <el-form v-if="type==='novel'" size="small">
+          <el-form-item>
+            <template #label><span class="form-label">检索范围</span></template>
+            <el-select v-model="tempParams.novel.s_mode" effect="dark" style="width: 120px">
+              <el-option v-for="item in s_modes" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">按系列分组</span></template>
+            <el-radio-group v-model="tempParams.novel.gs" size="small" type="primary">
+              <el-radio-button :label="1">是</el-radio-button>
+              <el-radio-button :label="0">否</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">最小字数</span></template>
+            <el-select v-model="tempParams.novel.tlt" :clearable="true" effect="dark" style="width: 120px">
+              <el-option v-for="item in tlts" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">最大字数</span></template>
+            <el-select v-model="tempParams.novel.tgt" :clearable="true" effect="dark" style="width: 120px">
+              <el-option v-for="item in tgts" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <el-button type="success" @click="submit">提交</el-button>
+      </el-dialog>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -105,6 +111,7 @@
 <script>
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
+import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 
 const getDate = () => {
   return DateUtils.withZone(new Date(), 9)
@@ -122,6 +129,9 @@ export default {
   name: "Home",
   data() {
     return {
+      dialog: {
+        filter: false,
+      },
       total: 100,
       layout: "prev, pager, next, jumper",
       tlts: [0, 5000, 20000, 80000],
@@ -166,10 +176,22 @@ export default {
           tlt: undefined,
         },
       },
+      tempParams: {},
     }
   },
   computed: {},
   methods: {
+    submit() {
+      this.params = ObjectUtils.clone(this.tempParams)
+      this.dialog.filter = false
+      this.pushRoute();
+    },
+    showDialog() {
+      this.tempParams = ObjectUtils.clone(this.params)
+      const {scd, ecd} = this.params.common
+      this.dateRange = [scd, ecd]
+      this.dialog.filter = true;
+    },
     //跳转路由
     pushRoute() {
       const {common, novel} = this.params
@@ -181,13 +203,12 @@ export default {
     },
     //翻页
     changePage(page) {
-      const common = this.params.common
-      common.p = page
+      this.params.common.p = page
       this.pushRoute()
     },
     //修改选择日期
     dateRangeChanged(e) {
-      const c = this.params.common
+      const c = this.tempParams.common
       if (e) {
         console.log("选择日期", e[0], e[1])
         c.scd = e[0];
@@ -196,14 +217,11 @@ export default {
         c.scd = undefined;
         c.ecd = undefined;
       }
-      this.pushRoute()
     },
     //从路由中加载参数
     load(route) {
-      console.log(route)
-      const {keyword, page,} = route.params
-      const {mode, scd, ecd, s_mode, gs, tgt, tlt} = route.query
-      console.log(route.query)
+      const {keyword,} = route.params
+      const {mode, scd, ecd, s_mode, gs, tgt, tlt, p} = route.query
 
       //同步查询参数
 
@@ -213,10 +231,11 @@ export default {
 
       //通用参数
       const common = this.params.common
-      common.p = page ? Number(page) : 1;
+      common.p = p ? Number(p) : 1;
       common.mode = mode || "all";
       common.scd = scd;
       common.ecd = ecd;
+      this.dateRange = [scd, ecd]
 
       //小说参数
       const novel = this.params.novel
