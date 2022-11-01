@@ -72,6 +72,7 @@ export default {
     this.$store.commit("Account/loadAccount")
     this.$store.commit("Config/loadConfig")
     Title.suffix = 'PLU'
+    Title.set("启动中..")
 
     let account = this.getCurrent();
     if (account) {

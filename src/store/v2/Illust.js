@@ -56,7 +56,7 @@ export default {
                         const {userIllustIds, userIllustsInfo, commissionFrom} = item
                         //保存用户作品id
                         if (userIllustIds) {
-                            commit("User/updateProfile", {uid: item.userId, illusts: userIllustIds}, {root: true})
+                            commit("User/updateProfile", {uid: item.userId, illusts: userIllustIds.reverse()}, {root: true})
                             delete item.userIllustIds
                         }
                         //保存用户其他作品info
