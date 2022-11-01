@@ -19,6 +19,15 @@ const routes = [
         ]
     },
     {
+        path: '/search',
+        name: '搜索',
+        component: () => import("../views/v2/search/Home"),
+        children: [
+            {path: "illust/:keyword/:page", name: "搜索绘画", component: () => import("../views/v2/search/Illust"),},
+            {path: "novel/:keyword/:page", name: "搜索小说", component: () => import("../views/v2/search/Novel"),},
+        ]
+    },
+    {
         path: '/user/:uid',
         name: '用户主页',
         component: () => import("../views/v2/user/Home"),
