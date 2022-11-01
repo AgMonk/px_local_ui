@@ -47,7 +47,7 @@ export default {
     return {
       routes: [
         {path: "/follow/latest", name: "最新"},
-        {path: "/search/illust", name: "搜索"},
+        {path: "/search", name: "搜索"},
         {path: "/config", name: "配置"},
       ]
     }

@@ -1,7 +1,9 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header>{{ $route.name }}</el-header>
+    <el-header>
+      <h2 style="color: white">{{ $route.name }}</h2>
+    </el-header>
     <el-main>
 
     </el-main>
@@ -30,7 +32,8 @@ export default {
   computed: {},
   methods: {
     load(route, force) {
-
+      const {params, query} = route
+      console.log(params, query)
     }
   },
   mounted() {
@@ -38,7 +41,9 @@ export default {
   },
   watch: {
     $route(to) {
-
+      if (to.name === '搜索小说') {
+        this.load(to)
+      }
     }
   },
   props: {},

@@ -7,21 +7,21 @@
 
         <el-row>
           <el-col :span="12" style="text-align: left">
-            <el-radio-group v-model="type" size="small" type="primary">
+            <el-radio-group v-model="type" size="small" type="primary" @change="pushRoute">
               <el-radio-button label="illust">绘画</el-radio-button>
               <el-radio-button label="novel">小说</el-radio-button>
             </el-radio-group>
           </el-col>
           <el-col :span="12" style="text-align: right">
-            <el-button size="small" type="primary">搜索</el-button>
+            <el-button size="small" type="primary" @click="pushRoute">搜索</el-button>
           </el-col>
         </el-row>
         <!--      搜索框-->
-        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" />
+        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="pushRoute" />
         <!--        搜索条件 -->
         <div style="margin-top: 5px">
           <!--          通用条件-->
-          <el-form inline size="small">
+          <el-form inline label-position="left" size="small">
             <el-form-item>
               <template #label><span class="form-label">模式</span></template>
               <el-select v-model="params.common.mode" effect="dark" style="width: 80px">
@@ -43,38 +43,52 @@
               />
             </el-form-item>
           </el-form>
-          <!--          小说条件-->
+          <!--        todo  小说条件-->
           <el-form v-if="type==='novel'" inline size="small">
             <el-form-item>
-              <template #label><span class="form-label">匹配模式</span></template>
+              <template #label><span class="form-label">检索范围</span></template>
+              <el-select v-model="params.novel.s_mode" effect="dark" style="width: 120px">
+                <el-option v-for="item in s_modes" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
             <el-form-item>
               <template #label><span class="form-label">按系列分组</span></template>
+              <el-radio-group v-model="params.novel.gs" size="small" type="primary">
+                <el-radio-button :label="1">是</el-radio-button>
+                <el-radio-button :label="0">否</el-radio-button>
+              </el-radio-group>
             </el-form-item>
             <el-form-item>
               <template #label><span class="form-label">最小字数</span></template>
+              <el-select v-model="params.novel.tlt" :clearable="true" effect="dark" style="width: 120px">
+                <el-option v-for="item in tlts" :label="item" :value="item" />
+              </el-select>
             </el-form-item>
             <el-form-item>
               <template #label><span class="form-label">最大字数</span></template>
+              <el-select v-model="params.novel.tgt" :clearable="true" effect="dark" style="width: 120px">
+                <el-option v-for="item in tgts" :label="item" :value="item" />
+              </el-select>
             </el-form-item>
           </el-form>
         </div>
-        <!--      todo 搜索筛选条件 模式 日期-->
-
       </div>
       <div>
         <!--      todo 已保存的搜索 -->
       </div>
-      <div>
-        <el-pagination v-model:current-page="params.common.page"
+      <div v-if="$route.name!=='搜索'">
+        <!--        翻页-->
+        <el-pagination v-model:current-page="params.common.p"
                        :layout="layout"
                        :total="total"
                        hide-on-single-page
                        size="small"
                        @current-change="changePage"
         />
+        <!--        子路由-->
         <router-view @change-total="total=$event" />
-        <el-pagination v-model:current-page="params.common.page"
+        <!--        翻页-->
+        <el-pagination v-model:current-page="params.common.p"
                        :layout="layout"
                        :total="total"
                        hide-on-single-page
@@ -110,10 +124,18 @@ export default {
     return {
       total: 100,
       layout: "prev, pager, next, jumper",
+      tlts: [0, 5000, 20000, 80000],
+      tgts: [4999, 19999, 79999],
       modes: [
         {label: "全部", value: "all"},
         {label: "R18", value: "r18"},
         {label: "安全", value: "safe"},
+      ],
+      s_modes: [
+        {label: "默认", value: "s_tag"},
+        {label: "标签、部分一致", value: "s_tag_only"},
+        {label: "标签，完全一致", value: "s_tag_full"},
+        {label: "正文", value: "s_tc"},
       ],
       dateRange: [],
       //日期快捷选项
@@ -131,7 +153,7 @@ export default {
       params: {
         //公共参数
         common: {
-          page: undefined,
+          p: undefined,
           mode: undefined,
           scd: undefined,
           ecd: undefined,
@@ -148,9 +170,22 @@ export default {
   },
   computed: {},
   methods: {
-    changePage(page) {
-      console.log(page)
+    //跳转路由
+    pushRoute() {
+      const {common, novel} = this.params
+      const params = {keyword: this.keyword}
+      const query = Object.assign({}, common, this.type === 'novel' ? novel : {})
+      const name = this.type === 'novel' ? '搜索小说' : '搜索绘画';
+      // noinspection JSCheckFunctionSignatures
+      this.$router.push({name, params, query})
     },
+    //翻页
+    changePage(page) {
+      const common = this.params.common
+      common.p = page
+      this.pushRoute()
+    },
+    //修改选择日期
     dateRangeChanged(e) {
       const c = this.params.common
       if (e) {
@@ -161,20 +196,24 @@ export default {
         c.scd = undefined;
         c.ecd = undefined;
       }
+      this.pushRoute()
     },
+    //从路由中加载参数
     load(route) {
       console.log(route)
-      const {keyword, page, type} = route.params
+      const {keyword, page,} = route.params
       const {mode, scd, ecd, s_mode, gs, tgt, tlt} = route.query
+      console.log(route.query)
 
       //同步查询参数
 
-      //通用参数
-      this.type = type;
+      //路径参数
+      this.type = route.path.split('/')[2] || 'illust';
       this.keyword = keyword
 
+      //通用参数
       const common = this.params.common
-      common.page = page ? Number(page) : 1;
+      common.p = page ? Number(page) : 1;
       common.mode = mode || "all";
       common.scd = scd;
       common.ecd = ecd;
@@ -182,7 +221,7 @@ export default {
       //小说参数
       const novel = this.params.novel
       novel.s_mode = s_mode || 's_tag';
-      novel.gs = gs ? 1 : 0;
+      novel.gs = (!gs || gs === '0') ? 0 : 1;
       novel.tgt = tgt ? Number(tgt) : undefined;
       novel.tlt = tlt ? Number(tlt) : undefined;
     }
