@@ -19,9 +19,9 @@ export default {
                 state.config = {
                     //界面
                     ui: {
-                        //显示热门作品
+                        //搜索时,显示热门作品
                         showPopular: false,
-                        //显示相关标签
+                        //搜索时,显示相关标签
                         showRelatedTags: false,
                         //将已收藏作品分组显示
                         groupBookmarked: true,

@@ -21,7 +21,21 @@
     <el-tag v-else-if="data.r18" effect="dark" style="position: absolute; top: 0; left: 0;padding: 0 2px;" type="danger">R-18</el-tag>
 
     <!--      收藏按钮-->
-    <span class="b1" style="position: absolute; bottom:0 ; right: 0;border-radius:15px">
+    <span v-if="data.illustType===2" :style=" {
+      bottom:size/3+'px' ,
+      right: size/3+'px',
+      'border-radius':'15px'
+    }"
+          class="b1"
+    >
+      <illust-link :disable-tooltip="true" :pid="info.id">
+        <el-icon :size="size/3" color="white">
+          <CaretRight />
+        </el-icon>
+      </illust-link>
+    </span>
+    <!--      收藏按钮-->
+    <span class="b1" style="bottom:0 ; right: 0;border-radius:15px">
       <illust-bookmark-button :pid="info.id" />
     </span>
     <!--      图片数量-->
@@ -35,10 +49,11 @@
 import IllustBookmarkButton from "@/components/v2/illust/illust-bookmark-button";
 import IllustLink from "@/components/v2/illust/illust-link";
 import {mapGetters} from "vuex";
+import {CaretRight} from "@element-plus/icons-vue";
 
 export default {
   name: "illust-image",
-  components: {IllustLink, IllustBookmarkButton},
+  components: {IllustLink, IllustBookmarkButton, CaretRight},
   data() {
     return {
       loading: true,
@@ -86,5 +101,6 @@ export default {
 <style scoped>
 .b1 {
   background-color: rgba(61, 24, 24, 0.34);
+  position: absolute;
 }
 </style>

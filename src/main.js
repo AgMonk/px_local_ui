@@ -13,5 +13,4 @@ import 'gin-utils/css/global.css'
 createApp(App)
     .use(Clipboard)
     .use(ElementPlus, {locale: zhCn,})
-
     .use(store).use(router).mount('#app')
