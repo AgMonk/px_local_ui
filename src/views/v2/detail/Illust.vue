@@ -115,11 +115,14 @@
           <!--         标签-->
           <div style="text-align: left;margin-top: 20px">
             <illust-tag v-for="item in data.tags" :tag="item" />
+            <!--            todo 追加标签-->
           </div>
           <!--        评论区-->
           <div v-if="data.commentCount>0">
             <illust-comment-area :pid="data.id" />
           </div>
+
+          <!--          todo 推荐作品-->
         </div>
       </div>
     </el-main>
