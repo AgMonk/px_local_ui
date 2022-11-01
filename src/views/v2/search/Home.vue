@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import {Title} from "gin-utils/dist/utils/DomUtils";
+import {DomUtils, Title} from "gin-utils/dist/utils/DomUtils";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 
@@ -206,6 +206,7 @@ export default {
     },
     //翻页
     changePage(page) {
+      DomUtils.scrollYToTop();
       this.params.common.p = page
       this.pushRoute()
     },
