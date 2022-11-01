@@ -30,6 +30,7 @@
         <!--        翻页-->
         <el-pagination v-model:current-page="params.common.p"
                        :layout="layout"
+                       :page-size="size"
                        :total="total"
                        hide-on-single-page
                        size="small"
@@ -40,6 +41,7 @@
         <!--        翻页-->
         <el-pagination v-model:current-page="params.common.p"
                        :layout="layout"
+                       :page-size="size"
                        :total="total"
                        hide-on-single-page
                        size="small"
@@ -132,6 +134,7 @@ export default {
       dialog: {
         filter: false,
       },
+      size: 60,
       total: 100,
       layout: "prev, pager, next, jumper",
       tlts: [0, 5000, 20000, 80000],
@@ -223,6 +226,7 @@ export default {
       const {keyword,} = route.params
       const {mode, scd, ecd, s_mode, gs, tgt, tlt, p} = route.query
 
+      this.dialog.filter = false
       //同步查询参数
 
       //路径参数

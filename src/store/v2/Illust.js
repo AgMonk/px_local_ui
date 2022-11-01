@@ -9,6 +9,7 @@ export default {
     state: {
         latest: new Map(),
         detail: new Map(),
+        search: new Map(),
         bookmarkData: new Map(),
         illustData: new Map(),
     },
@@ -119,8 +120,8 @@ export default {
                         illust.forEach(item => {
                             //保存收藏数据
                             commit("updateBmkData", item);
-                            //保存用户数据
                             clearIllustInfo(item)
+                            //保存用户数据
                             commit("User/update", item.author, {root: true})
                             delete item.author
                             commit("updateIllust", item)
@@ -135,7 +136,44 @@ export default {
                 }
             })
         },
+        search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.search,
+                force, key: JSON.stringify({keyword, p, mode, scd, ecd}),
+                seconds: 10 * 60,
+                requestMethod: () => {
+                    return rootGetters["getApi"].illustManga.search(keyword, {
+                        p, mode, scd, ecd,
+                        order: 'date_d',
+                        lang: 'zh',
+                    }).then(res => {
+                        const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res
 
+                        let handleIllusts = function (array) {
+                            array.forEach(item => {
+                                //保存收藏数据
+                                commit("updateBmkData", item);
+                                clearIllustInfo(item)
+                                //保存用户数据
+                                commit("User/update", item.author, {root: true})
+                                delete item.author
+                                commit("updateIllust", item)
+                            })
+                        }
+
+                        handleIllusts(illustManga.data)
+                        handleIllusts(popular.permanent)
+                        handleIllusts(popular.recent)
+
+
+                        delete res.extraData
+                        delete res.illustManga.bookmarkRanges
+                        delete res.zoneConfig
+                        return res;
+                    })
+                }
+            })
+        },
     },
     getters: {
         getIllust: (state) => (id) => {
