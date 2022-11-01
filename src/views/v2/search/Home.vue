@@ -17,20 +17,33 @@
           </el-col>
         </el-row>
         <!--      搜索框-->
-        <el-input v-model="keyword" placeholder="请输入关键字" size="small" />
+        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" />
         <!--        搜索条件 -->
-        <div>
+        <div style="margin-top: 5px">
+          <!--          通用条件-->
           <el-form inline size="small">
             <el-form-item>
               <template #label><span class="form-label">模式</span></template>
+              <el-select v-model="params.common.mode" effect="dark" style="width: 80px">
+                <el-option v-for="item in modes" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
             <el-form-item>
-              <template #label><span class="form-label">日期(起)</span></template>
-            </el-form-item>
-            <el-form-item>
-              <template #label><span class="form-label">日期(止)</span></template>
+              <template #label><span class="form-label">日期范围</span></template>
+              <el-date-picker
+                  v-model="dateRange"
+                  :shortcuts="dateRangeShortCuts"
+                  end-placeholder="结束日期"
+                  range-separator="到"
+                  start-placeholder="起始日期"
+                  type="daterange"
+                  unlink-panels
+                  value-format="YYYY-MM-DD"
+                  @change="dateRangeChanged"
+              />
             </el-form-item>
           </el-form>
+          <!--          小说条件-->
           <el-form v-if="type==='novel'" inline size="small">
             <el-form-item>
               <template #label><span class="form-label">匹配模式</span></template>
@@ -49,10 +62,26 @@
         <!--      todo 搜索筛选条件 模式 日期-->
 
       </div>
-      <!--      todo 翻页-->
-      <!--      todo 已保存的搜索 -->
-      <router-view />
-      <!--      todo 翻页-->
+      <div>
+        <!--      todo 已保存的搜索 -->
+      </div>
+      <div>
+        <el-pagination v-model:current-page="params.common.page"
+                       :layout="layout"
+                       :total="total"
+                       hide-on-single-page
+                       size="small"
+                       @current-change="changePage"
+        />
+        <router-view @change-total="total=$event" />
+        <el-pagination v-model:current-page="params.common.page"
+                       :layout="layout"
+                       :total="total"
+                       hide-on-single-page
+                       size="small"
+                       @current-change="changePage"
+        />
+      </div>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -61,11 +90,34 @@
 
 <script>
 import {Title} from "gin-utils/dist/utils/DomUtils";
+import {DateUtils} from "gin-utils/dist/utils/DateUtils";
+
+const getDate = () => {
+  return DateUtils.withZone(new Date(), 9)
+}
 
 export default {
   name: "Home",
   data() {
     return {
+      total: 100,
+      layout: "prev, pager, next, jumper",
+      modes: [
+        {label: "全部", value: "all"},
+        {label: "R18", value: "r18"},
+        {label: "安全", value: "safe"},
+      ],
+      dateRange: [],
+      //日期快捷选项
+      dateRangeShortCuts: [
+        {
+          text: '今天',
+          value: () => {
+            const start = DateUtils.format(getDate(), "yyyy-MM-dd")
+            return [start, start]
+          },
+        },
+      ],
       type: undefined,
       keyword: undefined,
       //参数
@@ -89,6 +141,20 @@ export default {
   },
   computed: {},
   methods: {
+    changePage(page) {
+      console.log(page)
+    },
+    dateRangeChanged(e) {
+      const c = this.params.common
+      if (e) {
+        console.log("选择日期", e[0], e[1])
+        c.scd = e[0];
+        c.ecd = e[1];
+      } else {
+        c.scd = undefined;
+        c.ecd = undefined;
+      }
+    },
     load(route) {
       console.log(route)
       const {keyword, page, type} = route.params
@@ -101,7 +167,7 @@ export default {
       this.keyword = keyword
 
       const common = this.params.common
-      common.page = Number(page);
+      common.page = page ? Number(page) : 1;
       common.mode = mode || "all";
       common.scd = scd;
       common.ecd = ecd;

@@ -35,6 +35,7 @@ export default {
   },
   mounted() {
     this.load(this.$route)
+    this.$emit("change-total", 5000);
   },
   watch: {
     $route(to) {

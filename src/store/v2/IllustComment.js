@@ -9,8 +9,7 @@ import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 function handleCommentRes(res) {
     const {comment, comment_id, parent_id, stamp_id, user_id} = res
     //获得当前时区偏移
-    let offset = 540 + new Date().getTimezoneOffset()
-    let date = DateUtils.plusMinutes(new Date(), offset);
+    let date = DateUtils.withZone(new Date(), 9);
     return {
         comment,
         id: Number(comment_id),
