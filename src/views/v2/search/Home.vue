@@ -95,6 +95,14 @@ import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 const getDate = () => {
   return DateUtils.withZone(new Date(), 9)
 }
+const getDateRange = (days) => {
+  let end = getDate();
+  let start = DateUtils.plusDays(end, -1 * days)
+  return [
+    DateUtils.format(start, "yyyy-MM-dd"),
+    DateUtils.format(end, "yyyy-MM-dd"),
+  ]
+}
 
 export default {
   name: "Home",
@@ -110,13 +118,12 @@ export default {
       dateRange: [],
       //日期快捷选项
       dateRangeShortCuts: [
-        {
-          text: '今天',
-          value: () => {
-            const start = DateUtils.format(getDate(), "yyyy-MM-dd")
-            return [start, start]
-          },
-        },
+        {text: '今天', value: () => getDateRange(0),},
+        {text: '最近2天', value: () => getDateRange(1),},
+        {text: '最近3天', value: () => getDateRange(2),},
+        {text: '最近1周', value: () => getDateRange(6),},
+        {text: '最近2周', value: () => getDateRange(13),},
+        {text: '最近30天', value: () => getDateRange(29),},
       ],
       type: undefined,
       keyword: undefined,
