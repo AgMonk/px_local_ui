@@ -85,11 +85,11 @@ export default {
   },
   beforeUnmount() {
     this.startUnmounted = new Date().getTime()
-    console.debug(`beforeUnmount`, this.info.id)
+    // console.debug(`beforeUnmount`, this.info.id)
   },
   unmounted() {
     let duration = new Date().getTime() - this.startUnmounted;
-    console.debug(`unmount cost: ${duration}ms`, this.info.id)
+    // console.debug(`unmount cost: ${duration}ms`, this.info.id)
   },
 }
 
