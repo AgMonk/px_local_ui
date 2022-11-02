@@ -68,13 +68,13 @@ const matchArrayRule = function (list, arrayRule) {
   const tag = list.map(i => i.tag)
   const translation = list.map(i => i.translation)
   const array = [...tag, ...translation]
-  for (let i = 0; i < arrayRule; i++) {
+  for (let i = 0; i < arrayRule.length; i++) {
     let rule = arrayRule[i]
     if (!array.includes(rule)) {
       return false;
     }
   }
-  console.debug(`触发屏蔽:`, array)
+  console.debug(`触发屏蔽:`, array, arrayRule)
   return true;
 }
 
