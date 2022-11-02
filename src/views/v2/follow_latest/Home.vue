@@ -1,10 +1,10 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" style="padding: 0 20px">
     <!--  <el-container direction="horizontal">-->
     <!--    <el-header ></el-header>-->
     <el-main>
       <div style="text-align: left">
-        <el-radio-group v-model="type" type="primary" @change="change">
+        <el-radio-group v-model="type" size="small" type="primary" @change="change">
           <el-radio-button label="illust">绘画</el-radio-button>
           <el-radio-button label="novel">小说</el-radio-button>
         </el-radio-group>

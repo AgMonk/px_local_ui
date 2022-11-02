@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
-import {clearIllustDetail, clearIllustInfo} from "@/assets/v2/axios";
+import {clearIllustDetail, clearIllustInfo, handleTagTranslation} from "@/assets/v2/axios";
 
 /**
  * 精简作品的字段
@@ -147,6 +147,7 @@ export default {
                 seconds: 10 * 60,
                 requestMethod: () => {
                     return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
+                        handleTagTranslation(res)
                         const {tagTranslation, thumbnails} = res
                         const {illust} = thumbnails
                         handleIllusts(commit, illust)
@@ -168,6 +169,7 @@ export default {
                         order: 'date_d',
                         lang: 'zh',
                     }).then(res => {
+                        handleTagTranslation(res)
                         const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res
 
                         handleIllusts(commit, illustManga.data)

@@ -115,3 +115,18 @@ export const clearIllustDetail = function (item) {
     delete item.isBookmarkable;
 
 }
+/**
+ * 整理 tagTranslation
+ * @param res 响应
+ */
+export const handleTagTranslation = function (res) {
+    if (!res.hasOwnProperty("tagTranslation")) {
+        return;
+    }
+    let obj = {};
+    for (let key in res.tagTranslation) {
+        const {zh, en} = res.tagTranslation[key]
+        obj[key] = zh || en
+    }
+    res.tagTranslation = obj
+}

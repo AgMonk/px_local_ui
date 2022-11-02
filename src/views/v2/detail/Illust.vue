@@ -62,7 +62,7 @@
             </div>
             <el-descriptions :column="1" border style="margin-top: 10px">
               <el-descriptions-item label="收藏">
-                <illust-bookmark-button :pid="data.id" />
+                <illust-bookmark-button :pid="data.id" empty-color="black" />
                 ({{ data.bookmarkCount }})
               </el-descriptions-item>
               <el-descriptions-item label="喜欢">
@@ -88,8 +88,11 @@
               </el-descriptions-item>
               <el-descriptions-item label="尺寸">{{ data.size.width }}x{{ data.size.height }}</el-descriptions-item>
               <el-descriptions-item v-if="data.isCommission" label="约稿人">
-                <user-avatar :uid="data.commissionFrom.id" />
-                <user-link :uid="data.commissionFrom.id" />
+                <div v-if="data.commissionFrom">
+                  <user-avatar :uid="data.commissionFrom.id" />
+                  <user-link :uid="data.commissionFrom.id" />
+                </div>
+                <div v-else>匿名约稿</div>
               </el-descriptions-item>
               <el-descriptions-item label="Aria2">
                 <!--                todo 下载原图-->

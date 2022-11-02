@@ -1,5 +1,5 @@
 <template>
-  <el-icon v-if="loading" :size="size" class="is-loading" color="white">
+  <el-icon v-if="loading" :color="emptyColor" :size="size" class="is-loading">
     <Loading />
   </el-icon>
   <el-icon v-else-if="data" :size="size" class="bmk-button" color="red" @click="del">
