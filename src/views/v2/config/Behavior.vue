@@ -1,37 +1,52 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header></el-header>
+    <!--    <el-header></el-header>-->
     <el-main>
-
+      <el-descriptions :column="3" border>
+        <el-descriptions-item label="加载卡片时，缓存它的详情数据" label-align="right">
+          <el-switch v-model="data.requestCardDetail"
+                     active-text="是"
+                     class="config-switch"
+                     inactive-text="否"
+                     inline-prompt
+                     @change="saveConfig"
+          />
+        </el-descriptions-item>
+      </el-descriptions>
     </el-main>
-    <el-footer></el-footer>
+    <!--    <el-footer></el-footer>-->
   </el-container>
 
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   name: "Behavior",
   data() {
-    return {}
+    return {
+      data: {},
+
+    }
   },
   computed: {
     ...mapState("Config", ['config']),
   },
   methods: {
-    load(route, force) {
+    ...mapMutations("Config", ['saveConfig']),
+    load(config) {
+      this.data = config.behavior
 
     }
   },
   mounted() {
-    this.load(this.$route)
+    this.load(this.config)
   },
   watch: {
-    $route(to) {
-
+    config(to) {
+      this.load(to)
     }
   },
   props: {},

@@ -22,6 +22,8 @@ export default {
   },
   emits: ["success", "error"],
   methods: {
+    //todo 加载卡片时，缓存它的详情数据
+
     imageCompleted() {
       this.current--;
       this.loadImage()

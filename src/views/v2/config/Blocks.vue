@@ -1,37 +1,44 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header></el-header>
+    <!--    <el-header></el-header>-->
     <el-main>
-
+      <el-descriptions :column="3" border>
+        <el-descriptions-item label="下载根目录" label-align="right">
+        </el-descriptions-item>
+      </el-descriptions>
     </el-main>
-    <el-footer></el-footer>
+    <!--    <el-footer></el-footer>-->
   </el-container>
 
 </template>
-
 <script>
-import {mapState} from "vuex";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   name: "Blocks",
   data() {
-    return {}
+    return {
+      data: {},
+
+    }
   },
   computed: {
     ...mapState("Config", ['config']),
   },
   methods: {
-    load(route, force) {
+    ...mapMutations("Config", ['saveConfig']),
+    load(config) {
+      this.data = config.blocks
 
     }
   },
   mounted() {
-    this.load(this.$route)
+    this.load(this.config)
   },
   watch: {
-    $route(to) {
-
+    config(to) {
+      this.load(to)
     }
   },
   props: {},
