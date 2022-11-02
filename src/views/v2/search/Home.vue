@@ -17,7 +17,7 @@
           </el-col>
           <el-col :span="8" style="text-align: right">
             <el-button size="small" type="primary" @click="showDialog ">筛选条件</el-button>
-            <el-button size="small" type="primary" @click="pushRoute">搜索</el-button>
+            <el-button size="small" type="primary" @click="params.common.p=1;pushRoute()">搜索</el-button>
           </el-col>
         </el-row>
         <!--      搜索框-->

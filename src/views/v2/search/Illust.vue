@@ -44,10 +44,9 @@ export default {
         this.failed = false;
         this.$emit("change-total", total);
         this.$nextTick(() => {
-          this.$refs.cardGroup.clear(data)
+          this.$refs.cardGroup.clear(data, [...popular.recent, ...popular.permanent])
         })
         // todo 显示相关标签
-        // todo 显示热门作品
       }).catch(e => {
         console.error(e)
         this.failed = true;

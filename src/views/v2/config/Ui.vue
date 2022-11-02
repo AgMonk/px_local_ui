@@ -4,15 +4,6 @@
     <!--    <el-header></el-header>-->
     <el-main>
       <el-descriptions :column="3" border>
-        <el-descriptions-item label="搜索时,显示热门作品" label-align="right">
-          <el-switch v-model="data.showPopular"
-                     active-text="是"
-                     class="config-switch"
-                     inactive-text="否"
-                     inline-prompt
-                     @change="saveConfig"
-          />
-        </el-descriptions-item>
         <el-descriptions-item label="搜索时,显示相关标签" label-align="right">
           <el-switch v-model="data.showRelatedTags"
                      active-text="是"

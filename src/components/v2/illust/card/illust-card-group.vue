@@ -7,6 +7,7 @@
         <!--     刷新按钮-->
         <el-col :span="12">
           <el-button size="small" type="success" @click="$emit('request-refresh')">刷新</el-button>
+          <el-button v-if="popular.length>0" size="small" type="primary" @click="dialogShow.popular=true">热门作品({{ popular.length }})</el-button>
         </el-col>
         <el-col :span="12">
           <el-button v-if="bookmarked.length>0" size="small" type="primary" @click="dialogShow.bookmarked=true">已收藏({{ bookmarked.length }})</el-button>
@@ -15,12 +16,19 @@
       </el-row>
       <!--      常规-->
       <illust-card-div :data="normal" style="margin-top: 5px" />
+      <!--      热门作品-->
+      <el-dialog v-if="popular.length>0" v-model="dialogShow.popular" append-to-body close-on-click-modal title="热门作品" width="90%">
+        <el-scrollbar :height="scrollbarHeight">
+          <illust-card-div :data="popular" />
+        </el-scrollbar>
+      </el-dialog>
       <!--      已收藏-->
       <el-dialog v-if="bookmarked.length>0" v-model="dialogShow.bookmarked" append-to-body close-on-click-modal title="已收藏" width="90%">
         <el-scrollbar :height="scrollbarHeight">
           <illust-card-div :data="bookmarked" />
         </el-scrollbar>
       </el-dialog>
+
       <!--      已屏蔽-->
       <el-dialog v-if="blocked.length>0" v-model="dialogShow.blocked" append-to-body close-on-click-modal title="已屏蔽" width="90%">
         <el-scrollbar :height="scrollbarHeight">
@@ -88,9 +96,11 @@ export default {
       normal: [],
       bookmarked: [],
       blocked: [],
+      popular: [],
       dialogShow: {
         bookmarked: false,
         blocked: false,
+        popular: false,
       }
     }
   },
@@ -101,10 +111,11 @@ export default {
     ...mapGetters("Illust", ['getBookmarkData', 'getIllust']),
     ...mapGetters("User", ['getUser']),
     //清空数据
-    clear(illusts) {
+    clear(illusts, popular) {
       this.normal = []
       this.bookmarked = []
       this.blocked = []
+      this.popular = popular || []
       console.debug("清空作品组")
       this.add(illusts)
     },
