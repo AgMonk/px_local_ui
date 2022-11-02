@@ -30,13 +30,13 @@ export default {
             //屏蔽
             blocks: {
                 //uid屏蔽
-                userIdList: [],
+                userIdRules: [],
                 //标题关键字
-                titleKeywords: [],
+                titleKeywordsRules: [],
                 //标签
-                tagList: [],
+                tagRules: [],
                 //用户名关键字
-                usernameKeywords: [],
+                usernameKeywordsRules: [],
             },
         },
     },

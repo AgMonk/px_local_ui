@@ -44,7 +44,7 @@ export default {
         inputValue: this.title
       }).then(({value}) => {
         this.addBlock({
-          type: "titleKeywords",
+          type: "titleKeywordsRules",
           value,
         })
         ElMessage.success("添加成功")

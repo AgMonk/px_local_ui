@@ -47,7 +47,7 @@ export default {
     blockUid() {
       ElMessageBox.confirm("确认屏蔽UID：" + this.uid, "屏蔽").then(() => {
         this.addBlock({
-          type: "userIdList",
+          type: "userIdRules",
           value: this.uid,
         })
         ElMessage.success("添加成功")
@@ -59,7 +59,7 @@ export default {
         inputValue: this.data.name
       }).then(({value}) => {
         this.addBlock({
-          type: "usernameKeywords",
+          type: "usernameKeywordsRules",
           value,
         })
         ElMessage.success("添加成功")

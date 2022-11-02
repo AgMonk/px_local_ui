@@ -49,6 +49,7 @@ const matchTags = function (list, rules) {
   for (let i = 0; i < list.length; i++) {
     let {tag, translation} = list[i]
     if (stringRules.includes(tag) || stringRules.includes(translation)) {
+      console.log(`触发屏蔽: ${tag} ${translation}`)
       return true;
     }
   }
@@ -64,12 +65,16 @@ const matchTags = function (list, rules) {
 }
 //判断一个标签列表是否被数组规则匹配
 const matchArrayRule = function (list, arrayRule) {
+  const tag = list.map(i => i.tag)
+  const translation = list.map(i => i.translation)
+  const array = [...tag, ...translation]
   for (let i = 0; i < arrayRule; i++) {
     let rule = arrayRule[i]
-    if (!list.includes(rule)) {
+    if (!array.includes(rule)) {
       return false;
     }
   }
+  console.log(`触发屏蔽:`, array)
   return true;
 }
 
@@ -109,19 +114,19 @@ export default {
     //判断一个作品是否被屏蔽
     isBlocked({id, uid}) {
       //4种屏蔽策略
-      const {tagList, titleKeywords, userIdList, usernameKeywords,} = this.config.blocks
+      const {tagRules, titleKeywordsRules, userIdRules, usernameKeywordsRules,} = this.config.blocks
       // todo 屏蔽逻辑
 
       //uid匹配
-      if (userIdList.includes(uid)) {
+      if (userIdRules.includes(uid)) {
         return true
       }
       //用户名关键字匹配
       let user = this.getUser()(uid)
       if (user && user.hasOwnProperty('name')) {
         const name = user.name
-        for (let i = 0; i < usernameKeywords.length; i++) {
-          let item = usernameKeywords[i]
+        for (let i = 0; i < usernameKeywordsRules.length; i++) {
+          let item = usernameKeywordsRules[i]
           if (name.includes(item)) {
             return true;
           }
@@ -132,8 +137,8 @@ export default {
         //标题关键字匹配
         if (illust.hasOwnProperty("title")) {
           const title = illust.title
-          for (let i = 0; i < titleKeywords.length; i++) {
-            let item = titleKeywords[i]
+          for (let i = 0; i < titleKeywordsRules.length; i++) {
+            let item = titleKeywordsRules[i]
             if (title.includes(item)) {
               return true;
             }
@@ -141,10 +146,9 @@ export default {
         }
 
         //标签匹配 todo
-        const {tagList, tags} = illust
         //选择执行判断的列表
-        const list = tags || tagList;
-        if (matchTags(list, tagList)) {
+        const list = illust.tags || illust.tagList;
+        if (matchTags(list, tagRules)) {
           return true;
         }
       }
