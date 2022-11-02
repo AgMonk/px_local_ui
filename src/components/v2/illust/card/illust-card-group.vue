@@ -58,7 +58,7 @@ export default {
     ...mapState("Config", ['config']),
   },
   methods: {
-    ...mapGetters("Illust", ['getBookmarkData']),
+    ...mapGetters("Illust", ['getBookmarkData', 'getIllust']),
     //清空数据
     clear(illusts) {
       this.normal = []
@@ -70,14 +70,26 @@ export default {
     isBookmarked(id) {
       return !!this.getBookmarkData()(id)
     },
+    //判断一个作品是否被屏蔽
+    isBlocked(illust) {
+      //4种屏蔽策略
+      const {tags, title, uid, username} = this.config.blocks
+      // todo 屏蔽逻辑
+
+      return false;
+    },
     //添加数据
     add(illusts) {
       if (!illusts) {
         return;
       }
       console.debug("添加数据", illusts)
-      //todo 过滤掉需要屏蔽的作品
-
+      illusts.forEach(i => {
+        i.blocked = this.isBlocked(i)
+      })
+      // 过滤掉需要屏蔽的作品
+      this.blocked.push(...illusts.filter(i => i.blocked))
+      illusts = illusts.filter(i => !i.blocked)
 
       const {ui, behavior} = this.config
       const {groupBookmarked} = ui;

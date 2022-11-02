@@ -9,6 +9,7 @@
       <el-form>
         <el-form-item v-if="title" label="标题">
           <copy-span :text="title" />
+          <el-button size="small" type="danger" @click="block">屏蔽</el-button>
         </el-form-item>
         <el-form-item label="Pid">
           <copy-span :text="pid" />
@@ -25,6 +26,8 @@
 
 <script>
 import CopySpan from "@/components/v2/copy/copy-span";
+import {ElMessage, ElMessageBox} from "element-plus";
+import {mapMutations} from "vuex";
 
 export default {
   name: "illust-link",
@@ -33,7 +36,25 @@ export default {
     return {}
   },
   computed: {},
-  methods: {},
+  methods: {
+    ...mapMutations("Config", ['addBlock']),
+    block() {
+      console.log("屏蔽标题关键字", this.title)
+      ElMessageBox.prompt("屏蔽标题关键字", {
+        title: "屏蔽",
+        inputValue: this.title
+      }).then(({value}) => {
+        this.addBlock({
+          type: "title",
+          value,
+        })
+        ElMessage.success("添加成功")
+      }).catch(e => {
+        console.error(e)
+        ElMessage.info("已取消")
+      })
+    }
+  },
   mounted() {
   },
   watch: {},
