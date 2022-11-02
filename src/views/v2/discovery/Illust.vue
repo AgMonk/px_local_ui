@@ -1,9 +1,7 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header>
-      <h2 style="color: white">{{ $route.name }}</h2>
-    </el-header>
+    <el-header style="color: white">{{ $route.name }}</el-header>
     <el-main>
 
     </el-main>
@@ -16,7 +14,7 @@
 import {Title} from "gin-utils/dist/utils/DomUtils";
 
 export default {
-  name: "Novel",
+  name: "Illust",
   data() {
     return {
       showDialog: {},
@@ -34,17 +32,16 @@ export default {
   computed: {},
   methods: {
     load(route, force) {
-      const {params, query} = route
-      console.log(params, query)
+
     }
   },
   mounted() {
-    Title.set('搜索小说')
+    Title.set('发现绘画')
     this.load(this.$route)
   },
   watch: {
     $route(to) {
-      if (to.name === '搜索小说') {
+      if (to.name === '发现绘画') {
         this.load(to)
       }
     }

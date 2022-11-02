@@ -1,9 +1,7 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header>
-      <h2 style="color: white">{{ $route.name }}</h2>
-    </el-header>
+    <el-header style="color: white">{{ $route.name }}</el-header>
     <el-main>
 
     </el-main>
@@ -34,17 +32,16 @@ export default {
   computed: {},
   methods: {
     load(route, force) {
-      const {params, query} = route
-      console.log(params, query)
+
     }
   },
   mounted() {
-    Title.set('搜索小说')
+    Title.set('发现小说')
     this.load(this.$route)
   },
   watch: {
     $route(to) {
-      if (to.name === '搜索小说') {
+      if (to.name === '发现小说') {
         this.load(to)
       }
     }

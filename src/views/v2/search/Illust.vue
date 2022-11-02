@@ -16,6 +16,7 @@
 <script>
 import {mapActions} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
+import {Title} from "gin-utils/dist/utils/DomUtils";
 
 export default {
   name: "Illust",
@@ -56,6 +57,7 @@ export default {
     }
   },
   mounted() {
+    Title.set('搜索绘画')
     this.load(this.$route)
   },
   watch: {

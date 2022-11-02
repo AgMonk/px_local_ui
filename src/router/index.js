@@ -28,6 +28,15 @@ const routes = [
         ]
     },
     {
+        path: '/discovery',
+        name: '发现',
+        component: () => import("../views/v2/discovery/Home"),
+        children: [
+            {path: "illust", name: "发现绘画", component: () => import("../views/v2/discovery/Illust"),},
+            {path: "novel", name: "发现小说", component: () => import("../views/v2/discovery/Novel"),},
+        ]
+    },
+    {
         path: '/user/:uid',
         name: '用户主页',
         component: () => import("../views/v2/user/Home"),
