@@ -60,7 +60,7 @@ export default {
             this.commit("Config/saveConfig")
         }, saveConfig(state) {
             StorageUtils.put(key, state.config);
-            console.log('保存配置')
+            console.debug('保存配置', state.config)
         }
     }, actions: {
         method: ({dispatch, commit, state}, payload) => {

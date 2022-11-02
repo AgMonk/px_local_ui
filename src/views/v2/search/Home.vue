@@ -16,7 +16,14 @@
             <span v-if="params.common.scd || params.common.ecd" style="color: white ;margin: 0;">日期范围: {{ params.common.scd }} ~ {{ params.common.ecd }}</span>
           </el-col>
           <el-col :span="8" style="text-align: right">
-            <!--            todo 保存搜索 -->
+            <el-dropdown size="small" split-button style="margin-right: 5px" type="primary" @click="showSaveSearchDialog" @command="choseSavedSearch">
+              保存
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item v-for="param in config.search[type]" :command="param.command">{{ param.title }}</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
             <el-button size="small" type="primary" @click="showDialog ">筛选条件</el-button>
             <el-button size="small" type="primary" @click="params.common.p=1;pushRoute()">搜索</el-button>
           </el-col>
@@ -51,6 +58,26 @@
       </div>
 
 
+      <el-dialog v-model="dialog.search" append-to-body title="保存搜索">
+        <el-form v-if="dialog.search" size="small" @submit.prevent>
+          <el-form-item>
+            <template #label><span class="form-label">标题</span></template>
+            <el-select ref="search-form-title" v-model="searchForm.title" :allow-create="true" :filterable="true">
+              <el-option v-for="param in config.search[type]" :label="param.title" :value="param.title" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">关键字</span></template>
+            <el-input v-model="searchForm.command.keyword" />
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">日期快捷项</span></template>
+            <el-select v-model="searchForm.command.dateShortcut">
+              <el-option v-for="item in dateRangeShortCuts" :label="item.text" :value="item.text" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
       <el-dialog v-model="dialog.filter" append-to-body title="筛选条件">
         <!--          通用条件-->
         <el-form label-position="left" size="small">
@@ -135,9 +162,12 @@ export default {
     return {
       dialog: {
         filter: false,
+        search: false,
       },
+      //即将保存的搜索参数
+      searchForm: undefined,
       size: 60,
-      total: 100,
+      total: 6000,
       layout: "prev, pager, next, jumper",
       tlts: [0, 5000, 20000, 80000],
       tgts: [4999, 19999, 79999],
@@ -189,10 +219,32 @@ export default {
   },
   methods: {
     ...mapMutations("Config", ['saveConfig']),
+    choseSavedSearch(command) {
+      //todo
+      console.log('选中已保存的搜索', command)
+
+    },
     submit() {
       this.params = ObjectUtils.clone(this.tempParams)
       this.dialog.filter = false
       this.pushRoute();
+    },
+    showSaveSearchDialog() {
+      this.dialog.search = true;
+      this.searchForm = {
+        title: undefined,
+        command: {
+          keyword: this.keyword,
+          dateShortcut: undefined,
+        }
+      }
+      console.log('保存搜索参数')
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.$refs['search-form-title'].focus()
+        }, 50)
+      })
+      //todo
     },
     showDialog() {
       this.tempParams = ObjectUtils.clone(this.params)
