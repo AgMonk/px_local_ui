@@ -117,6 +117,7 @@
           </div>
           <!--         标签-->
           <div style="text-align: left;margin-top: 20px">
+            <block-tag-button :tags="data.tags" style="margin-right: 5px" />
             <illust-tag v-for="item in data.tags" :tag="item" />
             <!--            todo 追加标签-->
           </div>
@@ -147,10 +148,14 @@ import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
 import IllustTag from "@/components/v2/illust/illust-tag";
 import IllustCommentArea from "@/components/v2/illust/comment/illust-comment-area";
+import BlockTagButton from "@/components/v2/block-tag-button";
 
 export default {
   name: "Illust",
-  components: {IllustCommentArea, IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled},
+  components: {
+    BlockTagButton,
+    IllustCommentArea, IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled
+  },
   data() {
     return {
       activeIndex: 0,
