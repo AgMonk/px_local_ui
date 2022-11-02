@@ -39,7 +39,6 @@ export default {
   methods: {
     ...mapMutations("Config", ['addBlock']),
     block() {
-      console.log("屏蔽标题关键字", this.title)
       ElMessageBox.prompt("屏蔽标题关键字", {
         title: "屏蔽",
         inputValue: this.title
