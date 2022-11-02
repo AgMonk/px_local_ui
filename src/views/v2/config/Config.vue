@@ -1,5 +1,5 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" style="padding: 0 20px">
     <!--  <el-container direction="horizontal">-->
     <el-header style="text-align: left">
       <!--      todo  -->
@@ -12,17 +12,16 @@
           <accounts />
         </el-tab-pane>
         <el-tab-pane label="界面">
-          <!--          todo-->
+          <Ui />
         </el-tab-pane>
         <el-tab-pane label="行为">
-          <!--          todo-->
+          <Behavior />
         </el-tab-pane>
         <el-tab-pane label="屏蔽">
-          <!--          todo-->
+          <Blocks />
         </el-tab-pane>
         <el-tab-pane label="Aria2">
-          <!--          todo-->
-
+          <Aria2 />
         </el-tab-pane>
         <!--        <el-tab-pane label="Aria2">Task</el-tab-pane>-->
       </el-tabs>
@@ -35,10 +34,14 @@
 <script>
 import accounts from "@/views/v2/config/Accounts";
 import {Title} from "gin-utils/dist/utils/DomUtils";
+import Ui from "@/views/v2/config/Ui";
+import Behavior from "@/views/v2/config/Behavior";
+import Blocks from "@/views/v2/config/Blocks";
+import Aria2 from "@/views/v2/config/Aria2";
 
 export default {
   name: "Config",
-  components: {accounts},
+  components: {Aria2, Blocks, Behavior, Ui, accounts},
   data() {
     return {}
   },
