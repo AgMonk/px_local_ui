@@ -16,6 +16,7 @@
             <span v-if="params.common.scd || params.common.ecd" style="color: white ;margin: 0;">日期范围: {{ params.common.scd }} ~ {{ params.common.ecd }}</span>
           </el-col>
           <el-col :span="8" style="text-align: right">
+            <!--            todo 保存搜索 -->
             <el-button size="small" type="primary" @click="showDialog ">筛选条件</el-button>
             <el-button size="small" type="primary" @click="params.common.p=1;pushRoute()">搜索</el-button>
           </el-col>
@@ -114,6 +115,7 @@
 import {DomUtils, Title} from "gin-utils/dist/utils/DomUtils";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
+import {mapMutations, mapState} from "vuex";
 
 const getDate = () => {
   return DateUtils.withZone(new Date(), 9)
@@ -182,8 +184,11 @@ export default {
       tempParams: {},
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Config", ['config']),
+  },
   methods: {
+    ...mapMutations("Config", ['saveConfig']),
     submit() {
       this.params = ObjectUtils.clone(this.tempParams)
       this.dialog.filter = false

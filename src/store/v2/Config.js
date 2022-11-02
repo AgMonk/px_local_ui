@@ -36,6 +36,11 @@ export default {
             aria2: {
                 //下载根目录
                 homePath: undefined
+            },
+            //保存的搜索
+            search: {
+                illust: [],
+                novel: [],
             }
         },
     }, mutations: {
