@@ -38,7 +38,7 @@ const routes = [
     },
     {
         path: '/user/:uid',
-        name: '用户主页',
+        name: '用户',
         component: () => import("../views/v2/user/Home"),
         children: []
     },

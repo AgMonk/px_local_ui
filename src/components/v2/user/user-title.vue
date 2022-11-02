@@ -11,7 +11,7 @@
     <!--作者-->
     <span>
       <user-link :size="fontSize" :uid="uid" />
-      <span v-if="data" style="margin-left: 10px">
+      <span v-if="data && !disableFollowButton" style="margin-left: 10px">
         <el-button v-if="data.isFollowed" :disabled="unfollowing" size="small" type="info" @click="unfollow">
           <el-icon v-if="unfollowing" class="is-loading" color="blue">
             <Loading />
@@ -117,6 +117,10 @@ export default {
       type: Number,
       default: 30,
     },
+    disableFollowButton: {
+      type: Boolean,
+      default: false,
+    }
   },
 }
 

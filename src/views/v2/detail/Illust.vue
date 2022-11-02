@@ -49,7 +49,7 @@
             <div style="display: flex; justify-content: space-between">
               <span style="color: chartreuse;margin-left: 3px">其他作品</span>
               <span style="margin-right: 3px">
-                <router-link :to="{name:'用户主页',params:{uid:data.userId}}">
+                <router-link :to="{name:'用户',params:{uid:data.userId}}">
                   <el-link :underline="false" type="success">
                     作品列表
                   </el-link>

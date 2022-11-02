@@ -21,7 +21,7 @@
           </el-col>
         </el-row>
         <!--      搜索框-->
-        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="pushRoute" />
+        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="params.common.p=1;pushRoute()" />
       </div>
       <div>
         <!--      todo 已保存的搜索 -->

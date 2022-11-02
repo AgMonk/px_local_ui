@@ -11,13 +11,20 @@
         <el-tab-pane label="账号">
           <accounts />
         </el-tab-pane>
-        <el-tab-pane label="常规">
+        <el-tab-pane label="界面">
+          <!--          todo-->
+        </el-tab-pane>
+        <el-tab-pane label="行为">
           <!--          todo-->
         </el-tab-pane>
         <el-tab-pane label="屏蔽">
           <!--          todo-->
         </el-tab-pane>
-        <el-tab-pane label="Task">Task</el-tab-pane>
+        <el-tab-pane label="Aria2">
+          <!--          todo-->
+
+        </el-tab-pane>
+        <!--        <el-tab-pane label="Aria2">Task</el-tab-pane>-->
       </el-tabs>
     </el-main>
     <el-footer></el-footer>
@@ -33,18 +40,7 @@ export default {
   name: "Config",
   components: {accounts},
   data() {
-    return {
-      showDialog: {},
-      loading: {},
-      params: {
-        filter: {},
-        page: 1,
-        size: 10,
-      },
-      form: {},
-      data: [],
-      total: 10,
-    }
+    return {}
   },
   computed: {},
   methods: {

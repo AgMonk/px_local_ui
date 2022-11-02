@@ -27,7 +27,11 @@ export default {
   methods: {},
   mounted() {
   },
-  watch: {},
+  watch: {
+    $route(to) {
+      this.activeIndex = to.path
+    }
+  },
   props: {
     routes: {
       type: Array

@@ -73,6 +73,8 @@ export default {
       let api = new Api(instance, account.token)
       this.$store.commit("setApi", api)
       console.log("用户已登陆", account.uid, account.name)
+
+      this.routes.push({path: '/user/' + account.uid, name: "我的"})
     } else {
       ElMessage.error("请先登陆");
     }

@@ -49,7 +49,7 @@ const matchTags = function (list, rules) {
   for (let i = 0; i < list.length; i++) {
     let {tag, translation} = list[i]
     if (stringRules.includes(tag) || stringRules.includes(translation)) {
-      console.log(`触发屏蔽: ${tag} ${translation}`)
+      console.debug(`触发屏蔽: ${tag} ${translation}`)
       return true;
     }
   }
@@ -74,7 +74,7 @@ const matchArrayRule = function (list, arrayRule) {
       return false;
     }
   }
-  console.log(`触发屏蔽:`, array)
+  console.debug(`触发屏蔽:`, array)
   return true;
 }
 
@@ -145,7 +145,7 @@ export default {
           }
         }
 
-        //标签匹配 todo
+        //标签匹配
         //选择执行判断的列表
         const list = illust.tags || illust.tagList;
         if (matchTags(list, tagRules)) {

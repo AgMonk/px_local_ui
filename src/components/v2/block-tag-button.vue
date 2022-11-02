@@ -30,6 +30,7 @@
 
 import {ArrayUtils} from "gin-utils/dist/utils/ArrayUtils";
 import {mapMutations} from "vuex";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "block-tag-button",
@@ -53,10 +54,13 @@ export default {
         this.addBlock({
           type, value: this.selection[0],
         })
+        ElMessage.success("添加成功")
+
       } else {
         this.addBlock({
           type, value: this.selection,
         })
+        ElMessage.success("添加成功")
       }
 
     },

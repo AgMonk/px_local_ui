@@ -1,6 +1,6 @@
 <template>
   <el-tooltip placement="right">
-    <router-link :to="{name:'用户主页',params:{uid}}">
+    <router-link :to="{name:'用户',params:{uid}}">
       <el-link :style="{'font-size':size+'px'}" :underline="false" type="primary">
         {{ data && data.name }}
       </el-link>
