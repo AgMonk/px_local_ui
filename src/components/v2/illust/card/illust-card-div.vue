@@ -1,7 +1,6 @@
 <template>
   <div>
-    <!--    卡片size 从config中取 todo -->
-    <illust-card v-for="(item,index) in data" :key="index" :info="item" :size="150" style="margin-right: 5px" @success="imageCompleted" />
+    <illust-card v-for="(item,index) in data" :key="index" :info="item" :size="config.ui.cardSize" style="margin-right: 5px" @success="imageCompleted" />
   </div>
 </template>
 
