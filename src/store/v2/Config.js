@@ -30,20 +30,22 @@ export default {
             //屏蔽
             blocks: {
                 //uid屏蔽
-                uid: [],
+                userIdList: [],
                 //标题关键字
-                title: [],
+                titleKeywords: [],
                 //标签
-                tags: [],
+                tagList: [],
                 //用户名关键字
-                username: [],
+                usernameKeywords: [],
             },
         },
     },
     mutations: {
         loadConfig(state) {
-            state.config = StorageUtils.get(key);
-            if (!state.config) {
+            let config = StorageUtils.get(key);
+            if (config) {
+                state.config = config;
+            } else {
                 this.commit("Config/saveConfig")
             }
         },

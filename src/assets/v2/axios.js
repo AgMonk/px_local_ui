@@ -130,3 +130,18 @@ export const handleTagTranslation = function (res) {
     }
     res.tagTranslation = obj
 }
+/**
+ * 对简易标签进行翻译
+ * @param dic 字典
+ * @param tag 标签
+ */
+export const translateTagList = function (dic, tag) {
+    if (dic.hasOwnProperty(tag)) {
+        return {
+            tag, translation: dic[tag]
+        }
+    }
+    return {
+        tag, translation: undefined,
+    }
+}

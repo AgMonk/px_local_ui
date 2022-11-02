@@ -37,6 +37,41 @@
 <script>
 import {mapGetters, mapState} from "vuex";
 import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
+import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
+
+//判断一个标签列表是否被屏蔽
+const matchTags = function (list, rules) {
+  //单个标签规则
+  const stringRules = rules.filter(i => ObjectUtils.getTypeOf(i) === 'String')
+  //数组规则(同时存在多个标签时才屏蔽)
+  const arrayRules = rules.filter(i => ObjectUtils.getTypeOf(i) === 'Array')
+
+  for (let i = 0; i < list.length; i++) {
+    let {tag, translation} = list[i]
+    if (stringRules.includes(tag) || stringRules.includes(translation)) {
+      return true;
+    }
+  }
+
+  for (let i = 0; i < arrayRules.length; i++) {
+    let rule = arrayRules[i]
+    if (matchArrayRule(list, rule)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+//判断一个标签列表是否被数组规则匹配
+const matchArrayRule = function (list, arrayRule) {
+  for (let i = 0; i < arrayRule; i++) {
+    let rule = arrayRule[i]
+    if (!list.includes(rule)) {
+      return false;
+    }
+  }
+  return true;
+}
 
 export default {
   name: "illust-card-group",
@@ -59,6 +94,7 @@ export default {
   },
   methods: {
     ...mapGetters("Illust", ['getBookmarkData', 'getIllust']),
+    ...mapGetters("User", ['getUser']),
     //清空数据
     clear(illusts) {
       this.normal = []
@@ -71,11 +107,47 @@ export default {
       return !!this.getBookmarkData()(id)
     },
     //判断一个作品是否被屏蔽
-    isBlocked(illust) {
+    isBlocked({id, uid}) {
       //4种屏蔽策略
-      const {tags, title, uid, username} = this.config.blocks
+      const {tagList, titleKeywords, userIdList, usernameKeywords,} = this.config.blocks
       // todo 屏蔽逻辑
 
+      //uid匹配
+      if (userIdList.includes(uid)) {
+        return true
+      }
+      //用户名关键字匹配
+      let user = this.getUser()(uid)
+      if (user && user.hasOwnProperty('name')) {
+        const name = user.name
+        for (let i = 0; i < usernameKeywords.length; i++) {
+          let item = usernameKeywords[i]
+          if (name.includes(item)) {
+            return true;
+          }
+        }
+      }
+      let illust = this.getIllust()(id)
+      if (illust) {
+        //标题关键字匹配
+        if (illust.hasOwnProperty("title")) {
+          const title = illust.title
+          for (let i = 0; i < titleKeywords.length; i++) {
+            let item = titleKeywords[i]
+            if (title.includes(item)) {
+              return true;
+            }
+          }
+        }
+
+        //标签匹配 todo
+        const {tagList, tags} = illust
+        //选择执行判断的列表
+        const list = tags || tagList;
+        if (matchTags(list, tagList)) {
+          return true;
+        }
+      }
       return false;
     },
     //添加数据

@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
-import {clearIllustDetail, clearIllustInfo, handleTagTranslation} from "@/assets/v2/axios";
+import {clearIllustDetail, clearIllustInfo, handleTagTranslation, translateTagList} from "@/assets/v2/axios";
 
 /**
  * 精简作品的字段
@@ -21,19 +21,23 @@ const simplify = (array) => {
  * 处理一个作品列表
  * @param commit commit方法
  * @param item 作品
+ * @param dic 标签翻译字典
  */
-const handleIllust = function (commit, item) {
+const handleIllust = function (commit, item, dic) {
     //保存收藏数据
     commit("updateBmkData", item);
     clearIllustInfo(item)
+    if (dic) {
+        item.tagList = item.tagList.map(i => translateTagList(dic, i))
+    }
     //保存用户数据
     commit("User/update", item.author, {root: true})
     commit("updateIllust", item)
     delete item.author
 }
 
-const handleIllusts = function (commit, array) {
-    array.forEach(item => handleIllust(commit, item))
+const handleIllusts = function (commit, array, dic) {
+    array.forEach(item => handleIllust(commit, item, dic))
 }
 
 export default {
@@ -150,7 +154,7 @@ export default {
                         handleTagTranslation(res)
                         const {tagTranslation, thumbnails} = res
                         const {illust} = thumbnails
-                        handleIllusts(commit, illust)
+                        handleIllusts(commit, illust, tagTranslation)
                         return {
                             data: simplify(illust), tagTranslation
                         }
@@ -172,9 +176,9 @@ export default {
                         handleTagTranslation(res)
                         const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res
 
-                        handleIllusts(commit, illustManga.data)
-                        handleIllusts(commit, popular.permanent)
-                        handleIllusts(commit, popular.recent)
+                        handleIllusts(commit, illustManga.data, tagTranslation)
+                        handleIllusts(commit, popular.permanent, tagTranslation)
+                        handleIllusts(commit, popular.recent, tagTranslation)
 
 
                         const data = simplify(illustManga.data)
