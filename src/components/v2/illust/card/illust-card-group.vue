@@ -115,7 +115,7 @@ export default {
     isBlocked({id, uid}) {
       //4种屏蔽策略
       const {tagRules, titleKeywordsRules, userIdRules, usernameKeywordsRules,} = this.config.blocks
-      // todo 屏蔽逻辑
+      // 屏蔽逻辑
 
       //uid匹配
       if (userIdRules.includes(uid)) {
