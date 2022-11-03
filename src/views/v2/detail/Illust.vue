@@ -96,6 +96,7 @@
               </el-descriptions-item>
               <el-descriptions-item label="Aria2">
                 <!--                todo 下载原图-->
+                <el-button size="small" type="success" @click="aria2Download">下载</el-button>
               </el-descriptions-item>
 
             </el-descriptions>
@@ -136,7 +137,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import IllustCard from "@/components/v2/illust/card/illust-card";
 import IllustImage from "@/components/v2/illust/illust-image";
@@ -169,12 +170,31 @@ export default {
       original: [],
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Config", ['config']),
+  },
   methods: {
     ...mapActions("Illust", ['detail']),
+    ...mapActions("Aria2", ['addUri']),
     ...mapGetters("User", ['getUser']),
-    like() {
+    //使用Aria2下载原图
+    aria2Download: function () {
+      if (this.data.pageCount === 1) {
+        //单图作品
+        let url = this.data.urls.original
+        //如果为动图，替换链接
+        if (this.data.illustType === 2) {
+          url = url.replace("img-original", 'img-zip-ugoira')
+              .replace('_ugoira0.jpg', '_ugoira1920x1080.zip')
+        }
+        //任务名称
+        let name = this.pid + "_p0"
+        let dir = this.config.aria2.homePath
+        this.addUri({name, url, param: {dir}})
 
+      }
+    },
+    like() {
       this.liking = true;
       this.$store.getters.getApi.bookmark.like(this.pid).then(res => {
         this.data.likeData = true;

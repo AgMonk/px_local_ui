@@ -83,6 +83,7 @@ export default {
       const {version} = res
       console.log(`Aria2已连接 版本号：`, version)
     })
+    this.$store.dispatch("Aria2/init")
   },
 }
 </script>
