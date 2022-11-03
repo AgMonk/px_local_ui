@@ -50,6 +50,8 @@ export default {
         {path: "/search", name: "搜索"},
         {path: "/discovery", name: "发现"},
         {path: "/config", name: "配置"},
+        //肯定 以及确信
+        {path: "/illust/99147997", name: "老婆"},
       ]
     }
   },
