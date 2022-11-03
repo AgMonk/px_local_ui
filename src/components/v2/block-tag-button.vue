@@ -55,12 +55,13 @@ export default {
           type, value: this.selection[0],
         })
         ElMessage.success("添加成功")
-
+        this.selection = []
       } else {
         this.addBlock({
           type, value: this.selection,
         })
         ElMessage.success("添加成功")
+        this.selection = []
       }
 
     },

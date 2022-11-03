@@ -59,11 +59,20 @@
 
 
       <el-dialog v-model="dialog.search" append-to-body title="保存搜索">
-        <el-form v-if="dialog.search" size="small" @submit.prevent>
+        <el-form v-if="dialog.search" label-width="80px" size="small" @submit.prevent>
           <el-form-item>
             <template #label><span class="form-label">标题</span></template>
-            <el-select ref="search-form-title" v-model="searchForm.title" :allow-create="true" :filterable="true">
-              <el-option v-for="param in config.search[type]" :label="param.title" :value="param.title" />
+            <el-autocomplete ref="search-form-title"
+                             v-model="searchForm.title"
+                             :fetch-suggestions="fetchSuggestions"
+                             clearable
+                             placeholder="请输入标题"
+            />
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">日期快捷项</span></template>
+            <el-select v-model="searchForm.command.dateShortcut">
+              <el-option v-for="item in dateRangeShortCuts" :label="item.text" :value="item.text" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -71,10 +80,7 @@
             <el-input v-model="searchForm.command.keyword" />
           </el-form-item>
           <el-form-item>
-            <template #label><span class="form-label">日期快捷项</span></template>
-            <el-select v-model="searchForm.command.dateShortcut">
-              <el-option v-for="item in dateRangeShortCuts" :label="item.text" :value="item.text" />
-            </el-select>
+            <el-button size="small" type="success" @click="saveSearch">保存</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -143,6 +149,7 @@ import {DomUtils, Title} from "gin-utils/dist/utils/DomUtils";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import {mapMutations, mapState} from "vuex";
+import {ElMessage} from "element-plus";
 
 const getDate = () => {
   return DateUtils.withZone(new Date(), 9)
@@ -218,11 +225,31 @@ export default {
     ...mapState("Config", ['config']),
   },
   methods: {
-    ...mapMutations("Config", ['saveConfig']),
-    choseSavedSearch(command) {
-      //todo
-      console.log('选中已保存的搜索', command)
+    ...mapMutations("Config", ['saveConfig', 'addSearch']),
+    choseSavedSearch({keyword, dateShortcut}) {
+      console.log('选中已保存的搜索', keyword)
+      this.keyword = keyword
+      if (dateShortcut) {
+        let array = this.dateRangeShortCuts.filter(i => i.text === dateShortcut)
+        if (array.length > 0) {
+          let range = array[0].value()
+          this.params.common.scd = range[0]
+          this.params.common.ecd = range[1]
+        }
+      }
 
+      this.pushRoute()
+    },
+    fetchSuggestions(s, cb) {
+      let array = this.config.search[this.type].map(i => i.title)
+      cb(array.filter(i => i.includes(s)).map(value => {
+        return {value}
+      }))
+    },
+    saveSearch() {
+      this.addSearch({type: this.type, data: this.searchForm})
+      this.dialog.search = false;
+      ElMessage.success("添加成功")
     },
     submit() {
       this.params = ObjectUtils.clone(this.tempParams)

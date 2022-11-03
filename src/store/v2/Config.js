@@ -44,6 +44,13 @@ export default {
             }
         },
     }, mutations: {
+        addSearch(state, {type, data: {title, command}}) {
+            const config = state.config;
+            config.search[type] = config.search[type].filter(i => i.title !== title)
+            config.search[type].push({title, command})
+            config.search[type].sort((a, b) => a.title.localeCompare(b.title))
+            this.commit("Config/saveConfig")
+        },
         loadConfig(state) {
             let config = StorageUtils.get(key);
             if (config) {
