@@ -12,7 +12,7 @@ export default {
         config: {
             //界面
             ui: {
-                //搜索时,显示相关标签
+                //搜索时,显示相关标签 todo
                 showRelatedTags: false,
                 //将已收藏作品分组显示
                 groupBookmarked: true,
@@ -21,7 +21,7 @@ export default {
             },
             //行为
             behavior: {
-                //加载卡片时，缓存它的详情数据
+                //加载卡片时，缓存它的详情数据 todo
                 requestCardDetail: false,
             },
             //屏蔽
@@ -34,10 +34,10 @@ export default {
             },
             //aria2配置
             aria2: {
-                //下载根目录
+                //下载根目录 todo
                 homePath: undefined
             },
-            //保存的搜索
+            //保存的搜索t
             search: {
                 illust: [],
                 novel: [],
