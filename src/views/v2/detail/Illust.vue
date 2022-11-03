@@ -94,9 +94,9 @@
                 </div>
                 <div v-else>匿名约稿</div>
               </el-descriptions-item>
-              <el-descriptions-item label="Aria2">
-                <!--                todo 下载原图-->
-                <el-button size="small" type="success" @click="aria2Download">下载</el-button>
+              <el-descriptions-item label="下载原图">
+                <el-button size="small" type="success" @click="aria2Download">Aria2</el-button>
+                <copy-el-button :text="images.download.join('\n')" size="small" type="primary">复制地址</copy-el-button>
               </el-descriptions-item>
 
             </el-descriptions>
@@ -134,9 +134,10 @@
       <el-dialog v-model="dialog.aria2" append-to-body title="批量下载">
         <el-button size="small" type="primary" @click="selectAll">全选</el-button>
         <el-button size="small" type="danger" @click="images.selected=[]">全不选</el-button>
+        <copy-el-button :text="images.selected.join('\n')" size="small" type="primary">复制地址</copy-el-button>
         <el-button size="small" type="success" @click="aria2MultiDownload">确认下载</el-button>
         <el-scrollbar max-height="400px" style="margin-top: 10px">
-          <el-checkbox-group v-model="images.selected" size="small" @change="change">
+          <el-checkbox-group v-model="images.selected" size="small">
             <el-tooltip v-for="index in data.pageCount">
               <template #content>
                 <el-image :src="images.small[index-1]" lazy style="height:200px;" />
@@ -170,10 +171,12 @@ import IllustTag from "@/components/v2/illust/illust-tag";
 import IllustCommentArea from "@/components/v2/illust/comment/illust-comment-area";
 import BlockTagButton from "@/components/v2/block-tag-button";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
+import CopyElButton from "@/components/v2/copy/copy-el-button";
 
 export default {
   name: "Illust",
   components: {
+    CopyElButton,
     BlockTagButton,
     IllustCommentArea, IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled
   },
@@ -210,7 +213,7 @@ export default {
   },
   methods: {
     ...mapActions("Illust", ['detail']),
-    ...mapActions("Aria2", ['addUri']),
+    ...mapActions("Aria2", ['addUri', 'addUris']),
     ...mapGetters("User", ['getUser']),
     change(e) {
       console.log(e)
@@ -218,6 +221,12 @@ export default {
     //使用Aria2批量下载原图
     aria2MultiDownload() {
       console.log(this.images.selected)
+      let dir = this.config.aria2.homePath
+      this.addUris({
+        urls: this.images.selected, dir
+      }).then(() => {
+        this.dialog.aria2 = false;
+      })
     },
     //选中全部
     selectAll() {
@@ -234,9 +243,8 @@ export default {
               .replace('_ugoira0.jpg', '_ugoira1920x1080.zip')
         }
         //任务名称
-        let name = this.pid + "_p0"
         let dir = this.config.aria2.homePath
-        this.addUri({name, url, param: {dir}})
+        this.addUri({url, dir})
 
       } else {
         //批量下载
