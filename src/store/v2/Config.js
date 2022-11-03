@@ -51,6 +51,10 @@ export default {
             config.search[type].sort((a, b) => a.title.localeCompare(b.title))
             this.commit("Config/saveConfig")
         },
+        delSearch(state, {type, index}) {
+            state.config.search[type].splice(index, 1)
+            this.commit("Config/saveConfig")
+        },
         loadConfig(state) {
             let config = StorageUtils.get(key);
             if (config) {

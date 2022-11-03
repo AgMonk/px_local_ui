@@ -20,7 +20,9 @@
               保存
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item v-for="param in config.search[type]" :command="param.command">{{ param.title }}</el-dropdown-item>
+                  <el-dropdown-item v-for="(param,index) in config.search[type]" :command="param.command">
+                    <el-tag closable effect="dark" size="small" @close="removeSavedSearch(index)">{{ param.title }}</el-tag>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -149,7 +151,7 @@ import {DomUtils, Title} from "gin-utils/dist/utils/DomUtils";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import {mapMutations, mapState} from "vuex";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const getDate = () => {
   return DateUtils.withZone(new Date(), 9)
@@ -225,7 +227,14 @@ export default {
     ...mapState("Config", ['config']),
   },
   methods: {
-    ...mapMutations("Config", ['saveConfig', 'addSearch']),
+    ...mapMutations("Config", ['saveConfig', 'addSearch', 'delSearch']),
+    removeSavedSearch(index) {
+      console.log(index)
+      ElMessageBox.confirm(`确认删除搜索：${this.config.search[this.type][index].title} ?`, "确认删除").then(() => {
+        this.delSearch({type: this.type, index})
+        ElMessage.success("删除成功")
+      })
+    },
     choseSavedSearch({keyword, dateShortcut}) {
       console.log('选中已保存的搜索', keyword)
       this.keyword = keyword
