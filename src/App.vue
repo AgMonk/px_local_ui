@@ -78,6 +78,11 @@ export default {
     } else {
       ElMessage.error("请先登陆");
     }
+
+    this.$store.dispatch("Aria2/getVersion").then(res => {
+      const {version} = res
+      console.log(`Aria2已连接 版本号：`, version)
+    })
   },
 }
 </script>
