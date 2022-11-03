@@ -52,7 +52,7 @@ export default {
                         })
                     }
                 })
-            }, 3000)
+            }, 10000)
         },
         addUri: ({dispatch, commit, state, rootGetters}, {name, url, param: {dir, filename}}) => {
             return state.api.addUri([url], {dir, out: filename, referer: "*"}).then(res => {

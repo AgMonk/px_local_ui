@@ -15,14 +15,14 @@
             <el-tabs v-if="showTabs" v-model="activeIndex" stretch tab-position="left">
               <el-tab-pane v-for="index in data.pageCount" :name="index-1" lazy>
                 <template #label>
-                  <el-image :src="getUrl('small',index-1)" lazy style="height:40px;">
+                  <el-image :src="images.small[index-1]" lazy style="height:40px;">
                     <template #placeholder>
                       <span style="color: white" v-text="index-1"></span>
                     </template>
                   </el-image>
                 </template>
                 <el-image :initial-index="index-1"
-                          :preview-src-list="original"
+                          :preview-src-list="images.original"
                           :src="getUrl('regular',index-1)"
                           :style="{
                             height: Math.min(800,data.size.height)+'px'
@@ -130,6 +130,25 @@
           <!--          todo 推荐作品-->
         </div>
       </div>
+
+      <el-dialog v-model="dialog.aria2" append-to-body title="批量下载">
+        <el-button size="small" type="primary" @click="selectAll">全选</el-button>
+        <el-button size="small" type="danger" @click="images.selected=[]">全不选</el-button>
+        <el-button size="small" type="success" @click="aria2MultiDownload">确认下载</el-button>
+        <el-scrollbar max-height="400px" style="margin-top: 10px">
+          <el-checkbox-group v-model="images.selected" size="small" @change="change">
+            <el-tooltip v-for="index in data.pageCount">
+              <template #content>
+                <el-image :src="images.small[index-1]" lazy style="height:200px;" />
+              </template>
+              <el-checkbox :label="images.download[index-1]" border>
+                {{ index - 1 }}
+              </el-checkbox>
+            </el-tooltip>
+          </el-checkbox-group>
+
+        </el-scrollbar>
+      </el-dialog>
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -150,6 +169,7 @@ import UserLink from "@/components/v2/user/user-link";
 import IllustTag from "@/components/v2/illust/illust-tag";
 import IllustCommentArea from "@/components/v2/illust/comment/illust-comment-area";
 import BlockTagButton from "@/components/v2/block-tag-button";
+import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 
 export default {
   name: "Illust",
@@ -159,15 +179,30 @@ export default {
   },
   data() {
     return {
+      dialog: {
+        aria2: false,
+      },
+      //图片地址
+      images: {
+        //选中的
+        selected: [],
+        //缩略图
+        small: [],
+        //原图(显示用)
+        original: [],
+        //下载备选项
+        download: [],
+      },
       activeIndex: 0,
       loading: false,
       liking: false,
       showTabs: false,
       failed: false,
+      //当前作品数据
       data: undefined,
+      //其他作品
       others: [],
       pid: undefined,
-      original: [],
     }
   },
   computed: {
@@ -177,8 +212,19 @@ export default {
     ...mapActions("Illust", ['detail']),
     ...mapActions("Aria2", ['addUri']),
     ...mapGetters("User", ['getUser']),
+    change(e) {
+      console.log(e)
+    },
+    //使用Aria2批量下载原图
+    aria2MultiDownload() {
+      console.log(this.images.selected)
+    },
+    //选中全部
+    selectAll() {
+      this.images.selected = ObjectUtils.clone(this.images.download);
+    },
     //使用Aria2下载原图
-    aria2Download: function () {
+    aria2Download() {
       if (this.data.pageCount === 1) {
         //单图作品
         let url = this.data.urls.original
@@ -192,6 +238,10 @@ export default {
         let dir = this.config.aria2.homePath
         this.addUri({name, url, param: {dir}})
 
+      } else {
+        //批量下载
+        this.selectAll()
+        this.dialog.aria2 = true;
       }
     },
     like() {
@@ -224,9 +274,13 @@ export default {
           return {id, showImage: true}
         })
 
-        this.original = []
+        this.images.small = []
+        this.images.original = []
+        this.images.download = []
         for (let i = 0; i < this.data.pageCount; i++) {
-          this.original.push(this.getUrl("original", i))
+          this.images.small.push(this.getUrl("small", i))
+          this.images.original.push(this.getUrl("original", i))
+          this.images.download.push(this.data.urls.original.replace("_p0", "_p" + i))
         }
         //如果有标题 修改浏览器标题
         res.title && Title.set(res.title)

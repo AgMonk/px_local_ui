@@ -3,7 +3,7 @@ import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
 export const PIXIV_PATH = "/pixiv-net";
 
-export const instance = axios.create({baseURL: PIXIV_PATH, timeout: 10000})
+export const instance = axios.create({baseURL: PIXIV_PATH, timeout: 5000})
 
 function clearIllust(item) {
     //格式转换
