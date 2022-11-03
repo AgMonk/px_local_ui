@@ -289,6 +289,9 @@ export default {
     },
     //跳转路由
     pushRoute() {
+      if (!this.keyword || this.keyword.length === 0) {
+        return;
+      }
       const {common, novel} = this.params
       const params = {keyword: this.keyword}
       const query = Object.assign({}, common, this.type === 'novel' ? novel : {})
