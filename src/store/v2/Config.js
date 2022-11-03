@@ -44,6 +44,7 @@ export default {
             }
         },
     }, mutations: {
+        //保存搜索
         addSearch(state, {type, data: {title, command}}) {
             const config = state.config;
             config.search[type] = config.search[type].filter(i => i.title !== title)
@@ -51,25 +52,33 @@ export default {
             config.search[type].sort((a, b) => a.title.localeCompare(b.title))
             this.commit("Config/saveConfig")
         },
+        //删除搜索
         delSearch(state, {type, index}) {
             state.config.search[type].splice(index, 1)
             this.commit("Config/saveConfig")
         },
+        //从 localstorage 加载配置
         loadConfig(state) {
             let config = StorageUtils.get(key);
             if (config) {
                 state.config = Object.assign({}, state.config, config);
             }
             this.commit("Config/saveConfig")
-        }, addBlock(state, {type, value}) {
+        },
+        //添加屏蔽规则
+        addBlock(state, {type, value}) {
             if (state.config.blocks.hasOwnProperty(type)) {
                 state.config.blocks[type].push(value)
                 this.commit("Config/saveConfig")
             }
-        }, updateConfig(state, config) {
+        },
+        //更新配置
+        updateConfig(state, config) {
             state.config = config;
             this.commit("Config/saveConfig")
-        }, saveConfig(state) {
+        },
+        //保存配置到 localstorage
+        saveConfig(state) {
             StorageUtils.put(key, state.config);
             console.debug('保存配置', state.config)
         }
