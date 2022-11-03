@@ -32,7 +32,7 @@
         <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="params.common.p=1;pushRoute()" />
       </div>
       <div>
-        <!--      todo 已保存的搜索 -->
+        <!--      已保存的搜索 -->
       </div>
       <div v-if="$route.name!=='搜索'">
         <!--        翻页-->
@@ -271,7 +271,6 @@ export default {
           this.$refs['search-form-title'].focus()
         }, 50)
       })
-      //todo
     },
     showDialog() {
       this.tempParams = ObjectUtils.clone(this.params)
