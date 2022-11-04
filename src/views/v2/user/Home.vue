@@ -16,7 +16,11 @@
             <span v-if="item.count && data[item.count] && data[item.count].length>0">({{ data[item.count].length }})</span>
           </el-radio-button>
         </el-radio-group>
-        <!--        todo pickup内容-->
+        <div v-if="data.pickup && $route.name==='用户主页'" style="text-align: left">
+          <h3 style="color: white">精选</h3>
+          <!--        todo fanbox 链接-->
+          <illust-image v-for="item in data.pickup.filter(i=>i.hasOwnProperty('illustType'))" :info="item" style="margin-right: 10px"></illust-image>
+        </div>
         <router-view v-if="!loading && !failed" />
       </div>
     </el-main>
@@ -29,10 +33,11 @@
 import UserTitle from "@/components/v2/user/user-title";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import {mapActions, mapGetters} from "vuex";
+import IllustImage from "@/components/v2/illust/illust-image";
 
 export default {
   name: "Home",
-  components: {UserTitle},
+  components: {IllustImage, UserTitle},
   data() {
     return {
       uid: undefined,
@@ -64,10 +69,12 @@ export default {
       this.type = route.path.split('/')[3]
       this.uid = Number(route.params.uid);
       this.loading = true;
-      this.profileAll({uid: this.uid, force}).then(({illusts, manga, novels, pickup, mangaSeries, novelSeries}) => {
+      this.profileAll({uid: this.uid, force}).then(res => {
         this.failed = false;
-        this.data = {illusts, manga, novels, pickup, mangaSeries, novelSeries}
-        console.log(this.data);
+        this.data = res
+        console.log(res);
+        res.pickup.forEach(i => i.showImage = true)
+        console.log(res.pickup);
       }).catch(e => {
         console.error(e)
         this.failed = true;
