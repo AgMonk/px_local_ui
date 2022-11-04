@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import {Title} from "gin-utils/dist/utils/DomUtils";
+
 export default {
   name: "Request",
   data() {
@@ -30,7 +32,7 @@ export default {
   computed: {},
   methods: {
     load(route, force) {
-
+      Title.set(route.name)
     }
   },
   mounted() {
@@ -38,7 +40,9 @@ export default {
   },
   watch: {
     $route(to) {
-
+      if (to.name === '用户约稿') {
+        this.load(to)
+      }
     }
   },
   props: {},

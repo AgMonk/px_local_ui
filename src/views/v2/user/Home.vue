@@ -49,7 +49,7 @@ export default {
     }
   },
   mounted() {
-    Title.set("用户")
+    Title.set("用户主页")
     this.load(this.$route)
   },
   watch: {
