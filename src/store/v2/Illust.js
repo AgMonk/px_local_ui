@@ -12,47 +12,36 @@ import {clearIllustDetail, clearIllustInfo, handleTagTranslation, translateTagLi
 const simplify = (array) => {
     return array.map(item => {
         return {
-            id: item.id,
-            uid: item.uid,
+            id: item.id, uid: item.uid,
         }
     })
 }
-/**
- * 处理一个作品列表
- * @param commit commit方法
- * @param item 作品
- * @param dic 标签翻译字典
- */
-const handleIllust = function (commit, item, dic) {
-    //保存收藏数据
-    commit("updateBmkData", item);
-    clearIllustInfo(item)
-    if (dic) {
-        item.tagList = item.tagList.map(i => translateTagList(dic, i))
-    }
-    //保存用户数据
-    commit("User/update", item.author, {root: true})
-    commit("updateIllust", item)
-    delete item.author
-}
-
-const handleIllusts = function (commit, array, dic) {
-    array.forEach(item => handleIllust(commit, item, dic))
-}
 
 export default {
-    namespaced: true,
-    state: {
-        latest: new Map(),
-        detail: new Map(),
-        search: new Map(),
-        bookmarkData: new Map(),
-        illustData: new Map(),
-    },
-    mutations: {
+    namespaced: true, state: {
+        latest: new Map(), detail: new Map(), search: new Map(), bookmarkData: new Map(), illustData: new Map(),
+    }, mutations: {
         method(state, payload) {
 
         },
+        //处理单个作品
+        handleIllust(state, {item, dic}) {
+            //保存收藏数据
+            this.commit("Illust/updateBmkData", item);
+            clearIllustInfo(item)
+            if (dic) {
+                item.tagList = item.tagList.map(i => translateTagList(dic, i))
+            }
+            //保存用户数据
+            this.commit("User/update", item.author, {root: true})
+            this.commit("Illust/updateIllust", item)
+            delete item.author
+        },
+        //处理作品数组
+        handleIllusts(state, {array, dic}) {
+            array.forEach(item => this.commit('Illust/handleIllust', {item, dic}))
+        },
+        //更新作品数据
         updateIllust(state, info) {
             const {id} = info
             let cache = state.illustData.get(id);
@@ -64,23 +53,20 @@ export default {
                 state.illustData.set(id, info);
             }
         },
+        //更新收藏数据
         updateBmkData(state, item) {
             console.debug("更新收藏数据:" + item.id)
             state.bookmarkData.set(Number(item.id), item.bookmarkData)
             item.bookmarked = !!item.bookmarkData
             delete item.bookmarkData;
         }
-    },
-    actions: {
+    }, actions: {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
         },
         detail: ({dispatch, commit, state, rootGetters}, {pid, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.detail,
-                force, key: pid,
-                seconds: 10 * 60,
-                requestMethod: () => {
+                caches: state.detail, force, key: pid, seconds: 10 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.detail(pid).then(item => {
                         //保存收藏数据
                         commit("updateBmkData", item);
@@ -115,19 +101,14 @@ export default {
                     })
                 }
             })
-        },
-        delBookmark: ({dispatch, commit, state, rootGetters}, {pid, bmkId}) => {
+        }, delBookmark: ({dispatch, commit, state, rootGetters}, {pid, bmkId}) => {
             return rootGetters["getApi"].bookmark.delIllust(bmkId).then(res => {
                 state.bookmarkData.delete(pid)
                 return res
             })
-        },
-        addBookmark: ({dispatch, commit, state, rootGetters}, pid) => {
+        }, addBookmark: ({dispatch, commit, state, rootGetters}, pid) => {
             return rootGetters["getApi"].bookmark.addIllust({
-                comment: "",
-                tags: [],
-                illust_id: pid,
-                restrict: 0,
+                comment: "", tags: [], illust_id: pid, restrict: 0,
             }).then(id => {
                 if (id) {
                     commit("updateBmkData", {id: pid, bookmarkData: {id: id, private: false}});
@@ -137,49 +118,37 @@ export default {
                     return res.id
                 })
             })
-        },
-        bookmarkData: ({dispatch, commit, state, rootGetters}, pid) => {
+        }, bookmarkData: ({dispatch, commit, state, rootGetters}, pid) => {
             return rootGetters["getApi"].illustManga.bookmarkData(pid).then(res => {
                 state.bookmarkData.set(pid, res.bookmarkData)
                 return res.bookmarkData;
             })
-        },
-        followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
+        }, followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.latest,
-                force, key: page,
-                seconds: 10 * 60,
-                requestMethod: () => {
+                caches: state.latest, force, key: page, seconds: 10 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
                         handleTagTranslation(res)
                         const {tagTranslation, thumbnails} = res
                         const {illust} = thumbnails
-                        handleIllusts(commit, illust, tagTranslation)
+                        commit("handleIllusts", {array: illust, dic: tagTranslation})
                         return {
                             data: simplify(illust), tagTranslation
                         }
                     })
                 }
             })
-        },
-        search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
+        }, search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.search,
-                force, key: JSON.stringify({keyword, p, mode, scd, ecd}),
-                seconds: 10 * 60,
-                requestMethod: () => {
+                caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 10 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.search(keyword, {
-                        p, mode, scd, ecd,
-                        order: 'date_d',
-                        lang: 'zh',
+                        p, mode, scd, ecd, order: 'date_d', lang: 'zh',
                     }).then(res => {
                         handleTagTranslation(res)
                         const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res
 
-                        handleIllusts(commit, illustManga.data, tagTranslation)
-                        handleIllusts(commit, popular.permanent, tagTranslation)
-                        handleIllusts(commit, popular.recent, tagTranslation)
-
+                        commit("handleIllusts", {array: illustManga.data, dic: tagTranslation})
+                        commit("handleIllusts", {array: popular.permanent, dic: tagTranslation})
+                        commit("handleIllusts", {array: popular.recent, dic: tagTranslation})
 
                         const data = simplify(illustManga.data)
                         const total = illustManga.total
@@ -193,12 +162,10 @@ export default {
                 }
             })
         },
-    },
-    getters: {
+    }, getters: {
         getIllust: (state) => (id) => {
             return state.illustData.get(id)
-        },
-        getBookmarkData: (state) => (id) => {
+        }, getBookmarkData: (state) => (id) => {
             return state.bookmarkData.get(id)
         }
     },
