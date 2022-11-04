@@ -38,7 +38,8 @@ export default {
       }
     },
     load() {
-      for (let i = 0; i < Math.min(this.threads - this.current, this.data.length); i++) {
+      const count = Math.min(this.threads - this.current, this.data.length)
+      for (let i = 0; i < count; i++) {
         this.loadImage()
       }
     }
@@ -47,7 +48,7 @@ export default {
     this.load()
   },
   watch: {
-    data() {
+    data(e) {
       this.load()
     }
   },

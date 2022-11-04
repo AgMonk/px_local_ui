@@ -1,17 +1,10 @@
 <template>
-  <el-container v-loading="loading" direction="vertical">
-    <!--  <el-container direction="horizontal">-->
-    <!--    <el-header></el-header>-->
+  <el-container direction="vertical">
     <el-main style="min-height: 300px">
-      <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
-        <h3>请求失败</h3>
-        <h4>点击刷新</h4>
-      </div>
-      <div v-if="!failed">
+      <retry-div :params="params" :request="request" @failed="failed" @success="success">
         <illust-card-group ref="cardGroup" @request-refresh="refresh" />
-      </div>
+      </retry-div>
     </el-main>
-    <!--    <el-footer></el-footer>-->
   </el-container>
 
 </template>
@@ -21,42 +14,46 @@ import {mapActions} from "vuex";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 import {ElMessage} from "element-plus";
+import RetryDiv from "@/components/v2/retry-div";
 
 export default {
   name: "Illust",
-  components: {IllustCardGroup,},
+  components: {RetryDiv, IllustCardGroup,},
   data() {
     return {
-      loading: false,
-      failed: false,
-      page: 1,
       total: 655350,
       data: [],
+      params: {
+        page: 1,
+        force: false,
+      }
     }
   },
   computed: {},
   methods: {
     ...mapActions("Illust", ['followLatest']),
-
+    //刷新请求
     refresh() {
+      this.$refs.cardGroup.clear([])
       this.load(this.$route, true)
     },
-    load(route, force) {
-      const {page} = route.params
-      this.loading = true;
-      this.followLatest({page, force}).then(res => {
-        this.failed = false;
-        this.$nextTick(() => {
-          this.$refs.cardGroup.clear(res.data)
-        })
-      }).catch(e => {
-        console.error(e)
-        ElMessage.error(e.message)
-        this.failed = true;
-      }).finally(() => {
-        this.loading = false
+    //请求
+    request(params) {
+      return this.followLatest(params)
+    },
+    //成功回调
+    success(res) {
+      this.$nextTick(() => {
+        this.$refs.cardGroup.clear(res.data)
       })
-
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    //加载方法
+    load(route, force) {
+      this.params = {page: Number(route.params.page), force}
     }
   },
   mounted() {
