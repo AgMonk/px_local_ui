@@ -38,7 +38,7 @@ import {mapActions, mapGetters} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 
 export default {
-  name: "Illust",
+  name: "IllustManga",
   components: {IllustCardGroup},
   data() {
     return {
@@ -64,12 +64,15 @@ export default {
       this.load(this.$route, true)
     },
     load(route, force) {
+      let type = route.path.split('/')[3]
+      type = type === 'manga' ? type : 'illusts'
+
       Title.set(route.name)
       const uid = Number(route.params.uid);
       const page = Number(route.query.p || 1);
 
       this.page = page;
-      this.illusts = this.getProfile()(uid).illusts
+      this.illusts = this.getProfile()(uid)[type]
       this.total = this.illusts.length
 
       //截取数组的起始位置
@@ -97,7 +100,7 @@ export default {
   },
   watch: {
     $route(to) {
-      if (to.name === '用户插画') {
+      if (['用户插画', '用户漫画'].includes(to.name)) {
         this.load(to)
       }
     }

@@ -41,8 +41,8 @@ const routes = [
         name: '用户主页',
         component: () => import("../views/v2/user/Home"),
         children: [
-            {path: "illust", name: "用户插画", component: () => import("../views/v2/user/Illust"),},
-            {path: "manga", name: "用户漫画", component: () => import("../views/v2/user/Manga"),},
+            {path: "illust", name: "用户插画", component: () => import("../views/v2/user/IllustManga"),},
+            {path: "manga", name: "用户漫画", component: () => import("../views/v2/user/IllustManga"),},
             {path: "novel", name: "用户小说", component: () => import("../views/v2/user/Novel"),},
             {path: "bookmark", name: "用户收藏", component: () => import("../views/v2/user/Bookmark"),},
             {path: "request", name: "用户约稿", component: () => import("../views/v2/user/Request"),},
