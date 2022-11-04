@@ -3,7 +3,9 @@
     <!--  <el-container direction="horizontal">-->
     <el-header style="color: white">{{ $route.name }}</el-header>
     <el-main>
-
+      <retry-div :request="request" @failed="success" @success="success">
+        <h4 style="color: white">标题</h4>
+      </retry-div>
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -12,9 +14,11 @@
 
 <script>
 import {Title} from "gin-utils/dist/utils/DomUtils";
+import RetryDiv from "@/components/v2/retry-div";
 
 export default {
   name: "Illust",
+  components: {RetryDiv},
   data() {
     return {
       showDialog: {},
@@ -31,6 +35,16 @@ export default {
   },
   computed: {},
   methods: {
+    request(force) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(1)
+        }, 4000)
+      })
+    },
+    success(res) {
+      console.log(res)
+    },
     load(route, force) {
 
     }
