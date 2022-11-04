@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build:prod": "vue-cli-service build --dest=D:\\Working\\pixiv-nginx\\plu"
+    "build:prod": "vue-cli-service build --dest=D:\\Working\\pixiv-nginx\\plu2"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",

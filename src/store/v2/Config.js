@@ -75,6 +75,7 @@ export default {
         //更新配置
         updateConfig(state, config) {
             state.config = config;
+            console.log("配置已修改", config)
             this.commit("Config/saveConfig")
         },
         //保存配置到 localstorage

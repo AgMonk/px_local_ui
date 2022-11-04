@@ -69,6 +69,7 @@
                              :fetch-suggestions="fetchSuggestions"
                              clearable
                              placeholder="请输入标题"
+                             @keyup.enter="saveSearch"
             />
           </el-form-item>
           <el-form-item>
