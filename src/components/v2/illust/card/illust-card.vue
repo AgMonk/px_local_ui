@@ -16,7 +16,7 @@
         </span>
       </illust-link>
     </div>
-    <div class="single-line" style="height: 20px;text-align: left">
+    <div v-if="info.uid" class="single-line" style="height: 20px;text-align: left">
       <el-row>
         <!--   作者头像-->
         <el-col :span="4">

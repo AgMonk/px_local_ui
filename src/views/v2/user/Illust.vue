@@ -1,39 +1,75 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header style="color:white">{{ $route.name }}</el-header>
-    <el-main>
-
+    <!--    <el-header style="color:white">{{ $route.name }}</el-header>-->
+    <el-main v-loading="loading">
+      <div v-if="failed" style="color: white;cursor: pointer;height: 300px" @click="refresh">
+        <h3>加载失败</h3>
+        <h4>点击刷新</h4>
+      </div>
+      <div v-else style="min-height: 500px">
+        <illust-card-group ref="cardGroup" @request-refresh="refresh" />
+      </div>
     </el-main>
-    <el-footer></el-footer>
+    <!--    <el-footer></el-footer>-->
   </el-container>
 
 </template>
 
 <script>
 import {Title} from "gin-utils/dist/utils/DomUtils";
+import {mapActions, mapGetters} from "vuex";
+import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 
 export default {
   name: "Illust",
+  components: {IllustCardGroup},
   data() {
     return {
+      loading: true,
+      failed: false,
+      illusts: {},
       showDialog: {},
-      loading: {},
       params: {
-        filter: {},
         page: 1,
-        size: 10,
+        size: 60,
       },
-      form: {},
-      data: [],
       total: 10,
     }
   },
   computed: {},
   methods: {
+    ...mapActions("User", ['profileIllusts']),
+    ...mapGetters("User", ['getProfile']),
+    refresh() {
+      this.load(this.$route, true)
+    },
     load(route, force) {
       Title.set(route.name)
+      const uid = Number(route.params.uid);
+      const page = route.query.p || 1;
 
+      this.params.page = page;
+      this.illusts = this.getProfile()(uid).illusts
+
+      //截取数组的起始位置
+      const start = (page - 1) * this.params.size
+      const end = Math.min(page * this.params.size, this.illusts.length)
+      const ids = this.illusts.slice(start, end)
+      this.loading = true;
+      this.profileIllusts({uid, ids, force}).then(res => {
+        this.failed = false;
+        this.$nextTick(() => {
+          this.$refs.cardGroup.clear(res.map(id => {
+            return {id}
+          }))
+        })
+      }).catch(e => {
+        console.error(e)
+        this.failed = true;
+      }).finally(() => {
+        this.loading = false
+      })
     }
   },
   mounted() {

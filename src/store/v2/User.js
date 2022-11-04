@@ -9,6 +9,8 @@ export default {
         user: new Map(),
         //用户作品概况缓存
         profile: new Map(),
+        //用户插画缓存
+        illusts: new Map(),
         //用户
         userData: new Map(), //用户作品数据
         userProfile: new Map(),
@@ -36,11 +38,11 @@ export default {
             let cache = state.userProfile.get(uid);
             cache = cache || {illusts, manga, novels, pickup, mangaSeries, novelSeries}
             illusts && (cache.illusts = illusts);
-            manga && (cache.illusts = manga);
-            novels && (cache.illusts = novels);
-            pickup && (cache.illusts = pickup);
-            mangaSeries && (cache.illusts = mangaSeries);
-            novelSeries && (cache.illusts = novelSeries);
+            manga && (cache.manga = manga);
+            novels && (cache.novels = novels);
+            pickup && (cache.pickup = pickup);
+            mangaSeries && (cache.mangaSeries = mangaSeries);
+            novelSeries && (cache.novelSeries = novelSeries);
             state.userProfile.set(uid, cache);
         }
     }, actions: {
@@ -87,6 +89,19 @@ export default {
                 }
             })
         },
+        // 查询用户插画/漫画
+        profileIllusts: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.illusts, force, key: uid + ids.join(','), seconds: 10 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].user.profileIllusts(uid, ids, 'zh').then((res) => {
+                        const array = Object.values(res.works)
+                        commit("Illust/handleIllusts", {array}, {root: true})
+                        return array.map(i => i.id).sort((a, b) => b - a)
+                    })
+                }
+            })
+        },
+
     }, getters: {
         //获取用户数据
         getUser: (state) => (id) => {

@@ -23,15 +23,18 @@
               <el-link v-if="item.type==='fanbox'" :href="item.contentUrl" :underline="false" target="_blank">
                 <!--        fanbox 封面-->
                 <div class="fanbox-card">
-                  <el-image v-if="item.imageUrl" :src="item.imageUrl" style="width: 250px;  border-radius: 15px;position: absolute;top:50%;transform: translate(-50%,-50%)" />
-                  <span style="position: absolute;top:50%;transform: translate(-50%,-50%);background-color: rgba(240,248,255,0.41);font-size: 30px"> Fanbox</span>
+                  <el-image v-if="item.imageUrl" :src="item.imageUrl" class="absolute-center" style="width: 250px;  border-radius: 15px;" />
+                  <span class="absolute-center" style="position: absolute;top:50%;transform: translate(-50%,-50%);background-color: rgba(240,248,255,0.41);font-size: 30px">
+                    Fanbox</span>
                 </div>
               </el-link>
               <illust-image v-if="item.hasOwnProperty('illustType')" :info="item" :size="250" style="margin-right: 10px"></illust-image>
             </el-col>
           </el-row>
         </div>
-        <router-view v-if="!loading && !failed" />
+        <div style="margin-top: 10px">
+          <router-view v-if="!loading && !failed" />
+        </div>
       </div>
     </el-main>
     <!--    <el-footer></el-footer>-->
@@ -52,7 +55,7 @@ export default {
     return {
       uid: undefined,
       type: undefined,
-      loading: false,
+      loading: true,
       failed: false,
       types: [
         {label: '插画', value: 'illust', count: 'illusts'},
@@ -82,9 +85,7 @@ export default {
       this.profileAll({uid: this.uid, force}).then(res => {
         this.failed = false;
         this.data = res
-        console.log(res);
         res.pickup.forEach(i => i.showImage = true)
-        console.log(res.pickup);
       }).catch(e => {
         console.error(e)
         this.failed = true;
@@ -120,6 +121,11 @@ export default {
   color: blue;
   /*background-color: aliceblue;*/
   position: relative;
+}
 
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
