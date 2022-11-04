@@ -1,7 +1,7 @@
 <template>
   <el-container direction="vertical" style="padding: 0 20px">
     <!--  <el-container direction="horizontal">-->
-    <el-header>
+    <el-header height="90px">
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
     </el-header>
     <el-main v-loading="loading">
@@ -9,17 +9,27 @@
         <h3>加载失败</h3>
         <h4>点击刷新</h4>
       </div>
-      <div v-else style="min-height: 300px">
+      <div v-else style="min-height: 500px">
         <el-radio-group v-model="type" size="large" @change="typeChanged">
           <el-radio-button v-for="item in types" :disabled="item.count && data[item.count] && data[item.count].length===0 " :label="item.value">
             {{ item.label }}
             <span v-if="item.count && data[item.count] && data[item.count].length>0">({{ data[item.count].length }})</span>
           </el-radio-button>
         </el-radio-group>
-        <div v-if="data.pickup && $route.name==='用户主页'" style="text-align: left">
+        <div v-if="data.pickup &&data.pickup.length>0 && $route.name==='用户主页'" style="text-align: left">
           <h3 style="color: white">精选</h3>
-          <!--        todo fanbox 链接-->
-          <illust-image v-for="item in data.pickup.filter(i=>i.hasOwnProperty('illustType'))" :info="item" style="margin-right: 10px"></illust-image>
+          <el-row>
+            <el-col v-for="item in data.pickup" :span="6">
+              <el-link v-if="item.type==='fanbox'" :href="item.contentUrl" :underline="false" target="_blank">
+                <!--        fanbox 封面-->
+                <div class="fanbox-card">
+                  <el-image v-if="item.imageUrl" :src="item.imageUrl" style="width: 250px;  border-radius: 15px;position: absolute;top:50%;transform: translate(-50%,-50%)" />
+                  <span style="position: absolute;top:50%;transform: translate(-50%,-50%);background-color: rgba(240,248,255,0.41);font-size: 30px"> Fanbox</span>
+                </div>
+              </el-link>
+              <illust-image v-if="item.hasOwnProperty('illustType')" :info="item" :size="250" style="margin-right: 10px"></illust-image>
+            </el-col>
+          </el-row>
         </div>
         <router-view v-if="!loading && !failed" />
       </div>
@@ -100,5 +110,16 @@ export default {
 </script>
 
 <style scoped>
+.fanbox-card {
+  margin-right: 10px;
+  border-radius: 15px;
+  height: 250px;
+  width: 250px;
+  display: inline-block;
+  text-align: center;
+  color: blue;
+  /*background-color: aliceblue;*/
+  position: relative;
 
+}
 </style>

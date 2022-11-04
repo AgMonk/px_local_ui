@@ -80,6 +80,8 @@ export default {
                         commit("Illust/handleIllusts", {array: pickupIllust}, {root: true})
                         let result = {illusts, manga, novels, pickup, mangaSeries, novelSeries}
                         commit("updateProfile", {uid, ...result})
+
+
                         return result
                     })
                 }
