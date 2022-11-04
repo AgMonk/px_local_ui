@@ -6,10 +6,13 @@
       <el-row style="text-align: left">
         <!--     刷新按钮-->
         <el-col :span="12">
-          <el-button size="small" type="success" @click="$emit('request-refresh')">刷新</el-button>
+          <el-tag effect="dark" size="small">{{ getMaxDate(normal) }}</el-tag>
+          <span style="color: white">~</span>
+          <el-tag effect="dark" size="small">{{ getMinDate(normal) }}</el-tag>
           <el-button v-if="popular.length>0" size="small" type="primary" @click="dialogShow.popular=true">热门作品({{ popular.length }})</el-button>
         </el-col>
         <el-col :span="12">
+          <el-button size="small" type="success" @click="$emit('request-refresh')">刷新</el-button>
           <el-button v-if="bookmarked.length>0" size="small" type="primary" @click="dialogShow.bookmarked=true">已收藏({{ bookmarked.length }})</el-button>
           <el-button v-if="blocked.length>0" size="small" type="primary" @click="dialogShow.blocked=true">已屏蔽({{ blocked.length }})</el-button>
         </el-col>
@@ -46,6 +49,7 @@
 import {mapGetters, mapState} from "vuex";
 import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
+import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
 //判断一个标签列表是否被屏蔽
 const matchTags = function (list, rules) {
@@ -118,6 +122,16 @@ export default {
       this.popular = popular || []
       console.debug("清空作品组")
       this.add(illusts)
+    },
+    getMinDate(array) {
+      const id = Math.min(...array.map(i => i.id));
+      const data = this.getIllust()(id);
+      return data ? DateUtils.format(new Date(data.createDate), "yy-MM-dd hh:mm") : undefined
+    },
+    getMaxDate(array) {
+      const id = Math.max(...array.map(i => i.id));
+      const data = this.getIllust()(id);
+      return data ? DateUtils.format(new Date(data.createDate), "yy-MM-dd hh:mm") : undefined
     },
     isBookmarked(id) {
       return !!this.getBookmarkData()(id)
