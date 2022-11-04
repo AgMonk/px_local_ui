@@ -5,6 +5,9 @@
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
     </el-header>
     <el-main>
+      <el-radio-group v-model="type" size="large" @change="typeChanged">
+        <el-radio-button v-for="item in types" :label="item.value">{{ item.label }}</el-radio-button>
+      </el-radio-group>
       <router-view />
     </el-main>
     <el-footer></el-footer>
@@ -23,15 +26,26 @@ export default {
   data() {
     return {
       uid: undefined,
+      type: undefined,
+      types: [
+        {label: '插画', value: 'illust'},
+        {label: '漫画', value: 'manga'},
+        {label: '小说', value: 'novel'},
+        {label: '收藏', value: 'bookmark'},
+        {label: '约稿', value: 'request'},
+      ],
+      profile: {},
     }
   },
   computed: {},
   methods: {
     ...mapGetters("Account", ['getCurrent']),
+    typeChanged(e) {
+      this.$router.push(`/user/${this.uid}/${e}`)
+    },
     load(route, force) {
-      console.log(route)
-      const {uid} = route.params
-      this.uid = Number(uid);
+      this.type = route.path.split('/')[3]
+      this.uid = Number(route.params.uid);
     }
   },
   mounted() {
@@ -40,7 +54,7 @@ export default {
   },
   watch: {
     $route(to) {
-      if (to.name === '用户') {
+      if (to.name.startsWith('用户')) {
         this.load(to)
       }
     }
