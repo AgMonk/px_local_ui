@@ -62,7 +62,10 @@ export default {
                         manga = Object.keys(manga).map(i => Number(i)).sort((a, b) => b - a)
                         novels = Object.keys(novels).map(i => Number(i)).sort((a, b) => b - a)
 
-                        //todo 处理 pickup
+                        //处理 pickup
+                        let pickupIllust = pickup.filter(i => i.hasOwnProperty('illustType'))
+                        commit("Illust/handleIllusts", {array: pickupIllust}, {root: true})
+
                         return {illusts, manga, novels, pickup}
                     })
                 }
