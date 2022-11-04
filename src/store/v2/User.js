@@ -5,12 +5,19 @@ import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 
 export default {
     namespaced: true, state: {
-        user: new Map(), profile: new Map(), userData: new Map(), //用户作品数据
+        //用户信息缓存
+        user: new Map(),
+        //用户作品概况缓存
+        profile: new Map(),
+        //用户
+        userData: new Map(), //用户作品数据
         userProfile: new Map(),
     }, mutations: {
         method(state, payload) {
 
-        }, update(state, info) {
+        },
+        //更新用户数据
+        update(state, info) {
             const {id} = info
             info.name = info.name.split("@")[0]
             info.name = info.name.split("＠")[0]
@@ -22,12 +29,18 @@ export default {
                 console.debug("新用户:", info)
                 state.userData.set(id, info);
             }
-        }, updateProfile(state, {uid, illusts, novels}) {
+        },
+        //更新用户作品概况
+        updateProfile(state, {uid, illusts, manga, novels, pickup, mangaSeries, novelSeries}) {
             console.debug("更新用户作品概况:", uid)
             let cache = state.userProfile.get(uid);
-            cache = cache || {illusts, novels}
+            cache = cache || {illusts, manga, novels, pickup, mangaSeries, novelSeries}
             illusts && (cache.illusts = illusts);
+            manga && (cache.illusts = manga);
             novels && (cache.illusts = novels);
+            pickup && (cache.illusts = pickup);
+            mangaSeries && (cache.illusts = mangaSeries);
+            novelSeries && (cache.illusts = novelSeries);
             state.userProfile.set(uid, cache);
         }
     }, actions: {
@@ -56,7 +69,7 @@ export default {
                 caches: state.profile, force, key: uid, seconds: 10 * 60, requestMethod: () => {
                     return rootGetters["getApi"].user.profileAll(uid, 'zh').then((res) => {
                         console.log(res)
-                        let {illusts, manga, novels, pickup} = res
+                        let {illusts, manga, novels, pickup, mangaSeries, novelSeries} = res
 
                         illusts = Object.keys(illusts).map(i => Number(i)).sort((a, b) => b - a)
                         manga = Object.keys(manga).map(i => Number(i)).sort((a, b) => b - a)
@@ -65,16 +78,20 @@ export default {
                         //处理 pickup
                         let pickupIllust = pickup.filter(i => i.hasOwnProperty('illustType'))
                         commit("Illust/handleIllusts", {array: pickupIllust}, {root: true})
-
-                        return {illusts, manga, novels, pickup}
+                        let result = {illusts, manga, novels, pickup, mangaSeries, novelSeries}
+                        commit("updateProfile", {uid, ...result})
+                        return result
                     })
                 }
             })
         },
     }, getters: {
+        //获取用户数据
         getUser: (state) => (id) => {
             return state.userData.get(id)
-        }, getProfile: (state) => (id) => {
+        },
+        //获取用户作品概况
+        getProfile: (state) => (id) => {
             return state.userProfile.get(id)
         },
     },
