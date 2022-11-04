@@ -1,5 +1,5 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" style="padding: 0 20px">
     <!--  <el-container direction="horizontal">-->
     <el-header>
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
@@ -18,7 +18,7 @@
 <script>
 import UserTitle from "@/components/v2/user/user-title";
 import {Title} from "gin-utils/dist/utils/DomUtils";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "Home",
@@ -40,12 +40,17 @@ export default {
   computed: {},
   methods: {
     ...mapGetters("Account", ['getCurrent']),
+    ...mapActions('User', ['profileAll']),
     typeChanged(e) {
       this.$router.push(`/user/${this.uid}/${e}`)
     },
     load(route, force) {
       this.type = route.path.split('/')[3]
       this.uid = Number(route.params.uid);
+
+      this.profileAll({uid: this.uid, force}).then(res => {
+        console.log(res)
+      })
     }
   },
   mounted() {

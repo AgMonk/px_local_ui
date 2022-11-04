@@ -4,28 +4,33 @@
     <h4>点击刷新</h4>
   </div>
   <div v-else v-loading="loading" :style="{height:avatarSize+20+'px'}" class="user-title">
-    <!--   作者头像-->
-    <span v-if="!loading">
-      <user-avatar :size="avatarSize" :uid="uid" big />
-    </span>
-    <!--作者-->
-    <span>
-      <user-link :size="fontSize" :uid="uid" />
-      <span v-if="data && !disableFollowButton" style="margin-left: 10px">
-        <el-button v-if="data.isFollowed" :disabled="unfollowing" size="small" type="info" @click="unfollow">
-          <el-icon v-if="unfollowing" class="is-loading" color="blue">
-            <Loading />
-          </el-icon>
-          <span v-else>已关注</span>
-        </el-button>
-        <el-button v-else :disabled="following" size="small" type="success" @click="follow">
-          <el-icon v-if="following" class="is-loading" color="blue">
-            <Loading />
-          </el-icon>
-          <span v-else>关注</span>
-        </el-button>
+    <div><!--   作者头像-->
+      <span v-if="!loading">
+        <user-avatar :size="avatarSize" :uid="uid" big />
       </span>
-    </span>
+         <!--作者-->
+      <span>
+        <user-link :size="fontSize" :uid="uid" />
+        <span v-if="data && !disableFollowButton" style="margin-left: 10px">
+          <el-button v-if="data.isFollowed" :disabled="unfollowing" size="small" type="info" @click="unfollow">
+            <el-icon v-if="unfollowing" class="is-loading" color="blue">
+              <Loading />
+            </el-icon>
+            <span v-else>已关注</span>
+          </el-button>
+          <el-button v-else :disabled="following" size="small" type="success" @click="follow">
+            <el-icon v-if="following" class="is-loading" color="blue">
+              <Loading />
+            </el-icon>
+            <span v-else>关注</span>
+          </el-button>
+        </span>
+      </span>
+    </div>
+    <!--    社交媒体-->
+    <div v-if="data&&data.social">
+      <el-link v-for="({url},label) in data.social" :href="url" class="social-link" target="_blank" type="success">{{ label }}</el-link>
+    </div>
   </div>
 </template>
 
@@ -130,5 +135,9 @@ export default {
 .user-title {
   text-align: left;
 
+}
+
+.social-link {
+  margin-right: 5px;
 }
 </style>
