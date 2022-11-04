@@ -64,6 +64,7 @@ export default {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
         },
+        //请求作品详情
         detail: ({dispatch, commit, state, rootGetters}, {pid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.detail, force, key: pid, seconds: 10 * 60, requestMethod: () => {
@@ -106,7 +107,9 @@ export default {
                 state.bookmarkData.delete(pid)
                 return res
             })
-        }, addBookmark: ({dispatch, commit, state, rootGetters}, pid) => {
+        },
+        //添加收藏
+        addBookmark: ({dispatch, commit, state, rootGetters}, pid) => {
             return rootGetters["getApi"].bookmark.addIllust({
                 comment: "", tags: [], illust_id: pid, restrict: 0,
             }).then(id => {
@@ -118,12 +121,16 @@ export default {
                     return res.id
                 })
             })
-        }, bookmarkData: ({dispatch, commit, state, rootGetters}, pid) => {
+        },
+        //查询收藏数据
+        bookmarkData: ({dispatch, commit, state, rootGetters}, pid) => {
             return rootGetters["getApi"].illustManga.bookmarkData(pid).then(res => {
                 state.bookmarkData.set(pid, res.bookmarkData)
                 return res.bookmarkData;
             })
-        }, followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
+        },
+        //最新绘画
+        followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.latest, force, key: page, seconds: 10 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
@@ -137,7 +144,9 @@ export default {
                     })
                 }
             })
-        }, search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
+        },
+        //搜索
+        search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 10 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.search(keyword, {
