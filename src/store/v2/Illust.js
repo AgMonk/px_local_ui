@@ -19,7 +19,16 @@ const simplify = (array) => {
 
 export default {
     namespaced: true, state: {
-        latest: new Map(), detail: new Map(), search: new Map(), bookmarkData: new Map(), illustData: new Map(),
+        // 最新作品缓存
+        latest: new Map(),
+        // 详情缓存
+        detail: new Map(),
+        // 搜索缓存
+        search: new Map(),
+        // 收藏数据
+        bookmarkData: new Map(),
+        // 作品信息数据
+        illustData: new Map(),
     }, mutations: {
         method(state, payload) {
 
@@ -102,7 +111,9 @@ export default {
                     })
                 }
             })
-        }, delBookmark: ({dispatch, commit, state, rootGetters}, {pid, bmkId}) => {
+        },
+        //删除收藏
+        delBookmark: ({dispatch, commit, state, rootGetters}, {pid, bmkId}) => {
             return rootGetters["getApi"].bookmark.delIllust(bmkId).then(res => {
                 state.bookmarkData.delete(pid)
                 return res
