@@ -50,7 +50,7 @@ export default {
 
         }, userInfo: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.user, force, key: uid, seconds: 10 * 60, requestMethod: () => {
+                caches: state.user, force, key: uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].user.userInfo(uid, 1, "zh").then(res => {
                         res.avatar = res.image
                         res.avatarBig = res.imageBig
@@ -68,7 +68,7 @@ export default {
         //作品概况
         profileAll: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.profile, force, key: uid, seconds: 10 * 60, requestMethod: () => {
+                caches: state.profile, force, key: uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].user.profileAll(uid, 'zh').then((res) => {
                         console.log(res)
                         let {illusts, manga, novels, pickup, mangaSeries, novelSeries} = res
@@ -92,7 +92,7 @@ export default {
         // 查询用户插画/漫画
         profileIllusts: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.illusts, force, key: uid + ids.join(','), seconds: 10 * 60, requestMethod: () => {
+                caches: state.illusts, force, key: uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].user.profileIllusts(uid, ids, 'zh').then((res) => {
                         const array = Object.values(res.works)
                         commit("Illust/handleIllusts", {array}, {root: true})

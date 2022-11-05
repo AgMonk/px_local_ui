@@ -88,7 +88,7 @@ export default {
         },
         illustsRoots: ({dispatch, commit, state, rootGetters}, {force, pid, page}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.roots, force, key: pid + "_" + page, seconds: 10 * 60, requestMethod: () => {
+                caches: state.roots, force, key: pid + "_" + page, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].comments.illustsRoots(pid, page, 10, "zh").then(res => {
                         const {comments} = res
                         commit("handleComments", comments)
@@ -100,7 +100,7 @@ export default {
         },
         illustsReplies: ({dispatch, commit, state, rootGetters}, {force, commentId, page}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.replies, force, key: commentId + "_" + page, seconds: 10 * 60, requestMethod: () => {
+                caches: state.replies, force, key: commentId + "_" + page, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].comments.illustsReplies(commentId, page, "zh").then(res => {
                         const {comments} = res
                         commit("handleComments", comments)

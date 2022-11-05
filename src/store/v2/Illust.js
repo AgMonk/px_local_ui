@@ -76,7 +76,7 @@ export default {
         //请求作品详情
         detail: ({dispatch, commit, state, rootGetters}, {pid, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.detail, force, key: pid, seconds: 10 * 60, requestMethod: () => {
+                caches: state.detail, force, key: pid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.detail(pid).then(item => {
                         //保存收藏数据
                         commit("updateBmkData", item);
@@ -143,7 +143,7 @@ export default {
         //最新绘画
         followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.latest, force, key: page, seconds: 10 * 60, requestMethod: () => {
+                caches: state.latest, force, key: page, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
                         handleTagTranslation(res)
                         const {tagTranslation, thumbnails} = res
@@ -159,7 +159,7 @@ export default {
         //搜索
         search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 10 * 60, requestMethod: () => {
+                caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.search(keyword, {
                         p, mode, scd, ecd, order: 'date_d', lang: 'zh',
                     }).then(res => {
