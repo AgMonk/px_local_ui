@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       isInit: true,
-      hasNext: true,
       loading: false,
       failed: false,
       errorCount: 0,
@@ -50,7 +49,6 @@ export default {
       this.loading = true;
       method(params).then(res => {
         //判断是否还有更多内容
-        this.hasNext = this.getHasNext(res, this.isInit)
         this.loading = false;
         this.failed = false;
         //请求成功，抛出结果
@@ -58,7 +56,6 @@ export default {
         this.isInit = false;
       }).catch(e => {
         console.error(e)
-
         if (e.message.startsWith('timeout of ') && this.autoRetry && this.errorCount < this.maxError) {
           //当超时时、如果开启了自动重试、且次数没有超出限制,自动重试
           this.errorCount++;
@@ -99,7 +96,7 @@ export default {
     //最大高度
     maxHeight: {
       type: Number,
-      default: 300,
+      default: 500,
     },
     //初次请求方法
     initRequest: {
@@ -125,6 +122,11 @@ export default {
     },
     //是否准备好了
     ready: {
+      type: Boolean,
+      default: true,
+    },
+    //是否还有更多数据
+    hasNext: {
       type: Boolean,
       default: true,
     },

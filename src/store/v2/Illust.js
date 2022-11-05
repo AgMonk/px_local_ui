@@ -73,6 +73,30 @@ export default {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
         },
+        recommendInit: ({dispatch, commit, state, rootGetters}, pid) => {
+            return rootGetters["getApi"].illustManga.recommendInit(pid, 24, 'zh').then(res => {
+                console.log(res);
+                let {illusts, nextIds} = res
+                nextIds = nextIds.map(i => Number(i))
+                illusts = illusts.filter(i => !i.hasOwnProperty('isAdContainer'))
+                commit("handleIllusts", {array: illusts})
+
+                illusts = illusts.map(({id, uid}) => {
+                    return {id, uid}
+                });
+                return {illusts, nextIds}
+            })
+        },
+        recommendIllusts: ({dispatch, commit, state, rootGetters}, ids) => {
+            return rootGetters["getApi"].illustManga.recommendIllusts(ids, 'zh').then(illusts => {
+                illusts = illusts.filter(i => !i.hasOwnProperty('isAdContainer'))
+                commit("handleIllusts", {array: illusts})
+                illusts = illusts.map(({id, uid}) => {
+                    return {id, uid}
+                });
+                return illusts
+            })
+        },
         //请求作品详情
         detail: ({dispatch, commit, state, rootGetters}, {pid, force}) => {
             return CacheUtils.getCacheByTime({

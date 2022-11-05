@@ -184,7 +184,7 @@ export default {
       if (!illusts) {
         return;
       }
-      console.debug("添加数据", illusts)
+      console.log("添加数据", illusts)
       illusts.forEach(i => {
         i.blocked = this.isBlocked(i)
       })
@@ -196,11 +196,14 @@ export default {
       const {groupBookmarked} = ui;
       if (groupBookmarked) {
         //如果需要分组
-        this.normal.push(...illusts.filter(i => !this.isBookmarked(i.id)))
-        this.bookmarked.push(...illusts.filter(i => this.isBookmarked(i.id)))
+        this.normal = [...this.normal, ...illusts.filter(i => !this.isBookmarked(i.id))];
+        // this.normal.push(...illusts.filter(i => !this.isBookmarked(i.id)))
+        // this.bookmarked.push(...illusts.filter(i => this.isBookmarked(i.id)))
+        this.bookmarked = [...this.bookmarked, ...illusts.filter(i => this.isBookmarked(i.id))]
         console.debug(`常规:${this.normal.length}个 已收藏:${this.bookmarked.length}`)
       } else {
-        this.normal.push(...illusts);
+        this.normal = [...this.normal, ...illusts];
+        // this.normal.push(...illusts);
         console.debug(`常规:${this.normal.length}个 `)
       }
     }
