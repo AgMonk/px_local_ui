@@ -3,9 +3,18 @@
     <!--  <el-container direction="horizontal">-->
     <el-main>
       <div>
-        <h2 style="color: white;text-align: left;">推荐作品</h2>
+        <h2 style="color: white;text-align: left;">推荐作品
+          <el-switch
+              v-model="show"
+              class="ml-2"
+              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+              @change="changeShow"
+          />
+        </h2>
+
       </div>
       <load-more-div
+          v-if="show"
           :has-next="hasNext"
           :init-request="init"
           :load-more-request="loadMore"
@@ -35,6 +44,7 @@ export default {
   data() {
     return {
       data: [],
+      show: false,
       ids: [],
       nextIds: [],
       hasNext: true,
@@ -43,6 +53,11 @@ export default {
   computed: {},
   methods: {
     ...mapActions("Illust", ['recommendInit', 'recommendIllusts']),
+    changeShow(e) {
+      if (!e) {
+        this.hasNext = true
+      }
+    },
     init() {
       return this.recommendInit(this.pid);
     },

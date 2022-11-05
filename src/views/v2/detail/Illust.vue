@@ -117,7 +117,7 @@
             <!--            todo 追加标签-->
           </div>
           <!--        评论区-->
-          <div v-if="data.commentCount>0">
+          <div v-if="data.commentCount>0" style="margin-top: 20px">
             <illust-comment-area :pid="data.id" />
           </div>
           <!--           推荐作品-->

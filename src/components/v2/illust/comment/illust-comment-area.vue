@@ -1,27 +1,37 @@
 <template>
-  <div style="color: white;text-align: left;background-color: rgba(1,48,133,0.3)">
-    <h2>评论区
-      <comment-stamp :pid="pid" @success="commentSuccess" />
-      <comment-text :pid="pid" @success="commentSuccess" />
-    </h2>
-    <div>
-      <!--        评论内容-->
-      <div id="scrollbar"
-           v-infinite-scroll="refresh"
-           :infinite-scroll-disabled="loading || !hasNext"
-           style="overflow:auto;max-height: 500px;min-height: 100px"
-      >
-        <illust-comment v-for="comment in data" :data="comment" :pid="pid" is-root style="margin-bottom: 2px" @deleted="deleted" />
+  <el-container direction="vertical" style="background-color: rgba(1,48,133,0.3)">
+    <!--  <el-container direction="horizontal">-->
+    <el-main>
+      <div style="color: white;text-align: left;">
+        <h2>评论区
+          <comment-stamp :pid="pid" @success="commentSuccess" />
+          <comment-text :pid="pid" @success="commentSuccess" />
+          <el-switch
+              v-model="show"
+              class="ml-2"
+              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+          />
+        </h2>
+        <div v-if="show">
+          <!--        评论内容-->
+          <div id="scrollbar"
+               v-infinite-scroll="refresh"
+               :infinite-scroll-disabled="loading || !hasNext"
+               style="overflow:auto;max-height: 500px;min-height: 100px"
+          >
+            <illust-comment v-for="comment in data" :data="comment" :pid="pid" is-root style="margin-bottom: 2px" @deleted="deleted" />
 
-        <h3 v-show="!hasNext" style="color:white">到底了</h3>
-        <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
-          <h3>请求失败</h3>
-          <h4>点击刷新</h4>
+            <h3 v-show="!hasNext" style="color:white">到底了</h3>
+            <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
+              <h3>请求失败</h3>
+              <h4>点击刷新</h4>
+            </div>
+            <div v-else-if="loading" v-loading="loading" style="min-height: 100px"></div>
+          </div>
         </div>
-        <div v-else-if="loading" v-loading="loading" style="min-height: 100px"></div>
       </div>
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -37,6 +47,7 @@ export default {
     return {
       data: [],
       page: 1,
+      show: false,
       hasNext: true,
       loading: false,
       failed: false,
