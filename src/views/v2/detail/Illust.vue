@@ -120,7 +120,10 @@
           <div v-if="data.commentCount>0">
             <illust-comment-area :pid="data.id" />
           </div>
-          <!--          todo 推荐作品-->
+          <!--           推荐作品-->
+          <div v-if="data" style="margin-top: 20px">
+            <illust-recommend :pid="data.id" />
+          </div>
         </div>
       </retry-div>
 
@@ -167,10 +170,12 @@ import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import CopyElButton from "@/components/v2/copy/copy-el-button";
 import {ElMessage} from "element-plus";
 import RetryDiv from "@/components/v2/retry-div";
+import IllustRecommend from "@/components/v2/illust/comment/illust-recommend";
 
 export default {
   name: "Illust",
   components: {
+    IllustRecommend,
     RetryDiv,
     CopyElButton,
     BlockTagButton,
