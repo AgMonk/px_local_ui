@@ -24,7 +24,7 @@ export default {
       total: 655350,
       data: [],
       params: {
-        page: 1,
+        page: Number(this.$route.params.page),
         force: false,
       }
     }
@@ -58,7 +58,7 @@ export default {
   },
   mounted() {
     Title.set("最新绘画")
-    this.load(this.$route)
+    // this.load(this.$route)
   },
   watch: {
     $route(to) {
