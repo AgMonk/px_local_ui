@@ -6,24 +6,36 @@
     </el-header>
     <el-main>
       <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
+        <!--        子路由切换-->
         <el-radio-group v-model="type" size="large" @change="typeChanged">
           <el-radio-button v-for="item in types" :disabled="item.count && data[item.count] && data[item.count].length===0 " :label="item.value">
             {{ item.label }}
             <span v-if="item.count && data[item.count] && data[item.count].length>0">({{ data[item.count].length }})</span>
           </el-radio-button>
         </el-radio-group>
+
+        <!--        精选作品-->
         <div v-if="data.pickup &&data.pickup.length>0 && $route.name==='用户主页'" style="text-align: left">
           <h3 style="color: white">精选</h3>
           <el-row>
             <el-col v-for="item in data.pickup" :span="6">
               <el-link v-if="item.type==='fanbox'" :href="item.contentUrl" :underline="false" target="_blank">
                 <!--        fanbox 封面-->
-                <div class="fanbox-card">
-                  <el-image v-if="item.imageUrl" :src="item.imageUrl" class="absolute-center" style="width: 250px;  border-radius: 15px;" />
-                  <span class="absolute-center" style="position: absolute;top:50%;transform: translate(-50%,-50%);background-color: rgba(240,248,255,0.41);font-size: 30px">
+                <div class="pickup-card">
+                  <el-image v-if="item.imageUrl" :src="item.imageUrl" class="absolute-center pickup-image" />
+                  <span class="absolute-center" style="background-color: rgba(240,248,255,0.41);font-size: 30px">
                     Fanbox</span>
                 </div>
               </el-link>
+              <el-link v-if="item.type==='illustSeries'" :href="item.contentUrl" :underline="false" target="_blank">
+                <!--        todo 作品系列 -->
+                <div class="pickup-card">
+                  <el-image v-if="item.url" :src="item.url" class="absolute-center pickup-image" />
+                  <span class="absolute-center" style="background-color: rgba(240,248,255,0.41);font-size: 30px">
+                    {{ item.title }}</span>
+                </div>
+              </el-link>
+
               <illust-image v-if="item.hasOwnProperty('illustType')" :info="item" :size="250" style="margin-right: 10px"></illust-image>
             </el-col>
           </el-row>
@@ -61,7 +73,7 @@ export default {
         {label: '约稿', value: 'request'},
       ],
       profile: {},
-      data: {},
+      data: undefined,
       params: {
         force: false,
         uid: Number(this.$route.params.uid),
@@ -83,6 +95,7 @@ export default {
     //成功回调
     success(res) {
       this.data = res
+      console.log(res)
       res.pickup.forEach(i => i.showImage = true)
     },
     //失败回调
@@ -119,7 +132,7 @@ export default {
 </script>
 
 <style scoped>
-.fanbox-card {
+.pickup-card {
   margin-right: 10px;
   border-radius: 15px;
   height: 250px;
@@ -129,6 +142,12 @@ export default {
   color: blue;
   /*background-color: aliceblue;*/
   position: relative;
+}
+
+.pickup-image {
+  width: 250px;
+  max-height: 250px;
+  border-radius: 15px;
 }
 
 .absolute-center {
