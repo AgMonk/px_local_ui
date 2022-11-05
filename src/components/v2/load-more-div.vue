@@ -48,11 +48,13 @@ export default {
         return
       }
       this.loading = true;
-      method(params).then(response => {
-        this.hasNext = this.getHasNext(response, this.isInit)
+      method(params).then(res => {
+        //判断是否还有更多内容
+        this.hasNext = this.getHasNext(res, this.isInit)
         this.loading = false;
         this.failed = false;
-        this.$emit("success", {response, isInit: this.isInit})
+        //请求成功，抛出结果
+        this.$emit("success", res, this.isInit)
         this.isInit = false;
       }).catch(e => {
         console.error(e)

@@ -41,8 +41,9 @@ export default {
       })
     },
     //成功回调
-    success(res) {
-      this.data.push(...res)
+    success(response, isInit) {
+      console.log(isInit)
+      this.data.push(...response)
     },
     //失败回调
     failed(e) {
