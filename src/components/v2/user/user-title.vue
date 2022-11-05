@@ -1,7 +1,7 @@
 <template>
   <retry-div :min-height="110" :params="params" :request="request" @failed="failed" @success="success">
     <div :style="{height:avatarSize+20+'px'}" class="user-title"><!--   作者头像-->
-      <span v-if="!loading">
+      <span>
         <user-avatar :size="avatarSize" :uid="uid" big />
       </span>
                                                                  <!--作者-->
@@ -113,7 +113,6 @@ export default {
     },
   },
   mounted() {
-    this.load(this.uid)
   },
   watch: {
     uid(to) {

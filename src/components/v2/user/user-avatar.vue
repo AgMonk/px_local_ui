@@ -1,5 +1,5 @@
 <template>
-  <el-avatar v-if="data" :size="size" :src="big?data.avatarBig:data.avatar" />
+  <el-avatar v-if="data" :size="size" :src="src" />
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
   name: "user-avatar",
   data() {
     return {
-      data: {},
+      data: undefined,
       src: "",
       interval: undefined,
     }
@@ -17,15 +17,26 @@ export default {
   computed: {},
   methods: {
     ...mapGetters("User", ['getUser']),
+    setInterval(uid) {
+      clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        this.load(uid)
+      }, 1000)
+    },
     load(uid) {
       this.data = this.getUser()(uid)
-      if (!this.data) {
-        this.interval = setInterval(() => {
-          this.load(uid)
-        }, 1000)
-        return
+      if (this.data) {
+        const {avatar, avatarBig} = this.data;
+        let url = (this.big && avatarBig) ? avatarBig : avatar;
+        if (url) {
+          this.src = url.replace('https://i.pximg.net', '/pximg')
+          clearInterval(this.interval);
+        } else {
+          this.setInterval(uid)
+        }
+      } else {
+        this.setInterval(uid)
       }
-      clearInterval(this.interval);
     }
   },
   mounted() {
