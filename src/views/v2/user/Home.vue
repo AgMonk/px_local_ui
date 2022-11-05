@@ -1,7 +1,7 @@
 <template>
   <el-container direction="vertical" style="padding: 0 20px">
     <!--  <el-container direction="horizontal">-->
-    <el-header height="90px">
+    <el-header height="110px">
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
     </el-header>
     <el-main v-loading="loading">

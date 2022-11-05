@@ -1,14 +1,10 @@
 <template>
-  <div v-if="failed" style="color: white;cursor: pointer" @click="refresh">
-    <h3>用户信息加载失败</h3>
-    <h4>点击刷新</h4>
-  </div>
-  <div v-else v-loading="loading" :style="{height:avatarSize+20+'px'}" class="user-title">
-    <div><!--   作者头像-->
+  <retry-div :min-height="110" :params="params" :request="request" @failed="failed" @success="success">
+    <div :style="{height:avatarSize+20+'px'}" class="user-title"><!--   作者头像-->
       <span v-if="!loading">
         <user-avatar :size="avatarSize" :uid="uid" big />
       </span>
-         <!--作者-->
+                                                                 <!--作者-->
       <span>
         <user-link :size="fontSize" :uid="uid" />
         <span v-if="data && !disableFollowButton" style="margin-left: 10px">
@@ -29,9 +25,17 @@
     </div>
     <!--    社交媒体-->
     <div v-if="data&&data.social">
-      <el-link v-for="({url},label) in data.social" :href="url" class="social-link" target="_blank" type="success">{{ label }}</el-link>
+      <el-form>
+        <el-form-item>
+          <template #label>
+            <span style="color:white">社交媒体</span>
+          </template>
+          <el-link v-for="({url},label) in data.social" :href="url" class="social-link" target="_blank" type="success">{{ label }}</el-link>
+
+        </el-form-item>
+      </el-form>
     </div>
-  </div>
+  </retry-div>
 </template>
 
 <script>
@@ -41,25 +45,49 @@ import UserAvatar from "@/components/v2/user/user-avatar";
 import {mapActions, mapGetters} from "vuex";
 import {ElMessage} from "element-plus";
 import {Loading} from "@element-plus/icons-vue";
+import RetryDiv from "@/components/v2/retry-div";
 
 export default {
   name: "user-title",
-  components: {UserLink, UserAvatar, Loading},
+  components: {RetryDiv, UserLink, UserAvatar, Loading},
   data() {
     return {
-      failed: false,
-      loading: false,
       data: undefined,
       unfollowing: false,
       following: false,
+      params: {
+        uid: this.uid,
+        force: false,
+      }
     }
   },
   computed: {},
   methods: {
     ...mapGetters("User", ['getUser']),
     ...mapActions("User", ['userInfo']),
+    //刷新请求
     refresh() {
+      this.$refs.cardGroup.clear([])
       this.load(this.uid, true)
+    },
+    //请求
+    request(params) {
+      return this.userInfo(params)
+    },
+    //成功回调
+    success(res) {
+      this.data = res;
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    //加载方法
+    load(uid, force) {
+      this.data = this.getUser()(uid)
+      if (!this.data || !this.data.avatarBig) {
+        this.params = {uid, force}
+      }
     },
     follow() {
       this.following = true;
@@ -83,23 +111,6 @@ export default {
         this.unfollowing = false;
       })
     },
-    load(uid, force) {
-      this.data = this.getUser()(uid)
-      if (!this.data || !this.data.avatarBig) {
-        //发送请求
-        this.loading = true;
-        this.failed = false;
-        this.userInfo({uid, force}).then(res => {
-          console.debug(res)
-          this.data = res;
-        }).catch(e => {
-          console.error(e)
-          this.failed = true;
-        }).finally(() => {
-          this.loading = false;
-        })
-      }
-    }
   },
   mounted() {
     this.load(this.uid)
