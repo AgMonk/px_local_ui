@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       loading: true,
+      errorCount: 0,
       data: {},
     }
   },
@@ -64,7 +65,21 @@ export default {
   computed: {},
   methods: {
     ...mapGetters("Illust", ['getIllust']),
-    failed() {
+    failed(e) {
+      console.error(e)
+      if (this.errorCount < 3) {
+        //自动重试
+        this.errorCount++;
+        console.warn(`图片加载失败 pid = ${this.data.id} ,自动重试 第 ${this.errorCount} 次`)
+        let url = this.data.url
+        this.data.url = ""
+        this.$nextTick(() => {
+          this.data.url = url;
+        })
+      } else {
+        //放弃加载
+        this.loading = false;
+      }
       this.$emit("failed", this.data.id)
     },
     success() {
