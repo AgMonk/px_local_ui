@@ -11,7 +11,7 @@
       <h4>点击刷新</h4>
     </div>
     <div v-else>
-      <slot />
+      <slot v-if="!unmountWhileLoading || !loading" />
     </div>
   </div>
 </template>
@@ -70,9 +70,15 @@ export default {
     },
     //参数
     params: {},
+    //最小高度
     minHeight: {
       type: Number,
       default: 300,
+    },
+    //加载时移除插槽
+    unmountWhileLoading: {
+      type: Boolean,
+      default: false,
     }
   },
 }
