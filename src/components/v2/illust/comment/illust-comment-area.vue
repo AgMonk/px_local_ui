@@ -6,16 +6,20 @@
     </h2>
     <div>
       <!--        评论内容-->
-      <el-scrollbar v-infinite-scroll="refresh" :infinite-scroll-disabled="loading" height="300px">
+      <div v-infinite-scroll="refresh"
+           :infinite-scroll-disabled="loading || !hasNext"
+           :infinite-scroll-immediate="true"
+           style="overflow:auto;max-height: 500px;min-height: 100px"
+      >
         <illust-comment v-for="comment in data" :data="comment" :pid="pid" is-root style="margin-bottom: 2px" @deleted="deleted" />
 
-        <div v-if="!hasNext" style="text-align: center">到底了</div>
+        <h3 v-show="!hasNext" style="color:white">到底了</h3>
         <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
           <h3>请求失败</h3>
           <h4>点击刷新</h4>
         </div>
         <div v-else-if="loading" v-loading="loading" style="min-height: 100px"></div>
-      </el-scrollbar>
+      </div>
     </div>
   </div>
 </template>
