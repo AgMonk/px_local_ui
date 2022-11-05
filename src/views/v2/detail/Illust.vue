@@ -1,15 +1,11 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" style="padding: 0 20px">
     <!--  <el-container direction="horizontal">-->
     <!--    <el-header>{{ pid }}</el-header>-->
-    <el-main v-loading="loading" style="min-height: 500px;">
-      <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
-        <h3>请求失败</h3>
-        <h4>点击刷新</h4>
-      </div>
-      <div v-else style="min-height: 500px;margin-left: 20px;margin-right: 20px">
+    <el-main>
+      <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
         <!--        主界面和右侧边-->
-        <el-container v-if="data" direction="horizontal">
+        <el-container direction="horizontal">
           <!--          主界面-->
           <el-main style="background-color: rgba(1,48,133,0.3);">
             <el-tabs v-if="showTabs" v-model="activeIndex" stretch tab-position="left">
@@ -103,13 +99,11 @@
           </el-aside>
 
         </el-container>
-
         <!--        底部信息-->
-        <div v-if="data">
-
+        <div>
           <!--       标题和描述 -->
           <div style="color: white;text-align: left">
-            <illust-link :pid="pid">
+            <illust-link :pid="data.id">
               <h2 style="color: white;">
                 {{ data.title ? data.title : '无标题' }}
               </h2>
@@ -126,10 +120,9 @@
           <div v-if="data.commentCount>0">
             <illust-comment-area :pid="data.id" />
           </div>
-
           <!--          todo 推荐作品-->
         </div>
-      </div>
+      </retry-div>
 
       <el-dialog v-model="dialog.aria2" append-to-body title="批量下载">
         <el-button size="small" type="primary" @click="selectAll">全选</el-button>
@@ -151,7 +144,7 @@
         </el-scrollbar>
       </el-dialog>
     </el-main>
-    <el-footer></el-footer>
+    <!--    <el-footer></el-footer>-->
   </el-container>
 
 </template>
@@ -172,10 +165,13 @@ import IllustCommentArea from "@/components/v2/illust/comment/illust-comment-are
 import BlockTagButton from "@/components/v2/block-tag-button";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import CopyElButton from "@/components/v2/copy/copy-el-button";
+import {ElMessage} from "element-plus";
+import RetryDiv from "@/components/v2/retry-div";
 
 export default {
   name: "Illust",
   components: {
+    RetryDiv,
     CopyElButton,
     BlockTagButton,
     IllustCommentArea, IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled
@@ -184,6 +180,10 @@ export default {
     return {
       dialog: {
         aria2: false,
+      },
+      params: {
+        pid: Number(this.$route.params.pid),
+        force: false,
       },
       //图片地址
       images: {
@@ -197,10 +197,8 @@ export default {
         download: [],
       },
       activeIndex: 0,
-      loading: false,
       liking: false,
       showTabs: false,
-      failed: false,
       //当前作品数据
       data: undefined,
       //其他作品
@@ -215,6 +213,47 @@ export default {
     ...mapActions("Illust", ['detail']),
     ...mapActions("Aria2", ['addUri', 'addUris']),
     ...mapGetters("User", ['getUser']),
+    //刷新请求
+    refresh() {
+      this.load(this.$route, true)
+    },
+    //请求
+    request(params) {
+      return this.detail(params)
+    },
+    //成功回调
+    success(res) {
+      this.showTabs = false;
+      this.data = res;
+      this.activeIndex = 0;
+      this.others = res.otherIllustIds.map(id => {
+        return {id, showImage: true}
+      })
+
+      this.images.small = []
+      this.images.original = []
+      this.images.download = []
+      for (let i = 0; i < this.data.pageCount; i++) {
+        this.images.small.push(this.getUrl("small", i))
+        this.images.original.push(this.getUrl("original", i))
+        this.images.download.push(this.data.urls.original.replace("_p0", "_p" + i))
+      }
+      //如果有标题 修改浏览器标题
+      res.title && Title.set(res.title)
+
+      //等渲染完成了再加载tabs 避免从图片多的作品切换到少的作品时无畏的404请求
+      this.$nextTick(() => {
+        this.showTabs = true;
+      })
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    //加载方法
+    load(route, force) {
+      this.params = {pid: Number(route.params.pid), force}
+    },
     change(e) {
       console.log(e)
     },
@@ -262,52 +301,12 @@ export default {
         this.liking = false;
       })
     },
-    refresh() {
-      this.load(this.$route)
-    },
     getUrl(type, index) {
       return this.data.urls[type].replace('https://i.pximg.net', '/pximg').replace("_p0", "_p" + index)
     },
-    load(route, force) {
-      const {pid} = route.params
-      this.pid = Number(pid)
-      this.loading = true
-      this.detail({pid, force}).then(res => {
-        console.log(res)
-        this.failed = false
-        this.showTabs = false;
-        this.data = res;
-        this.activeIndex = 0;
-        this.others = res.otherIllustIds.map(id => {
-          return {id, showImage: true}
-        })
-
-        this.images.small = []
-        this.images.original = []
-        this.images.download = []
-        for (let i = 0; i < this.data.pageCount; i++) {
-          this.images.small.push(this.getUrl("small", i))
-          this.images.original.push(this.getUrl("original", i))
-          this.images.download.push(this.data.urls.original.replace("_p0", "_p" + i))
-        }
-        //如果有标题 修改浏览器标题
-        res.title && Title.set(res.title)
-
-        //等渲染完成了再加载tabs 避免从图片多的作品切换到少的作品时无畏的404请求
-        this.$nextTick(() => {
-          this.showTabs = true;
-        })
-      }).catch(e => {
-        console.error(e)
-        this.failed = true
-      }).finally(() => {
-        this.loading = false
-      })
-    }
   },
   mounted() {
     Title.set("作品详情")
-    this.refresh()
   },
   watch: {
     $route(to) {

@@ -24,7 +24,7 @@
       </span>
     </div>
     <!--    社交媒体-->
-    <div v-if="data&&data.social">
+    <div v-if="data&&data.social&&Object.keys(data.social).length>0">
       <el-form>
         <el-form-item>
           <template #label>

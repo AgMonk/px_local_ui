@@ -1,6 +1,6 @@
 <template>
   <el-container direction="vertical">
-    <el-main style="min-height: 300px">
+    <el-main>
       <retry-div :params="params" :request="request" @failed="failed" @success="success">
         <illust-card-group ref="cardGroup" @request-refresh="refresh" />
       </retry-div>
