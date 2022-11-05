@@ -6,9 +6,9 @@
     </h2>
     <div>
       <!--        评论内容-->
-      <div v-infinite-scroll="refresh"
+      <div id="scrollbar"
+           v-infinite-scroll="refresh"
            :infinite-scroll-disabled="loading || !hasNext"
-           :infinite-scroll-immediate="true"
            style="overflow:auto;max-height: 500px;min-height: 100px"
       >
         <illust-comment v-for="comment in data" :data="comment" :pid="pid" is-root style="margin-bottom: 2px" @deleted="deleted" />
@@ -100,5 +100,20 @@ export default {
 </script>
 
 <style scoped>
+#scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
 
+#scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: rgb(127, 188, 232);
+}
+
+#scrollbar::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.07);
+
+}
 </style>
