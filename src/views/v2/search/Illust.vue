@@ -1,14 +1,10 @@
 <template>
-  <el-container v-loading="loading" direction="vertical">
+  <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <el-main>
-      <div v-if="failed" style="color:white;cursor: pointer;" @click="refresh">
-        <h3>请求失败</h3>
-        <h4>点击刷新</h4>
-      </div>
-      <div v-if="!failed" style="min-height: 300px">
+      <retry-div :params="params" :request="request" @failed="failed" @success="success">
         <illust-card-group ref="cardGroup" @request-refresh="refresh" />
-      </div>
+      </retry-div>
     </el-main>
   </el-container>
 </template>
@@ -17,47 +13,55 @@
 import {mapActions} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 import {Title} from "gin-utils/dist/utils/DomUtils";
+import RetryDiv from "@/components/v2/retry-div";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "Illust",
-  components: {IllustCardGroup},
+  components: {RetryDiv, IllustCardGroup},
   data() {
     return {
-      failed: false,
-      loading: false,
+      params: {
+        force: false,
+        keyword: this.$route.params.keyword,
+        params: this.$route.query
+      },
     }
   },
   computed: {},
   methods: {
     ...mapActions("Illust", ['search']),
+    //刷新请求
     refresh() {
+      this.$refs.cardGroup.clear([])
       this.load(this.$route, true)
     },
-    load(route, force) {
-      const query = route.query
-      const keyword = route.params.keyword
-      this.failed = false;
-      this.loading = true;
-      this.search({keyword, params: query, force}).then(res => {
-        console.log(res)
-        const {data, total, popular, relatedTags} = res
-        this.failed = false;
-        this.$emit("change-total", total);
-        this.$nextTick(() => {
-          this.$refs.cardGroup.clear(data, [...popular.recent, ...popular.permanent])
-        })
-        // todo 显示相关标签
-      }).catch(e => {
-        console.error(e)
-        this.failed = true;
-      }).finally(() => {
-        this.loading = false;
+    request(params) {
+      return this.search(params)
+    },
+    //成功回调
+    success(res) {
+      const {data, total, popular, relatedTags} = res
+      this.$emit("change-total", total);
+      this.$nextTick(() => {
+        this.$refs.cardGroup.clear(data, [...popular.recent, ...popular.permanent])
       })
+      // todo 显示相关标签
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    load(route, force) {
+      this.params = {
+        force,
+        keyword: route.params.keyword,
+        params: route.query,
+      }
     }
   },
   mounted() {
     Title.set('搜索绘画')
-    this.load(this.$route)
   },
   watch: {
     $route(to) {
