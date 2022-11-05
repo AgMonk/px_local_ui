@@ -36,6 +36,9 @@ export default {
       if (!method) {
         return
       }
+      if (!this.ready) {
+        return;
+      }
       this.loading = true;
       method(params).then(res => {
         this.failed = false;
@@ -54,6 +57,7 @@ export default {
   },
   watch: {
     request(method) {
+
       console.debug("方法变动", method)
       this.load(method, this.params)
     },
@@ -79,7 +83,13 @@ export default {
     unmountWhileLoading: {
       type: Boolean,
       default: false,
-    }
+    },
+    //加载时移除插槽
+    ready: {
+      type: Boolean,
+      default: true,
+    },
+
   },
 }
 
