@@ -10,7 +10,7 @@ export default {
     namespaced: true,
     state: {
         //api
-        api: new Aria2(axios.create({baseURL: '/aria2', timeout: 2000})),
+        api: new Aria2(axios.create({baseURL: '/aria2', timeout: 5000})),
         //由本UI添加的任务 gid
         gidList: [],
         //周期检查任务状态
