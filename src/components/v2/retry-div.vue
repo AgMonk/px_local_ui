@@ -73,7 +73,6 @@ export default {
   },
   watch: {
     request(method) {
-
       console.debug("方法变动", method)
       this.errorCount = 0;
       this.load(method, this.params)
@@ -107,7 +106,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    //加载时移除插槽
+    //是否准备好了
     ready: {
       type: Boolean,
       default: true,
