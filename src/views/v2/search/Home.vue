@@ -237,7 +237,7 @@ export default {
       })
     },
     choseSavedSearch({keyword, dateShortcut}) {
-      console.log('选中已保存的搜索', keyword)
+      console.debug('选中已保存的搜索', keyword)
       this.keyword = keyword
       if (dateShortcut) {
         let array = this.dateRangeShortCuts.filter(i => i.text === dateShortcut)

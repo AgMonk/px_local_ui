@@ -5,7 +5,7 @@
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
     </el-header>
     <el-main>
-      <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
+      <retry-div :min-height="60" :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
         <!--        子路由切换-->
         <el-radio-group v-model="type" size="large" @change="typeChanged">
           <el-radio-button v-for="item in types" :disabled="item.count && data[item.count] && data[item.count].length===0 " :label="item.value">
@@ -95,7 +95,6 @@ export default {
     //成功回调
     success(res) {
       this.data = res
-      console.log(res)
       res.pickup.forEach(i => i.showImage = true)
     },
     //失败回调
