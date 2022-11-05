@@ -2,12 +2,8 @@
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <!--    <el-header style="color:white">{{ $route.name }}</el-header>-->
-    <el-main v-loading="loading">
-      <div v-if="failed" style="color: white;cursor: pointer;height: 300px" @click="refresh">
-        <h3>加载失败</h3>
-        <h4>点击刷新</h4>
-      </div>
-      <div v-else style="min-height: 500px">
+    <el-main>
+      <retry-div :params="params" :ready="ready" :request="request" @failed="failed" @success="success">
         <el-pagination v-model:current-page="page"
                        :layout="layout"
                        :page-size="size"
@@ -25,7 +21,7 @@
                        size="small"
                        @current-change="changePage"
         />
-      </div>
+      </retry-div>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -33,23 +29,24 @@
 </template>
 
 <script>
-import {Title} from "gin-utils/dist/utils/DomUtils";
 import {mapActions, mapGetters} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
+import RetryDiv from "@/components/v2/retry-div";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "IllustManga",
-  components: {IllustCardGroup},
+  components: {RetryDiv, IllustCardGroup},
   data() {
     return {
-      loading: true,
       layout: "prev, pager, next, jumper",
-      failed: false,
+      ready: false,
       illusts: {},
       showDialog: {},
       page: 1,
       size: 60,
       total: 10,
+      params: {},
     }
   },
   computed: {},
@@ -60,40 +57,43 @@ export default {
       console.log(page)
       this.$router.push({query: {p: page}})
     },
+    //刷新请求
     refresh() {
       this.load(this.$route, true)
     },
+    //请求
+    request(params) {
+      return this.profileIllusts(params)
+    },
+    //成功回调
+    success(res) {
+      this.$nextTick(() => {
+        this.$refs.cardGroup && this.$refs.cardGroup.clear(res.map(id => {
+          return {id}
+        }))
+      })
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    //加载方法
     load(route, force) {
       let type = route.path.split('/')[3]
       type = type === 'manga' ? type : 'illusts'
 
-      Title.set(route.name)
-      const uid = Number(route.params.uid);
-      const page = Number(route.query.p || 1);
-
-      this.page = page;
-      this.illusts = this.getProfile()(uid)[type]
+      this.uid = Number(route.params.uid);
+      this.page = Number(route.query.p || 1);
+      this.illusts = this.getProfile()(this.uid)[type]
       this.total = this.illusts.length
-
-      //截取数组的起始位置
-      const start = (page - 1) * this.size
-      const end = Math.min(page * this.size, this.illusts.length)
+      const start = (this.page - 1) * this.size
+      const end = Math.min(this.page * this.size, this.illusts.length)
       const ids = this.illusts.slice(start, end)
-      this.loading = true;
-      this.profileIllusts({uid, ids, force}).then(res => {
-        this.failed = false;
-        this.$nextTick(() => {
-          this.$refs.cardGroup && this.$refs.cardGroup.clear(res.map(id => {
-            return {id}
-          }))
-        })
-      }).catch(e => {
-        console.error(e)
-        this.failed = true;
-      }).finally(() => {
-        this.loading = false
-      })
-    }
+
+      this.params = {uid: this.uid, ids, force}
+      //参数已准备好
+      this.ready = true;
+    },
   },
   mounted() {
     this.load(this.$route)
