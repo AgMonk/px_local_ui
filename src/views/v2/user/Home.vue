@@ -4,12 +4,8 @@
     <el-header height="110px">
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
     </el-header>
-    <el-main v-loading="loading">
-      <div v-if="failed" style="color: white;cursor: pointer;height: 300px" @click="refresh">
-        <h3>加载失败</h3>
-        <h4>点击刷新</h4>
-      </div>
-      <div v-else style="min-height: 500px">
+    <el-main>
+      <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
         <el-radio-group v-model="type" size="large" @change="typeChanged">
           <el-radio-button v-for="item in types" :disabled="item.count && data[item.count] && data[item.count].length===0 " :label="item.value">
             {{ item.label }}
@@ -33,9 +29,9 @@
           </el-row>
         </div>
         <div style="margin-top: 10px">
-          <router-view v-if="!loading && !failed" />
+          <router-view />
         </div>
-      </div>
+      </retry-div>
     </el-main>
     <!--    <el-footer></el-footer>-->
   </el-container>
@@ -47,16 +43,16 @@ import UserTitle from "@/components/v2/user/user-title";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import {mapActions, mapGetters} from "vuex";
 import IllustImage from "@/components/v2/illust/illust-image";
+import RetryDiv from "@/components/v2/retry-div";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "Home",
-  components: {IllustImage, UserTitle},
+  components: {RetryDiv, IllustImage, UserTitle},
   data() {
     return {
-      uid: undefined,
-      type: undefined,
-      loading: true,
-      failed: false,
+      uid: Number(this.$route.params.uid),
+      type: this.$route.path.split('/')[3],
       types: [
         {label: '插画', value: 'illust', count: 'illusts'},
         {label: '漫画', value: 'manga', count: 'manga'},
@@ -66,37 +62,49 @@ export default {
       ],
       profile: {},
       data: {},
+      params: {
+        force: false,
+        uid: Number(this.$route.params.uid),
+      },
     }
   },
   computed: {},
   methods: {
     ...mapGetters("Account", ['getCurrent']),
     ...mapActions('User', ['profileAll']),
+    //刷新请求
+    refresh() {
+      this.load(this.$route, true)
+    },
+    //请求
+    request(params) {
+      return this.profileAll(params)
+    },
+    //成功回调
+    success(res) {
+      this.data = res
+      res.pickup.forEach(i => i.showImage = true)
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    //加载方法
+    load(route, force) {
+      this.getParam(route)
+      this.params = {uid: this.uid, force}
+    },
+    //从路由获取参数
+    getParam(route) {
+      this.type = route.path.split('/')[3]
+      this.uid = Number(route.params.uid);
+    },
     typeChanged(e) {
       this.$router.push(`/user/${this.uid}/${e}`)
     },
-    refresh() {
-      this.load(this.$route)
-    },
-    load(route, force) {
-      this.type = route.path.split('/')[3]
-      this.uid = Number(route.params.uid);
-      this.loading = true;
-      this.profileAll({uid: this.uid, force}).then(res => {
-        this.failed = false;
-        this.data = res
-        res.pickup.forEach(i => i.showImage = true)
-      }).catch(e => {
-        console.error(e)
-        this.failed = true;
-      }).finally(() => {
-        this.loading = false;
-      })
-    }
   },
   mounted() {
     Title.set("用户主页")
-    this.load(this.$route)
   },
   watch: {
     $route(to) {
