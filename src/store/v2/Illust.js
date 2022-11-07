@@ -3,6 +3,7 @@
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {clearIllustDetail, clearIllustInfo, handleTagTranslation, translateTagList} from "@/assets/v2/axios";
+import {CancelerCache} from "pixiv-web-api-for-browser/dist/src/cache/CancelerCache";
 
 /**
  * 精简作品的字段
@@ -99,6 +100,7 @@ export default {
         },
         //请求作品详情
         detail: ({dispatch, commit, state, rootGetters}, {pid, force}) => {
+            CancelerCache.cancel("illust_detail")
             return CacheUtils.getCacheByTime({
                 caches: state.detail, force, key: pid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.detail(pid).then(item => {
@@ -166,6 +168,7 @@ export default {
         },
         //最新绘画
         followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
+            CancelerCache.cancel("illust_follow_latest")
             return CacheUtils.getCacheByTime({
                 caches: state.latest, force, key: page, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
@@ -182,6 +185,7 @@ export default {
         },
         //搜索
         search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
+            CancelerCache.cancel("illust_search")
             return CacheUtils.getCacheByTime({
                 caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.search(keyword, {
