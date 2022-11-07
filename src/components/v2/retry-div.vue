@@ -21,7 +21,7 @@ import {ElMessage} from "element-plus";
 
 export default {
   name: "retry-div",
-  emits: ["success", "failed"],
+  emits: ["success", "failed", 'canceled'],
   data() {
     return {
       loading: true,
@@ -58,6 +58,9 @@ export default {
           setTimeout(() => {
             this.load(method, params)
           }, 3000)
+        } else if (e.message === 'canceled') {
+          ElMessage.warning(`请求已取消`)
+          this.$emit("canceled", e)
         } else {
           //报错，抛出异常
           this.failed = true;
