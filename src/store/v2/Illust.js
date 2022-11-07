@@ -79,9 +79,7 @@ export default {
                 const {tagTranslation, thumbnails, recommendedIllusts} = res
                 const {illust} = thumbnails
                 commit("handleIllusts", {array: illust, dic: tagTranslation})
-                return illust.map(({id, uid}) => {
-                    return {id, uid}
-                });
+                return simplify(illust)
             })
         },
         recommendInit: ({dispatch, commit, state, rootGetters}, pid) => {
@@ -91,21 +89,14 @@ export default {
                 nextIds = nextIds.map(i => Number(i))
                 illusts = illusts.filter(i => !i.hasOwnProperty('isAdContainer'))
                 commit("handleIllusts", {array: illusts})
-
-                illusts = illusts.map(({id, uid}) => {
-                    return {id, uid}
-                });
-                return {illusts, nextIds}
+                return {illusts: simplify(illusts), nextIds}
             })
         },
         recommendIllusts: ({dispatch, commit, state, rootGetters}, ids) => {
             return rootGetters["getApi"].illustManga.recommendIllusts(ids, 'zh').then(illusts => {
                 illusts = illusts.filter(i => !i.hasOwnProperty('isAdContainer'))
                 commit("handleIllusts", {array: illusts})
-                illusts = illusts.map(({id, uid}) => {
-                    return {id, uid}
-                });
-                return illusts
+                return simplify(illusts)
             })
         },
         //请求作品详情
