@@ -5,7 +5,7 @@
   }"
   >
     <div>
-      <illust-image :info="info" :size="size" @failed="failed" @success="success" />
+      <illust-image :info="info" :size="size" @failed="failed" @success="success" @illust-bookmark-success="$emit('illust-bookmark-success',$event)" />
     </div>
 
     <div class="single-line" style="height: 20px;text-align: left">
@@ -47,7 +47,7 @@ export default {
       data: {},
     }
   },
-  emits: ['failed', 'success'],
+  emits: ['failed', 'success', "illust-bookmark-success"],
   computed: {
     ...mapState("Config", ['config']),
   },

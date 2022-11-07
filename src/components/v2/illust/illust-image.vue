@@ -36,7 +36,7 @@
     </span>
     <!--      收藏按钮-->
     <span class="b1" style="bottom:0 ; right: 0;border-radius:15px">
-      <illust-bookmark-button :pid="info.id" />
+      <illust-bookmark-button :pid="info.id" @illust-bookmark-success="$emit('illust-bookmark-success',$event)" />
     </span>
     <!--      图片数量-->
     <el-tag v-if="data.pageCount && data.pageCount>1" effect="dark" style="position: absolute; top:0 ; right: 0;border-radius:15px">
@@ -61,7 +61,7 @@ export default {
       data: {},
     }
   },
-  emits: ['failed', 'success'],
+  emits: ['failed', 'success', "illust-bookmark-success"],
   computed: {},
   methods: {
     ...mapGetters("Illust", ['getIllust']),

@@ -18,6 +18,7 @@ import {ElMessage} from "element-plus";
 export default {
   name: "illust-bookmark-button",
   components: {Star, StarFilled, Loading},
+  emits: ["illust-bookmark-success"],
   data() {
     return {
       loading: false,
@@ -36,6 +37,7 @@ export default {
       this.loading = true;
       this.addBookmark(this.pid).then(() => {
         ElMessage.success("收藏成功")
+        this.$emit("illust-bookmark-success", this.pid)
         this.loading = false;
         this.load();
       }).catch(() => {

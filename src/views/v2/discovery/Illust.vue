@@ -3,7 +3,7 @@
     <!--  <el-container direction="horizontal">-->
     <el-main>
       <load-more-div :init-request="request" :load-more-request="request" :max-height="600" :params="params" @success="success">
-        <illust-card-group ref="cardGroup" />
+        <illust-card-group ref="cardGroup" @illust-bookmark-success="illustBookmarkSuccess" />
       </load-more-div>
     </el-main>
   </el-container>
@@ -23,8 +23,7 @@ export default {
     return {
       params: {
         mode: "all",
-        limit: 24,
-        sampleIllustId: undefined,
+        limit: 48,
       },
     }
   },
@@ -37,6 +36,12 @@ export default {
     success(res) {
       console.log(res)
       this.$nextTick(() => {
+        this.$refs.cardGroup.add(res)
+      })
+    },
+    illustBookmarkSuccess(sampleIllustId) {
+      let param = Object.assign({}, this.params, {sampleIllustId})
+      this.discovery(param).then(res => {
         this.$refs.cardGroup.add(res)
       })
     },

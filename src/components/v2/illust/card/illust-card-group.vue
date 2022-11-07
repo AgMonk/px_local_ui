@@ -18,7 +18,7 @@
         </el-col>
       </el-row>
       <!--      常规-->
-      <illust-card-div :data="normal" style="margin-top: 5px" />
+      <illust-card-div :data="normal" style="margin-top: 5px" @illust-bookmark-success="$emit('illust-bookmark-success',$event)" />
       <!--      热门作品-->
       <el-dialog v-if="popular.length>0" v-model="dialogShow.popular" append-to-body close-on-click-modal title="热门作品" width="90%">
         <el-scrollbar :height="scrollbarHeight">
@@ -28,14 +28,14 @@
       <!--      已收藏-->
       <el-dialog v-if="bookmarked.length>0" v-model="dialogShow.bookmarked" append-to-body close-on-click-modal title="已收藏" width="90%">
         <el-scrollbar :height="scrollbarHeight">
-          <illust-card-div :data="bookmarked" />
+          <illust-card-div :data="bookmarked" @illust-bookmark-success="$emit('illust-bookmark-success',$event)" />
         </el-scrollbar>
       </el-dialog>
 
       <!--      已屏蔽-->
       <el-dialog v-if="blocked.length>0" v-model="dialogShow.blocked" append-to-body close-on-click-modal title="已屏蔽" width="90%">
         <el-scrollbar :height="scrollbarHeight">
-          <illust-card-div :data="blocked" />
+          <illust-card-div :data="blocked" @illust-bookmark-success="$emit('illust-bookmark-success',$event)" />
         </el-scrollbar>
       </el-dialog>
 
@@ -50,6 +50,7 @@ import {mapGetters, mapState} from "vuex";
 import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
+import {ArrayUtils} from "gin-utils/dist/utils/ArrayUtils";
 
 //判断一个标签列表是否被屏蔽
 const matchTags = function (list, rules) {
@@ -93,7 +94,7 @@ const matchArrayRule = function (list, arrayRule) {
 export default {
   name: "illust-card-group",
   components: {IllustCardDiv,},
-  emits: ['request-refresh'],
+  emits: ['request-refresh', 'illust-bookmark-success'],
   data() {
     return {
       scrollbarHeight: 500,
@@ -196,13 +197,13 @@ export default {
       const {groupBookmarked} = ui;
       if (groupBookmarked) {
         //如果需要分组
-        this.normal = [...this.normal, ...illusts.filter(i => !this.isBookmarked(i.id))];
+        this.normal = ArrayUtils.distinct([...this.normal, ...illusts.filter(i => !this.isBookmarked(i.id))], (item) => '' + item.id);
         // this.normal.push(...illusts.filter(i => !this.isBookmarked(i.id)))
         // this.bookmarked.push(...illusts.filter(i => this.isBookmarked(i.id)))
-        this.bookmarked = [...this.bookmarked, ...illusts.filter(i => this.isBookmarked(i.id))]
+        this.bookmarked = ArrayUtils.distinct([...this.bookmarked, ...illusts.filter(i => this.isBookmarked(i.id))], (item) => '' + item.id);
         console.debug(`常规:${this.normal.length}个 已收藏:${this.bookmarked.length}`)
       } else {
-        this.normal = [...this.normal, ...illusts];
+        this.normal = ArrayUtils.distinct([...this.normal, ...illusts], (item) => '' + item.id);
         // this.normal.push(...illusts);
         console.debug(`常规:${this.normal.length}个 `)
       }

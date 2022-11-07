@@ -1,6 +1,13 @@
 <template>
   <div>
-    <illust-card v-for="(item,index) in data" :key="index" :info="item" :size="config.ui.cardSize" style="margin-right: 5px" @success="imageCompleted" />
+    <illust-card v-for="(item,index) in data"
+                 :key="index"
+                 :info="item"
+                 :size="config.ui.cardSize"
+                 style="margin-right: 5px"
+                 @success="imageCompleted"
+                 @illust-bookmark-success="$emit('illust-bookmark-success',$event)"
+    />
   </div>
 </template>
 
@@ -20,7 +27,7 @@ export default {
   computed: {
     ...mapState("Config", ['config']),
   },
-  emits: ["success", "error"],
+  emits: ["success", "error", 'illust-bookmark-success'],
   methods: {
     //todo 加载卡片时，缓存它的详情数据
 
