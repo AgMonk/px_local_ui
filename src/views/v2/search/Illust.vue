@@ -3,22 +3,31 @@
     <!--  <el-container direction="horizontal">-->
     <el-main>
       <retry-div :params="params" :request="request" @failed="failed" @success="success">
-        <illust-card-group ref="cardGroup" @request-refresh="refresh" />
+        <!--        相关标签-->
+        <div v-if="config.ui.showRelatedTags" style="text-align: left">
+          <h4 style="color: white;margin-top: 5px;margin-bottom: 5px">相关标签</h4>
+          <el-tag v-for="item in relatedTags" effect="dark" size="small" style="margin-right: 3px;margin-bottom: 3px" type="warning">
+            <copy-span :text="item" />
+          </el-tag>
+        </div>
+
+        <illust-card-group ref="cardGroup" style="margin-top: 10px" @request-refresh="refresh" />
       </retry-div>
     </el-main>
   </el-container>
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 import {Title} from "gin-utils/dist/utils/DomUtils";
 import RetryDiv from "@/components/v2/retry-div";
 import {ElMessage} from "element-plus";
+import CopySpan from "@/components/v2/copy/copy-span";
 
 export default {
   name: "Illust",
-  components: {RetryDiv, IllustCardGroup},
+  components: {CopySpan, RetryDiv, IllustCardGroup},
   data() {
     return {
       params: {
@@ -26,9 +35,12 @@ export default {
         keyword: this.$route.params.keyword,
         params: this.$route.query
       },
+      relatedTags: [],
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("Config", ['config']),
+  },
   methods: {
     ...mapActions("Illust", ['search']),
     //刷新请求
@@ -43,10 +55,10 @@ export default {
     success(res) {
       const {data, total, popular, relatedTags} = res
       this.$emit("change-total", total);
+      this.relatedTags = relatedTags;
       this.$nextTick(() => {
         this.$refs.cardGroup.clear(data, [...popular.recent, ...popular.permanent])
       })
-      // todo 显示相关标签
     },
     //失败回调
     failed(e) {

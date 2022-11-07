@@ -12,7 +12,7 @@ export default {
         config: {
             //界面
             ui: {
-                //搜索时,显示相关标签 todo
+                //搜索时,显示相关标签
                 showRelatedTags: false,
                 //将已收藏作品分组显示
                 groupBookmarked: true,
@@ -34,7 +34,7 @@ export default {
             },
             //aria2配置
             aria2: {
-                //下载根目录 todo
+                //下载根目录
                 homePath: undefined
             },
             //保存的搜索t
