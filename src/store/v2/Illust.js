@@ -74,6 +74,16 @@ export default {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
         },
+        discovery: ({dispatch, commit, state, rootGetters}, {limit, mode, sampleIllustId}) => {
+            return rootGetters["getApi"].illustManga.discovery(limit, mode, sampleIllustId, 'zh').then(res => {
+                const {tagTranslation, thumbnails, recommendedIllusts} = res
+                const {illust} = thumbnails
+                commit("handleIllusts", {array: illust, dic: tagTranslation})
+                return illust.map(({id, uid}) => {
+                    return {id, uid}
+                });
+            })
+        },
         recommendInit: ({dispatch, commit, state, rootGetters}, pid) => {
             return rootGetters["getApi"].illustManga.recommendInit(pid, 24, 'zh').then(res => {
                 console.log(res);
