@@ -13,7 +13,7 @@ function clearIllust(item) {
     item.author = {
         avatar: item.profileImageUrl,
         name: item.userName,
-        id: item.userId
+        id: Number(item.userId)
     }
 
     delete item.titleCaptionTranslation;

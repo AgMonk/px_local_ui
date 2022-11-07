@@ -9,7 +9,7 @@ function clearNovel(item) {
     item.author = {
         avatar: item.profileImageUrl,
         name: item.userName,
-        id: item.userId
+        id: Number(item.userId)
     }
     let dates = ['createDate', 'updateDate', 'uploadDate']
     dates.forEach(key => {

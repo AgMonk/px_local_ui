@@ -70,5 +70,10 @@ export default {
             })
         },
     },
-    getters: {},
+    getters: {
+        //获取小说数据
+        getNovel: (state) => (id) => {
+            return state.novelData.get(id)
+        },
+    },
 }
