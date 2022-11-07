@@ -39,7 +39,6 @@ export default {
     },
     load() {
       const count = Math.min(this.threads - this.current, this.data.length)
-      console.log("数据变动", count)
       for (let i = 0; i < count; i++) {
         this.loadImage()
       }

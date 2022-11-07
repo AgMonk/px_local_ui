@@ -184,7 +184,7 @@ export default {
       if (!illusts) {
         return;
       }
-      console.log("添加数据", illusts)
+      console.debug("添加数据", illusts)
       illusts.forEach(i => {
         i.blocked = this.isBlocked(i)
       })

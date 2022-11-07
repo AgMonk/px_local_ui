@@ -239,6 +239,7 @@ export default {
     choseSavedSearch({keyword, dateShortcut}) {
       console.debug('选中已保存的搜索', keyword)
       this.keyword = keyword
+      this.params.common.p = 1
       if (dateShortcut) {
         let array = this.dateRangeShortCuts.filter(i => i.text === dateShortcut)
         if (array.length > 0) {
