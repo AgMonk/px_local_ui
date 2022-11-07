@@ -17,22 +17,20 @@ export default {
   name: "Novel",
   data() {
     return {
-      showDialog: {},
-      loading: {},
       params: {
-        filter: {},
-        page: 1,
-        size: 10,
-      },
-      form: {},
-      data: [],
-      total: 10,
+        page: Number(this.$route.params.page),
+        force: false,
+      }
     }
   },
   computed: {},
   methods: {
     load(route, force) {
+      this.params = {page: Number(route.params.page), force}
 
+      this.$store.dispatch("Novel/followLatest", this.params).then(res => {
+        console.log(res)
+      })
     }
   },
   mounted() {
@@ -41,7 +39,9 @@ export default {
   },
   watch: {
     $route(to) {
-
+      if (to.name === "最新小说") {
+        this.load(to)
+      }
     }
   },
   props: {},
