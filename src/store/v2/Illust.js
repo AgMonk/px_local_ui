@@ -2,8 +2,8 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
-import {clearIllustDetail, clearIllustInfo, handleTagTranslation, translateTagList} from "@/assets/v2/axios";
 import {CancelerCache} from "pixiv-web-api-for-browser/dist/src/cache/CancelerCache";
+import {clearIllustDetail, clearIllustInfo, handleTagTranslation, translateTagList} from "@/assets/v2/illust-clear";
 
 /**
  * 精简作品的字段
