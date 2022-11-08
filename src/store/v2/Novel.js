@@ -81,7 +81,7 @@ export default {
                 caches: state.detail, force, key: nid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].novel.detail(nid, "zh").then(res => {
                         commit("handelNovel", res)
-                        console.log(res)
+                        commit("handelNovels", res.otherNovelsInfo)
                         return res
                     })
                 }

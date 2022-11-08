@@ -55,7 +55,6 @@ export const clearNovelDetail = function (novel) {
     novel.otherNovels = Object.keys(novel.userNovels).map(i => Number(i)).reverse()
     novel.otherNovelsInfo = Object.values(novel.userNovels).filter(i => !!i).map(i => clearNovelInfo(i))
 
-    delete novel.tags;
     delete novel.isBungei;
     delete novel.suggestedSettings;
     delete novel.pollData;
