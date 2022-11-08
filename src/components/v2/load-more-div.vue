@@ -3,7 +3,7 @@
        :infinite-scroll-disabled="loading || !hasNext"
        :infinite-scroll-distance="50"
        :style="{ 'min-height': minHeight+'px', 'max-height': maxHeight+'px', }"
-       class="scrollbar"
+       class="gin-scrollbar"
   >
     <!--    插槽 使用数据渲染-->
     <slot />
@@ -141,23 +141,4 @@ export default {
 </script>
 
 <style scoped>
-.scrollbar {
-  overflow: auto;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: rgb(127, 188, 232);
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 0;
-  background: rgba(0, 0, 0, 0.07);
-}
 </style>
