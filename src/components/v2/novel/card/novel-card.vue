@@ -121,7 +121,4 @@ export default {
   text-align: left;
 }
 
-.gin-scrollbar::-webkit-scrollbar {
-  height: 6px;
-}
 </style>
