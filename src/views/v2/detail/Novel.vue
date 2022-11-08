@@ -73,7 +73,18 @@
 
 
             <div style="margin-top: 10px;text-align: left">
+              <el-form>
+                <el-form-item>
+                  <template #label>
+                    <span style="color: white">TXT下载</span>
+                  </template>
+                  <span style="color: white">
+                    <el-link :download="`[${data.id}] ${data.title}`" :href="blob" type="primary">下载</el-link>
+                  </span>
+                </el-form-item>
+              </el-form>
               <el-form v-if="seriesNavData">
+
                 <el-form-item>
                   <template #label>
                     <span class="right-aside-label">系列</span>
@@ -142,6 +153,7 @@ export default {
       layout: "prev, pager, next, jumper",
       data: undefined,
       content: undefined,
+      blob: undefined,
       seriesNavData: undefined,
       pages: [],
       page: 1,
@@ -155,8 +167,10 @@ export default {
     success(res) {
       console.log(res)
       this.data = res;
-      this.pages = res.content.split('[newpage]')
+      const s = '[newpage]';
+      this.pages = res.content.split(s)
       this.seriesNavData = res.seriesNavData
+      this.blob = URL.createObjectURL(new Blob([res.content.replace(s, '')]))
       this.changePage(1)
 
       if (res.seriesNavData) {
