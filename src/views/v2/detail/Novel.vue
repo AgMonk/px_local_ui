@@ -182,6 +182,8 @@ export default {
     changePage(e) {
       this.page = e;
       this.content = this.pages[e - 1]
+      const content = document.getElementById("novel-content");
+      content && content.scrollTo(0, 0)
     },
     //失败回调
     failed(e) {
