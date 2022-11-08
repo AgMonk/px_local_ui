@@ -6,6 +6,7 @@
       <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
 
         <el-container direction="horizontal">
+          <!--          header 和正文-->
           <el-main>
             <el-container direction="horizontal">
               <el-aside width="300px">
@@ -61,12 +62,53 @@
             <div id="novel-content" class="gin-scrollbar">
               {{ content }}
             </div>
+
           </el-main>
-          <el-aside style="padding-left: 20px;" width="280px">
+          <!--          右侧边-->
+          <el-aside style="padding-left: 20px;" width="250px">
             <div>
               <!--            用户头像-->
               <user-title :uid="data.uid" />
             </div>
+
+
+            <div style="margin-top: 10px;text-align: left">
+              <el-form v-if="seriesNavData">
+                <el-form-item>
+                  <template #label>
+                    <span class="right-aside-label">系列</span>
+                  </template>
+                  <span style="color: white">
+                    <!--                    todo 系列链接-->
+                    {{ seriesNavData.title }}
+                  </span>
+                </el-form-item>
+                <el-form-item v-if="seriesNavData.prev">
+                  <template #label>
+                    <span class="right-aside-label">前篇</span>
+                  </template>
+                  <novel-link :nid="seriesNavData.prev.id" disable-tooltip>
+                    <span style="color: white">{{ seriesNavData.prev.order }}#{{ seriesNavData.prev.title }}</span></novel-link>
+                </el-form-item>
+                <el-form-item v-if="seriesNavData.next">
+                  <template #label>
+                    <span class="right-aside-label">后篇</span>
+                  </template>
+                  <novel-link :nid="seriesNavData.next.id" disable-tooltip>
+                    <span style="color: white">{{ seriesNavData.next.order }}#{{ seriesNavData.next.title }}</span></novel-link>
+                </el-form-item>
+
+
+                <el-form-item>
+                  <template #label>
+                    <span style="color: white"></span>
+                  </template>
+                  <span style="color: white"></span>
+                </el-form-item>
+
+              </el-form>
+            </div>
+
           </el-aside>
         </el-container>
 
@@ -85,6 +127,7 @@ import {Title} from "gin-utils/dist/utils/DomUtils";
 import UserTitle from "@/components/v2/user/user-title";
 import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
+import NovelLink from "@/components/v2/novel/novel-link";
 
 const name = "小说详情"
 
@@ -99,20 +142,28 @@ export default {
       layout: "prev, pager, next, jumper",
       data: undefined,
       content: undefined,
+      seriesNavData: undefined,
       pages: [],
       page: 1,
     }
   },
-  components: {CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
-    ...mapActions("Novel", ['detail']),
+    ...mapActions("Novel", ['detail', 'series']),
     //成功回调
     success(res) {
       console.log(res)
       this.data = res;
       this.pages = res.content.split('[newpage]')
+      this.seriesNavData = res.seriesNavData
       this.changePage(1)
+
+      if (res.seriesNavData) {
+        this.series({seriesId: res.seriesNavData.seriesId}).then(res => {
+          console.log(res)
+        })
+      }
     },
     changePage(e) {
       this.page = e;
@@ -159,5 +210,9 @@ export default {
   text-align: left;
   max-height: 600px;
   line-height: 30px;
+}
+
+.right-aside-label {
+  color: #8d7fe8;
 }
 </style>

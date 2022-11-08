@@ -12,6 +12,8 @@ export default {
         latest: new Map(),
         //小说详情缓存
         detail: new Map(),
+        //小说系列缓存
+        series: new Map(),
         // 收藏数据
         bookmarkData: new Map(),
         // 小说信息数据
@@ -82,6 +84,15 @@ export default {
                     return rootGetters["getApi"].novel.detail(nid, "zh").then(res => {
                         commit("handelNovel", res)
                         commit("handelNovels", res.otherNovelsInfo)
+                        return res
+                    })
+                }
+            })
+        },
+        series: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].novel.series(seriesId, "zh").then(res => {
                         return res
                     })
                 }
