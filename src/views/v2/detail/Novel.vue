@@ -24,7 +24,7 @@
                 <!--            描述-->
                 <div class="gin-scrollbar" style="color: rgba(255,255,255,0.7);max-height: 200px;margin-top: 5px" v-html="data.description" />
                 <!--            标签-->
-                <div>
+                <div style="margin-top: 10px">
                   <el-tag v-for="item in data.tags"
                           :type="item.tag.toLowerCase().startsWith('r-18')?'danger':''"
                           effect="dark"
@@ -98,15 +98,23 @@
                   <template #label>
                     <span class="right-aside-label">前篇</span>
                   </template>
-                  <novel-link :nid="seriesNavData.prev.id" disable-tooltip>
-                    <span style="color: white">{{ seriesNavData.prev.order }}#{{ seriesNavData.prev.title }}</span></novel-link>
+                  <novel-link :nid="seriesNavData.prev.id" disable-tooltip type="primary">
+                    {{ seriesNavData.prev.order }}#{{ seriesNavData.prev.title }}
+                  </novel-link>
                 </el-form-item>
                 <el-form-item v-if="seriesNavData.next">
                   <template #label>
                     <span class="right-aside-label">后篇</span>
                   </template>
-                  <novel-link :nid="seriesNavData.next.id" disable-tooltip>
-                    <span style="color: white">{{ seriesNavData.next.order }}#{{ seriesNavData.next.title }}</span></novel-link>
+                  <novel-link :nid="seriesNavData.next.id" disable-tooltip type="primary">
+                    {{ seriesNavData.next.order }}#{{ seriesNavData.next.title }}
+                  </novel-link>
+                </el-form-item>
+                <el-form-item style="line-height: 20px">
+                  <template #label>
+                    <span class="right-aside-label">各篇</span>
+                  </template>
+                  <novel-series-title :series-id="seriesNavData.seriesId" />
                 </el-form-item>
 
 
@@ -139,6 +147,7 @@ import UserTitle from "@/components/v2/user/user-title";
 import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
 import NovelLink from "@/components/v2/novel/novel-link";
+import NovelSeriesTitle from "@/components/v2/novel/novel-series-title";
 
 const name = "小说详情"
 
@@ -159,10 +168,10 @@ export default {
       page: 1,
     }
   },
-  components: {NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
-    ...mapActions("Novel", ['detail', 'series']),
+    ...mapActions("Novel", ['detail']),
     //成功回调
     success(res) {
       console.log(res)
@@ -173,11 +182,6 @@ export default {
       this.blob = URL.createObjectURL(new Blob([res.content.replace(s, '')]))
       this.changePage(1)
 
-      if (res.seriesNavData) {
-        this.series({seriesId: res.seriesNavData.seriesId}).then(res => {
-          console.log(res)
-        })
-      }
     },
     changePage(e) {
       this.page = e;

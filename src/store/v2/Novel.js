@@ -14,6 +14,8 @@ export default {
         detail: new Map(),
         //小说系列缓存
         series: new Map(),
+        //小说各篇标题缓存
+        seriesTitles: new Map(),
         // 收藏数据
         bookmarkData: new Map(),
         // 小说信息数据
@@ -78,6 +80,7 @@ export default {
                 }
             })
         },
+        //小说详情
         detail: ({dispatch, commit, state, rootGetters}, {force, nid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.detail, force, key: nid, seconds: 30 * 60, requestMethod: () => {
@@ -89,6 +92,7 @@ export default {
                 }
             })
         },
+        //小说系列
         series: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
@@ -98,6 +102,20 @@ export default {
                 }
             })
         },
+        seriesTitles: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.seriesTitles, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].novel.seriesTitles(seriesId, "zh").then(res => {
+                        res.forEach(i => {
+                            // noinspection JSValidateTypes
+                            i.id = Number(i.id)
+                        })
+                        return res
+                    })
+                }
+            })
+        },
+
 
     },
     getters: {

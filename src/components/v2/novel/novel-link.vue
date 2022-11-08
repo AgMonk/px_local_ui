@@ -1,7 +1,7 @@
 <template>
   <el-tooltip :disabled="disableTooltip" placement="top-start">
     <router-link :to="{name:'小说详情',params:{nid}}">
-      <el-link :underline="false">
+      <el-link :type="type" :underline="false">
         <slot />
       </el-link>
     </router-link>
@@ -43,6 +43,7 @@ export default {
       required: true,
     },
     title: {},
+    type: {type: String,},
     disableTooltip: {
       type: Boolean,
     }
