@@ -8,6 +8,10 @@
         </novel-link>
       </el-aside>
       <el-main v-if="data" style="margin-left: 5px;">
+        <!--      todo   系列标题-->
+        <div v-if="data.seriesId" style="color: rgba(255,255,255,0.5)">
+          系列: {{ data.seriesTitle }}
+        </div>
         <!--     标题-->
         <div class="single-line">
           <novel-link :nid="info.id"><span style="color: white">{{ data.title }}</span></novel-link>
@@ -27,7 +31,7 @@
         </div>
         <!--  标签-->
         <div class="gin-scrollbar" style="max-height: 69px;">
-          <el-tag v-for="item in data.tags"
+          <el-tag v-for="item in data.tagList"
                   :type="item.toLowerCase().startsWith('r-18')?'danger':''"
                   effect="dark"
                   size="small"
@@ -84,7 +88,6 @@ export default {
     },
     load(info) {
       this.data = this.getNovel()(info.id);
-      console.log(this.data)
     }
   },
   mounted() {

@@ -1,11 +1,11 @@
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
-function clearNovel(item) {
+export const clearNovel = function (item) {
     item.id = Number(item.id)
     item.uid = Number(item.userId)
     item.r18 = !!item.xRestrict
     item.r18g = !!item.restrict
-    item.coverUrl = item.url
+    item.coverUrl || (item.coverUrl = item.url)
     item.seriesId && (item.seriesId = Number(item.seriesId))
     item.author = {
         avatar: item.profileImageUrl,
@@ -34,9 +34,44 @@ function clearNovel(item) {
     delete item.isUnlisted;
     delete item.marker;
 
+    return item
 }
 
 export const clearNovelInfo = function (novel) {
-    clearNovel(novel)
+    novel.tagList = novel.tags
+
+    delete novel.tags;
+    return novel;
+}
+export const clearNovelDetail = function (novel) {
+
+    novel.pageCount = Number(novel.pageCount)
+
+
+    novel.tags = novel.tags.tags.map(({tag, locked, deletable}) => {
+        return {tag, locked, deletable};
+    })
+
+    novel.otherNovels = Object.keys(novel.userNovels).map(i => Number(i)).reverse()
+    novel.otherNovelsInfo = Object.values(novel.userNovels).filter(i => !!i).map(i => clearNovelInfo(i))
+
+    delete novel.tags;
+    delete novel.isBungei;
+    delete novel.suggestedSettings;
+    delete novel.pollData;
+    delete novel.descriptionBoothId;
+    delete novel.descriptionYoutubeId;
+    delete novel.comicPromotion;
+    delete novel.fanboxPromotion;
+    delete novel.contestBanners;
+    delete novel.contestData;
+    delete novel.imageResponseOutData;
+    delete novel.imageResponseData;
+    delete novel.imageResponseCount;
+    delete novel.zoneConfig;
+    delete novel.hasGlossary;
+    delete novel.extraData;
+    delete novel.textEmbeddedImages;
+    delete novel.userNovels;
 }
 

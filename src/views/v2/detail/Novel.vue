@@ -11,29 +11,27 @@
 </template>
 
 <script>
-const name = ""
+import {mapActions} from "vuex";
+
+const name = "小说详情"
 
 export default {
   name: "Novel",
   data() {
     return {
-      showDialog: {},
-      loading: {},
-      params: {
-        filter: {},
-        page: 1,
-        size: 10,
-      },
-      form: {},
-      data: [],
-      total: 10,
+      nid: undefined,
     }
   },
   components: {},
   computed: {},
   methods: {
+    ...mapActions("Novel", ['detail']),
+    request(nid, force) {
+      this.detail({nid, force})
+    },
     load(route, force) {
-
+      this.nid = Number(route.params.nid)
+      this.request(this.nid, force);
     }
   },
   mounted() {

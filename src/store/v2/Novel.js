@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
-import {clearNovelInfo} from "@/assets/v2/novel-clear";
+import {clearNovel, clearNovelDetail, clearNovelInfo} from "@/assets/v2/novel-clear";
 import {simplify} from "@/assets/v2/axios";
 
 export default {
@@ -10,6 +10,8 @@ export default {
     state: {
         //最新小说缓存
         latest: new Map(),
+        //小说详情缓存
+        detail: new Map(),
         // 收藏数据
         bookmarkData: new Map(),
         // 小说信息数据
@@ -21,7 +23,12 @@ export default {
         },
         //处理单个小说数据
         handelNovel(state, item) {
-            clearNovelInfo(item)
+            clearNovel(item)
+            if (item.hasOwnProperty("content")) {
+                clearNovelDetail(item)
+            } else {
+                clearNovelInfo(item)
+            }
             //更新收藏数据
             this.commit("Novel/updateBmkData", item);
             //更新作者数据
@@ -69,6 +76,18 @@ export default {
                 }
             })
         },
+        detail: ({dispatch, commit, state, rootGetters}, {force, nid}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.detail, force, key: nid, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].novel.detail(nid, "zh").then(res => {
+                        commit("handelNovel", res)
+                        console.log(res)
+                        return res
+                    })
+                }
+            })
+        },
+
     },
     getters: {
         //获取小说数据
