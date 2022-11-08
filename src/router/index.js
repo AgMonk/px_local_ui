@@ -56,6 +56,11 @@ const routes = [
         component: () => import("../views/v2/detail/Illust")
     },
     {
+        path: "/novel/:nid",
+        name: "小说详情",
+        component: () => import("../views/v2/detail/Novel")
+    },
+    {
         path: "/config",
         name: "配置",
         component: () => import("../views/v2/config/Config")

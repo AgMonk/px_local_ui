@@ -6,6 +6,7 @@ function clearNovel(item) {
     item.r18 = !!item.xRestrict
     item.r18g = !!item.restrict
     item.coverUrl = item.url
+    item.seriesId && (item.seriesId = Number(item.seriesId))
     item.author = {
         avatar: item.profileImageUrl,
         name: item.userName,

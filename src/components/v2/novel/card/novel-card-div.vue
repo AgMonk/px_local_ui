@@ -4,7 +4,6 @@
                 :key="index"
                 :info="info"
                 :size="config.ui.cardSize"
-                style="margin-right: 5px"
                 @success="imageCompleted"
     />
   </div>

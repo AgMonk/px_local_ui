@@ -1,8 +1,10 @@
 <template>
   <div v-if="data" class="novel-image">
-    <el-image v-if="data.coverUrl && info.showImage"
-              :src="data.coverUrl.replace('https://i.pximg.net','/pximg')"
-              style="border-radius:15px"
+    <el-image v-if="info.showImage"
+              :src="src"
+              :style="{
+                'border-radius':'15px',
+              }"
               @error="failed"
               @load="success"
     />
@@ -22,6 +24,7 @@ export default {
   data() {
     return {
       data: undefined,
+      src: undefined,
     }
   },
   emits: ['failed', 'success', "novel-bookmark-success"],
@@ -38,7 +41,8 @@ export default {
     },
     load(info) {
       this.data = this.getNovel()(info.id);
-      console.log(this.data)
+      // this.src = '/pximg/c/600x600/novel-cover-master/img/2022/10/04/09/11/35/ci185806_983b9b0b0136aad09ad637fa64fe61c5_master1200.jpg'
+      this.src = this.data.coverUrl.replace('https://i.pximg.net', '/pximg')
     }
   },
   mounted() {
@@ -54,10 +58,6 @@ export default {
       type: Object,
       required: true,
     },
-    size: {
-      type: Number,
-      default: 150,
-    },
   },
 }
 
@@ -67,5 +67,6 @@ export default {
 .novel-image {
   display: inline-block;
   position: relative;
+  text-align: right;
 }
 </style>
