@@ -43,7 +43,17 @@ export default {
                 }
             })
         },
-
+        comment: ({dispatch, commit, state, rootGetters}, {authorUserId, type, comment, stampId, parentId, worksType, id}) => {
+            const params = {authorUserId, type, comment, stampId, parentId};
+            //根据作品类型决定字段名
+            if (worksType === 'illusts') {
+                params.illustId = id;
+            }
+            if (worksType === 'novels') {
+                params.novelId = id;
+            }
+            return rootGetters["getApi"].comments.comment(params)
+        },
     },
     getters: {},
 }
