@@ -11,6 +11,8 @@ export default {
         profile: new Map(),
         //用户插画缓存
         illusts: new Map(),
+        //用户小说缓存
+        novels: new Map(),
         //用户
         userData: new Map(), //用户作品数据
         userProfile: new Map(),
@@ -48,7 +50,9 @@ export default {
     }, actions: {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
-        }, userInfo: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+        },
+        //查询用户信息
+        userInfo: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.user, force, key: uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].user.userInfo(uid, 1, "zh").then(res => {
@@ -92,11 +96,24 @@ export default {
         // 查询用户插画/漫画
         profileIllusts: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.illusts, force, key: uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
+                caches: state.profile, force, key: uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].user.profileIllusts(uid, ids, 'zh').then((res) => {
                         const array = Object.values(res.works)
                         commit("Illust/handleIllusts", {array}, {root: true})
                         return array.map(i => i.id).sort((a, b) => b - a)
+                    })
+                }
+            })
+        },
+        // 用户小说使用的标签
+        novelsTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.novels, force, key: "tags_" + uid, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].user.novelsTags(uid, 'zh').then((res) => {
+                        res.forEach(i => {
+                            delete i.tag_yomigana
+                        })
+                        return res.sort((a, b) => b.cnt - a.cnt)
                     })
                 }
             })

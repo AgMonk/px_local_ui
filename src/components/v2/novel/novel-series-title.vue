@@ -33,7 +33,6 @@ export default {
       ElMessage.error(e.message)
     },
     success(res) {
-      console.log(res)
       this.data = res;
     },
     request({seriesId, force}) {

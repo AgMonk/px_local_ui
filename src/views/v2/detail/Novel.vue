@@ -71,8 +71,8 @@
               <user-title :uid="data.uid" />
             </div>
 
-
             <div style="margin-top: 10px;text-align: left">
+              <!--TXT下载-->
               <el-form>
                 <el-form-item>
                   <template #label>
@@ -83,6 +83,7 @@
                   </span>
                 </el-form-item>
               </el-form>
+              <!--小说系列-->
               <el-form v-if="seriesNavData">
 
                 <el-form-item>
@@ -110,13 +111,22 @@
                     {{ seriesNavData.next.order }}#{{ seriesNavData.next.title }}
                   </novel-link>
                 </el-form-item>
-                <el-form-item style="line-height: 20px">
+                <el-form-item>
                   <template #label>
                     <span class="right-aside-label">各篇</span>
                   </template>
-                  <novel-series-title :series-id="seriesNavData.seriesId" />
+                  <div class="gin-scrollbar" style="max-height: 300px">
+                    <novel-series-title :series-id="seriesNavData.seriesId" />
+                  </div>
                 </el-form-item>
-
+                <el-form-item>
+                  <template #label>
+                    <span class="right-aside-label">作品<br>标签</span>
+                  </template>
+                  <div class="gin-scrollbar" style="max-height: 300px">
+                    <novel-tags :uid="data.uid" />
+                  </div>
+                </el-form-item>
 
                 <el-form-item>
                   <template #label>
@@ -148,6 +158,7 @@ import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
 import NovelLink from "@/components/v2/novel/novel-link";
 import NovelSeriesTitle from "@/components/v2/novel/novel-series-title";
+import NovelTags from "@/components/v2/novel/novel-tags";
 
 const name = "小说详情"
 
@@ -168,7 +179,7 @@ export default {
       page: 1,
     }
   },
-  components: {NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
     ...mapActions("Novel", ['detail']),
