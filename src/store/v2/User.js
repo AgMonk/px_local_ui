@@ -20,6 +20,12 @@ export default {
         method(state, payload) {
 
         },
+        updateBatch(state, array) {
+            array.forEach(item => {
+                this.commit("User/update", item.author)
+                delete item.author
+            })
+        },
         //更新用户数据
         update(state, info) {
             const {id} = info

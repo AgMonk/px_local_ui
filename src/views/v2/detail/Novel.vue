@@ -62,9 +62,9 @@
             <div id="novel-content" class="gin-scrollbar">
               {{ content }}
             </div>
-            <!--  todo         评论区-->
-            <div v-if="data.commentCount>0">
-              <comment-area :id="data.id" type="novels" />
+            <!--            评论区-->
+            <div>
+              <comment-area :id="data.id" worksType="novels" />
             </div>
 
           </el-main>
