@@ -9,7 +9,7 @@
     <slot />
 
     <!--    到底标识-->
-    <h3 v-if="!hasNext" style="color:white">到底了</h3>
+    <el-divider v-if="!hasNext">到底了</el-divider>
     <div v-if="failed" style="color:white;cursor: pointer" @click="load">
       <h3>请求失败</h3>
       <h4>点击刷新</h4>

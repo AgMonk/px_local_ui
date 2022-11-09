@@ -1,6 +1,5 @@
 <template>
   <div style="margin-bottom: 5px">
-    {{ data }}
     <!--  用户和日期信息-->
     <div>
       <user-avatar :uid="data.uid" />
@@ -21,9 +20,9 @@
         <span v-if="data.comment" v-html="data.comment"></span>
         <el-image v-else :src="`https://s.pximg.net/common/images/stamp/generated-stamps/${data.stampId}_s.jpg`" style="width: 50px" />
       </div>
+      <!--     楼中楼-->
       <div v-if="isRoot && data.hasReplies">
-        <!--    todo 楼中楼-->
-
+        <comment-replies-area :comment-id="data.id" :work-id="workId" :works-type="worksType" />
       </div>
     </div>
   </div>
@@ -32,17 +31,18 @@
 <script>
 import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
+import CommentRepliesArea from "@/components/v2/comment/comment-replies-area";
 
 const name = "评论"
 
 export default {
-  name: "comment",
+  name: "comment-reply",
   data() {
     return {
       showRelies: false,
     }
   },
-  components: {UserLink, UserAvatar},
+  components: {CommentRepliesArea, UserLink, UserAvatar},
   computed: {},
   methods: {},
   mounted() {
@@ -57,6 +57,8 @@ export default {
     workId: {type: Number, required: true,},
     //是否为根评论
     isRoot: {type: Boolean, default: false,},
+    //父评论id
+    parentId: {type: Number},
   },
 }
 

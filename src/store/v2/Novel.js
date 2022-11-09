@@ -26,7 +26,7 @@ export default {
 
         },
         //处理单个小说数据
-        handelNovel(state, item) {
+        handleNovel(state, item) {
             clearNovel(item)
             if (item.hasOwnProperty("content")) {
                 clearNovelDetail(item)
@@ -42,7 +42,7 @@ export default {
         },
         //处理作品数组
         handleNovels(state, array) {
-            array.forEach(item => this.commit('Novel/handelNovel', item))
+            array.forEach(item => this.commit('Novel/handleNovel', item))
         },
         //更新收藏数据
         updateBmkData(state, item) {
@@ -85,8 +85,8 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.detail, force, key: nid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].novel.detail(nid, "zh").then(res => {
-                        commit("handelNovel", res)
-                        commit("handelNovels", res.otherNovelsInfo)
+                        commit("handleNovel", res)
+                        commit("handleNovels", res.otherNovelsInfo)
                         return res
                     })
                 }

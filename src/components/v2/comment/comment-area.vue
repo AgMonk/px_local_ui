@@ -10,7 +10,7 @@
     </h2>
     <load-more-div v-if="show" :has-next="hasNext" :init-request="request" :load-more-request="request" :params="params" @success="success">
       <!--        评论显示-->
-      <comment v-for="item in data" :data="item" :work-id="id" :works-type="worksType" />
+      <comment-reply v-for="item in data" :data="item" :work-id="id" :works-type="worksType" is-root />
     </load-more-div>
   </div>
 </template>
@@ -18,7 +18,7 @@
 <script>
 import LoadMoreDiv from "@/components/v2/load-more-div";
 import {mapActions} from "vuex";
-import Comment from "@/components/v2/comment/comment";
+import CommentReply from "@/components/v2/comment/comment-reply";
 
 const name = "评论区"
 
@@ -37,7 +37,7 @@ export default {
       show: false,
     }
   },
-  components: {Comment, LoadMoreDiv},
+  components: {CommentReply, LoadMoreDiv},
   computed: {},
   methods: {
     ...mapActions("Comments", ['novelsRoots', 'illustsRoots']),

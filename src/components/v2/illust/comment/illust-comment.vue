@@ -30,7 +30,7 @@
       <el-button v-if="children.length===0 && loading" :disabled="true" size="small" type="info">加载中..</el-button>
       <el-scrollbar v-if="children.length>0" v-infinite-scroll="loadReplies" :infinite-scroll-disabled="loading" :infinite-scroll-immediate="false" :max-height="300">
         <illust-comment v-for="comment in children" :data="comment" :pid="pid" @deleted="deleted" @comment-success="commentSuccess" />
-        <div v-if="!hasNext">~到底了~</div>
+        <el-divider v-if="!hasNext">到底了</el-divider>
         <div v-if="failed" style="color:white;cursor: pointer" @click="loadReplies">
           <h3>请求失败</h3>
           <h4>点击刷新</h4>

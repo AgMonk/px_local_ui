@@ -21,7 +21,7 @@
           >
             <illust-comment v-for="comment in data" :data="comment" :pid="pid" is-root style="margin-bottom: 2px" @deleted="deleted" />
 
-            <h3 v-show="!hasNext" style="color:white">到底了</h3>
+            <el-divider v-if="!hasNext">到底了</el-divider>
             <div v-if="failed" style="color:white;cursor: pointer" @click="refresh">
               <h3>请求失败</h3>
               <h4>点击刷新</h4>
