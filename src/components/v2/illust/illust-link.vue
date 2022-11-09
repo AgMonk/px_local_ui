@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip :disabled="disableTooltip" placement="top-start">
+  <el-tooltip :disabled="disableTooltip" :show-after="500" placement="top-start">
     <router-link :to="{name:'绘画详情',params:{pid}}">
       <el-link :underline="false">
         <slot />

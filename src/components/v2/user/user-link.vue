@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip placement="right">
+  <el-tooltip :show-after="500" placement="right">
     <router-link :to="{name:'用户主页',params:{uid}}">
       <el-link :style="{'font-size':size+'px'}" :underline="false" type="primary">
         {{ data && data.name }}
