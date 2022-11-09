@@ -62,6 +62,10 @@
             <div id="novel-content" class="gin-scrollbar">
               {{ content }}
             </div>
+            <!--  todo         评论区-->
+            <div v-if="data.commentCount>0">
+              <comment-area :id="data.id" type="novels" />
+            </div>
 
           </el-main>
           <!--          右侧边-->
@@ -71,6 +75,13 @@
               <user-title :uid="data.uid" />
             </div>
 
+            <div>
+              <router-link :to="{name:'用户小说',params:{uid:data.uid}}">
+                <el-link type="primary">查看作品目录</el-link>
+              </router-link>
+            </div>
+
+            <!--            TXT下载 系列信息 作品标签-->
             <div style="margin-top: 10px;text-align: left">
               <!--TXT下载-->
               <el-form>
@@ -127,14 +138,6 @@
                     <novel-tags :uid="data.uid" />
                   </div>
                 </el-form-item>
-
-                <el-form-item>
-                  <template #label>
-                    <span style="color: white"></span>
-                  </template>
-                  <span style="color: white"></span>
-                </el-form-item>
-
               </el-form>
             </div>
 
@@ -159,6 +162,7 @@ import CopySpan from "@/components/v2/copy/copy-span";
 import NovelLink from "@/components/v2/novel/novel-link";
 import NovelSeriesTitle from "@/components/v2/novel/novel-series-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
+import CommentArea from "@/components/v2/comment/comment-area";
 
 const name = "小说详情"
 
@@ -173,13 +177,14 @@ export default {
       layout: "prev, pager, next, jumper",
       data: undefined,
       content: undefined,
+      //txt文件下载
       blob: undefined,
       seriesNavData: undefined,
       pages: [],
       page: 1,
     }
   },
-  components: {NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {CommentArea, NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
     ...mapActions("Novel", ['detail']),
@@ -196,8 +201,11 @@ export default {
     },
     changePage(e) {
       this.page = e;
+      //当前显示的正文
       this.content = this.pages[e - 1]
+      //正文div
       const content = document.getElementById("novel-content");
+      //滚动到顶
       content && content.scrollTo(0, 0)
     },
     //失败回调

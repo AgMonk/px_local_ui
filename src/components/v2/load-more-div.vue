@@ -108,11 +108,6 @@ export default {
       type: Function,
       required: true,
     },
-    //通过响应，判断是否还有更多数据的方法
-    getHasNext: {
-      type: Function,
-      default: () => true,
-    },
     //参数
     params: {},
     //最大重试次数
