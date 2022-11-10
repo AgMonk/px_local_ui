@@ -169,7 +169,7 @@ import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import CopyElButton from "@/components/v2/copy/copy-el-button";
 import {ElMessage} from "element-plus";
 import RetryDiv from "@/components/v2/retry-div";
-import IllustRecommend from "@/components/v2/illust/comment/illust-recommend";
+import IllustRecommend from "@/components/v2/illust/illust-recommend";
 import CommentArea from "@/components/v2/comment/comment-area";
 
 export default {
