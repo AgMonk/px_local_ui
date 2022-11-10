@@ -64,7 +64,7 @@
             </div>
             <!--            评论区-->
             <div>
-              <comment-area :id="data.id" worksType="novels" />
+              <comment-area :id="data.id" :author-user-id="data.uid" worksType="novels" />
             </div>
 
           </el-main>

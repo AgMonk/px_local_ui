@@ -10,7 +10,7 @@
     </div>
     <load-more-div v-if="show" :has-next="hasNext" :init-request="request" :load-more-request="request" :params="params" @success="success">
       <!--        评论显示-->
-      <comment-reply v-for="item in data" :data="item" :parent-id="commentId" :work-id="workId" :works-type="worksType" />
+      <comment-reply v-for="item in data" :author-user-id="authorUserId" :data="item" :parent-id="commentId" :work-id="workId" :works-type="worksType" />
     </load-more-div>
   </div>
 </template>
@@ -74,6 +74,8 @@ export default {
     worksType: {type: String, required: true},
     //作品id
     workId: {type: Number, required: true,},
+    //作者uid
+    authorUserId: {type: Number, required: true},
   },
 }
 

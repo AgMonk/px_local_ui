@@ -118,7 +118,7 @@
           </div>
           <!--        评论区-->
           <div v-if="data.commentCount>0" style="margin-top: 20px">
-            <comment-area :id="data.id" worksType="illusts" />
+            <comment-area :id="data.id" :author-user-id="data.userId" worksType="illusts" />
           </div>
           <!--           推荐作品-->
           <div v-if="data" style="margin-top: 20px">

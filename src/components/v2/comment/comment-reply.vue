@@ -22,7 +22,7 @@
       </div>
       <!--     楼中楼-->
       <div v-if="isRoot && data.hasReplies">
-        <comment-replies-area :comment-id="data.id" :work-id="workId" :works-type="worksType" />
+        <comment-replies-area :author-user-id="authorUserId" :comment-id="data.id" :work-id="workId" :works-type="worksType" />
       </div>
     </div>
   </div>
@@ -59,6 +59,8 @@ export default {
     isRoot: {type: Boolean, default: false,},
     //父评论id
     parentId: {type: Number},
+    //作者uid
+    authorUserId: {type: Number, required: true},
   },
 }
 

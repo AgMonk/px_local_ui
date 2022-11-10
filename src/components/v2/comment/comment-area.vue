@@ -10,7 +10,7 @@
     </h2>
     <load-more-div v-if="show" :has-next="hasNext" :init-request="request" :load-more-request="request" :params="params" @success="success">
       <!--        评论显示-->
-      <comment-reply v-for="item in data" :data="item" :work-id="id" :works-type="worksType" is-root />
+      <comment-reply v-for="item in data" :author-user-id="authorUserId" :data="item" :work-id="id" :works-type="worksType" is-root />
     </load-more-div>
   </div>
 </template>
@@ -77,6 +77,8 @@ export default {
     worksType: {type: String, required: true},
     //id 根据类型不同 为 pid 或 nid
     id: {type: Number, required: true},
+    //作者uid
+    authorUserId: {type: Number, required: true},
   },
 }
 

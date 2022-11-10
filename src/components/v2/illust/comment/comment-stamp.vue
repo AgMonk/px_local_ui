@@ -7,7 +7,7 @@
       <div style="width: 550px">
         <el-image v-for="id in stampId" :src="`https://s.pximg.net/common/images/stamp/generated-stamps/${id}_s.jpg`"
                   style="width: 50px;cursor: pointer;margin-right: 5px"
-                  @click="comment(id)"
+                  @click="request(id)"
         />
       </div>
     </template>
@@ -19,7 +19,7 @@
 
 <script>
 import {Grid, Loading} from "@element-plus/icons-vue";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 import {stampId} from "@/assets/v2/stampId";
 import {ElMessage} from "element-plus";
 
@@ -36,15 +36,16 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapGetters("Illust", ['getIllust']),
-    ...mapActions("IllustComment", ['commentStamp']),
-    comment(stampId) {
+    ...mapActions("Comments", ['comment']),
+    request(stampId) {
       this.loading = true;
-      this.commentStamp({
-        illustId: this.pid,
-        parentId: this.parentId,
+      this.comment({
         stampId,
+        worksType: this.worksType,
+        parentId: this.parentId,
+        id: this.id,
         authorUserId: this.authorUserId,
+        type: 'stamp',
       }).then(res => {
         if (this.replyToUserId) {
           res.replyToUserId = this.replyToUserId;
@@ -58,7 +59,6 @@ export default {
       })
     },
     load(pid, force) {
-      this.authorUserId = this.getIllust()(pid).userId;
     }
   },
   mounted() {
@@ -70,8 +70,15 @@ export default {
     }
   },
   props: {
-    pid: {type: Number, required: true},
+    //作品id
+    id: {type: Number, required: true},
+    //类型 只能为 illusts 或 novels
+    worksType: {type: String, required: true},
+    //作者uid
+    authorUserId: {type: Number, required: true},
+    //如果是楼中楼，根评论id
     parentId: {type: Number},
+    //被回复的用户uid
     replyToUserId: {type: Number},
     iconSize: {type: Number, default: 20},
   },
