@@ -7,10 +7,11 @@
           style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
       />
         <!--      todo 发表评论按钮-->
+      <comment-stamp :id="id" :author-user-id="authorUserId" :works-type="worksType" @success="commentSuccess" />
     </h2>
     <load-more-div v-if="show" :has-next="hasNext" :init-request="request" :load-more-request="request" :params="params" @success="success">
       <!--        评论显示-->
-      <comment-reply v-for="item in data" :author-user-id="authorUserId" :data="item" :work-id="id" :works-type="worksType" is-root />
+      <comment-reply v-for="item in data" :author-user-id="authorUserId" :data="item" :work-id="id" :works-type="worksType" is-root @deleted="deleted" />
     </load-more-div>
   </div>
 </template>
@@ -19,6 +20,7 @@
 import LoadMoreDiv from "@/components/v2/load-more-div";
 import {mapActions} from "vuex";
 import CommentReply from "@/components/v2/comment/comment-reply";
+import CommentStamp from "@/components/v2/illust/comment/comment-stamp";
 
 const name = "评论区"
 
@@ -37,10 +39,17 @@ export default {
       show: false,
     }
   },
-  components: {CommentReply, LoadMoreDiv},
+  components: {CommentStamp, CommentReply, LoadMoreDiv},
   computed: {},
   methods: {
     ...mapActions("Comments", ['novelsRoots', 'illustsRoots']),
+    deleted(e) {
+      this.data = this.data.filter(i => i.id !== e)
+    },
+    commentSuccess(e) {
+      // 评论成功
+      this.data = [e, ...this.data];
+    },
     success({comments, hasNext}) {
       this.hasNext = hasNext
       console.log(comments)

@@ -23,11 +23,15 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions("IllustComment", ['delComment']),
+    ...mapActions("Comments", ['delComment']),
     del() {
       ElMessageBox.confirm("删除评论?", "确认删除").then(() => {
         this.loading = true;
-        this.delComment({pid: this.pid, commentId: this.commentId,}).then(() => {
+        this.delComment({
+          commentId: this.commentId,
+          id: this.id,
+          isNovel: this.worksType === 'novels'
+        }).then(() => {
           ElMessage.success("删除成功");
           this.$emit('deleted', this.commentId)
         }).catch(e => {
@@ -49,8 +53,12 @@ export default {
   },
   watch: {},
   props: {
-    pid: {type: Number, required: true},
+    //作品id
+    id: {type: Number, required: true},
+    //评论id
     commentId: {type: Number, required: true},
+    //类型 只能为 illusts 或 novels
+    worksType: {type: String, required: true},
     iconSize: {type: Number, default: 20},
   },
 }

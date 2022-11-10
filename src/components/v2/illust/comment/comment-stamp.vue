@@ -31,7 +31,6 @@ export default {
     return {
       stampId,
       loading: false,
-      authorUserId: undefined,
     }
   },
   computed: {},

@@ -18,6 +18,13 @@ export default {
         method: ({dispatch, commit, state, rootGetters}, payload) => {
 
         },
+        //删除评论
+        delComment: ({dispatch, commit, state, rootGetters}, {id, commentId, isNovel,}) => {
+            return rootGetters["getApi"].comments.delComment(id, commentId, isNovel).then(res => {
+                state[isNovel ? 'novels' : 'illusts'].clear()
+                return res;
+            })
+        },
         //获取绘画根评论
         illustsRoots: ({dispatch, commit, state, rootGetters}, {force, pid, page}) => {
             return CacheUtils.getCacheByTime({
@@ -78,7 +85,19 @@ export default {
             if (worksType === 'novels') {
                 params.novelId = id;
             }
-            return rootGetters["getApi"].comments.comment(params)
+            return rootGetters["getApi"].comments.comment(params).then(res => {
+                const {comment, comment_id, parent_id, stamp_id, user_id, user_name,} = res
+
+                state[worksType].clear()
+                return {
+                    comment,
+                    id: Number(comment_id),
+                    parentId: parent_id,
+                    stampId: stamp_id,
+                    uid: Number(user_id),
+                    userName: user_name,
+                }
+            })
         },
     }, getters: {},
 }

@@ -10,6 +10,7 @@
         <user-link :uid="data.replyToUserId" />
       </span>
       :
+      <comment-del v-if="data.editable" :id="workId" :comment-id="data.id" :works-type="worksType" @deleted="$emit('deleted', this.data.id)" />
       <!--      todo 删除评论按钮-->
       <!--      todo 回复楼中楼 按钮 表情贴图 或 文字回复-->
     </div>
@@ -32,6 +33,7 @@
 import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
 import CommentRepliesArea from "@/components/v2/comment/comment-replies-area";
+import CommentDel from "@/components/v2/illust/comment/comment-del";
 
 const name = "评论"
 
@@ -42,7 +44,8 @@ export default {
       showRelies: false,
     }
   },
-  components: {CommentRepliesArea, UserLink, UserAvatar},
+  emits: ['deleted'],
+  components: {CommentDel, CommentRepliesArea, UserLink, UserAvatar},
   computed: {},
   methods: {},
   mounted() {
