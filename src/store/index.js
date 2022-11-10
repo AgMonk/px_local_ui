@@ -3,7 +3,6 @@ import Illust from "@/store/v2/Illust"
 import User from "@/store/v2/User"
 import Account from "@/store/v2/Account";
 import Config from "@/store/v2/Config";
-import IllustComment from "@/store/v2/IllustComment";
 import Aria2 from "@/store/v2/Aria2";
 import Novel from "@/store/v2/Novel";
 import Comments from "@/store/v2/Comments";
@@ -19,7 +18,7 @@ export default createStore({
     },
     actions: {},
     modules: {
-        Illust, User, Account, Config, IllustComment, Aria2, Novel, Comments
+        Illust, User, Account, Config, Aria2, Novel, Comments
     }, getters: {
         getApi(state) {
             return state.api;

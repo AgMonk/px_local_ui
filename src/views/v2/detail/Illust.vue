@@ -118,7 +118,7 @@
           </div>
           <!--        评论区-->
           <div v-if="data.commentCount>0" style="margin-top: 20px">
-            <illust-comment-area :pid="data.id" />
+            <comment-area :id="data.id" worksType="illusts" />
           </div>
           <!--           推荐作品-->
           <div v-if="data" style="margin-top: 20px">
@@ -164,22 +164,33 @@ import IllustLink from "@/components/v2/illust/illust-link";
 import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
 import IllustTag from "@/components/v2/illust/illust-tag";
-import IllustCommentArea from "@/components/v2/illust/comment/illust-comment-area";
 import BlockTagButton from "@/components/v2/block-tag-button";
 import {ObjectUtils} from "gin-utils/dist/utils/ObjectUtils";
 import CopyElButton from "@/components/v2/copy/copy-el-button";
 import {ElMessage} from "element-plus";
 import RetryDiv from "@/components/v2/retry-div";
 import IllustRecommend from "@/components/v2/illust/comment/illust-recommend";
+import CommentArea from "@/components/v2/comment/comment-area";
 
 export default {
   name: "Illust",
   components: {
+    CommentArea,
     IllustRecommend,
     RetryDiv,
     CopyElButton,
     BlockTagButton,
-    IllustCommentArea, IllustTag, UserAvatar, UserLink, IllustLink, IllustBookmarkButton, UserTitle, IllustImage, IllustCard, Loading, SuccessFilled, QuestionFilled
+    IllustTag,
+    UserAvatar,
+    UserLink,
+    IllustLink,
+    IllustBookmarkButton,
+    UserTitle,
+    IllustImage,
+    IllustCard,
+    Loading,
+    SuccessFilled,
+    QuestionFilled
   },
   data() {
     return {
