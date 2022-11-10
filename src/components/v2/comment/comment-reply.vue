@@ -10,9 +10,11 @@
         <user-link :uid="data.replyToUserId" />
       </span>
       :
-      <comment-del v-if="data.editable" :id="workId" :comment-id="data.id" :works-type="worksType" @deleted="$emit('deleted', this.data.id)" />
-      <!--      todo 删除评论按钮-->
+      <!--      删除评论按钮-->
+      <comment-del v-if="data.editable" :id="workId" :comment-id="data.id" :works-type="worksType" @deleted="$emit('deleted', data.id)" />
       <!--      todo 回复楼中楼 按钮 表情贴图 或 文字回复-->
+      <comment-stamp :id="workId" :author-user-id="authorUserId" :parent-id="data.id" :works-type="worksType" @success="commentSuccess" />
+      <comment-text :id="workId" :author-user-id="authorUserId" :parent-id="data.id" :works-type="worksType" @success="commentSuccess" />
     </div>
     <!--正文和楼中楼    -->
     <div style="margin-left: 40px">
@@ -23,7 +25,12 @@
       </div>
       <!--     楼中楼-->
       <div v-if="isRoot && data.hasReplies">
-        <comment-replies-area :author-user-id="authorUserId" :comment-id="data.id" :work-id="workId" :works-type="worksType" />
+        <comment-replies-area ref="commentRepliesArea"
+                              :author-user-id="authorUserId"
+                              :comment-id="data.id"
+                              :work-id="workId"
+                              :works-type="worksType"
+        />
       </div>
     </div>
   </div>
@@ -34,6 +41,8 @@ import UserAvatar from "@/components/v2/user/user-avatar";
 import UserLink from "@/components/v2/user/user-link";
 import CommentRepliesArea from "@/components/v2/comment/comment-replies-area";
 import CommentDel from "@/components/v2/illust/comment/comment-del";
+import CommentStamp from "@/components/v2/illust/comment/comment-stamp";
+import CommentText from "@/components/v2/illust/comment/comment-text";
 
 const name = "评论"
 
@@ -44,10 +53,21 @@ export default {
       showRelies: false,
     }
   },
-  emits: ['deleted'],
-  components: {CommentDel, CommentRepliesArea, UserLink, UserAvatar},
+  emits: ['deleted', 'success'],
+  components: {CommentText, CommentStamp, CommentDel, CommentRepliesArea, UserLink, UserAvatar},
   computed: {},
-  methods: {},
+  methods: {
+    commentSuccess(e) {
+      if (this.isRoot) {
+        this.data.hasReplies = true;
+        this.$nextTick(() => {
+          this.$refs.commentRepliesArea.commentSuccess(e)
+        })
+      } else {
+        this.$emit("success", e)
+      }
+    },
+  },
   mounted() {
   },
   watch: {},

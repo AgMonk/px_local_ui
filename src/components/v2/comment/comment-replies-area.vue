@@ -10,7 +10,15 @@
     </div>
     <load-more-div v-if="show" :has-next="hasNext" :init-request="request" :load-more-request="request" :params="params" @success="success">
       <!--        评论显示-->
-      <comment-reply v-for="item in data" :author-user-id="authorUserId" :data="item" :parent-id="commentId" :work-id="workId" :works-type="worksType" />
+      <comment-reply v-for="item in data"
+                     :author-user-id="authorUserId"
+                     :data="item"
+                     :parent-id="commentId"
+                     :work-id="workId"
+                     :works-type="worksType"
+                     @deleted="deleted"
+                     @success="commentSuccess"
+      />
     </load-more-div>
   </div>
 </template>
@@ -46,6 +54,16 @@ export default {
   computed: {},
   methods: {
     ...mapActions("Comments", ['illustsReplies', 'novelsReplies']),
+    deleted(e) {
+      this.data = this.data.filter(i => i.id !== e)
+    },
+    commentSuccess(e) {
+      if (!this.show) {
+        this.show = true;
+      } else {
+        this.data = [e, ...this.data];
+      }
+    },
     request({worksType, commentId, page, force}) {
       if (worksType === 'illusts') {
         return this.illustsReplies({
