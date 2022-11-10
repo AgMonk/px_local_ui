@@ -8,6 +8,7 @@
       />
         <!--      todo 发表评论按钮-->
       <comment-stamp :id="id" :author-user-id="authorUserId" :works-type="worksType" @success="commentSuccess" />
+      <comment-text :id="id" :author-user-id="authorUserId" :works-type="worksType" @success="commentSuccess" />
     </h2>
     <load-more-div v-if="show" :has-next="hasNext" :init-request="request" :load-more-request="request" :params="params" @success="success">
       <!--        评论显示-->
@@ -21,6 +22,7 @@ import LoadMoreDiv from "@/components/v2/load-more-div";
 import {mapActions} from "vuex";
 import CommentReply from "@/components/v2/comment/comment-reply";
 import CommentStamp from "@/components/v2/illust/comment/comment-stamp";
+import CommentText from "@/components/v2/illust/comment/comment-text";
 
 const name = "评论区"
 
@@ -39,7 +41,7 @@ export default {
       show: false,
     }
   },
-  components: {CommentStamp, CommentReply, LoadMoreDiv},
+  components: {CommentText, CommentStamp, CommentReply, LoadMoreDiv},
   computed: {},
   methods: {
     ...mapActions("Comments", ['novelsRoots', 'illustsRoots']),

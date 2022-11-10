@@ -3,6 +3,7 @@
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {clearComments} from "@/assets/v2/comment-clear";
+import {DateUtils} from "gin-utils/dist/utils/DateUtils";
 
 export default {
     namespaced: true, state: {
@@ -89,6 +90,7 @@ export default {
                 const {comment, comment_id, parent_id, stamp_id, user_id, user_name,} = res
 
                 state[worksType].clear()
+                let date = DateUtils.withZone(new Date(), 9);
                 return {
                     comment,
                     id: Number(comment_id),
@@ -96,6 +98,8 @@ export default {
                     stampId: stamp_id,
                     uid: Number(user_id),
                     userName: user_name,
+                    commentDate: DateUtils.format(date, "yyyy-MM-dd hh:mm"),
+                    editable: true,
                 }
             })
         },

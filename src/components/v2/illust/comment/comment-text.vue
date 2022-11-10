@@ -34,7 +34,7 @@
 
 <script>
 import {ChatDotSquare, Grid, Loading} from "@element-plus/icons-vue";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 import {emoji} from "@/assets/v2/emoji";
 import {TextAreaUtils} from "gin-utils/dist/utils/DomUtils";
 import {ElMessage} from "element-plus";
@@ -49,21 +49,21 @@ export default {
       text: "",
       loading: false,
       disableTooltip: false,
-      authorUserId: undefined,
       showDialog: false,
     }
   },
   computed: {},
   methods: {
-    ...mapGetters("Illust", ['getIllust']),
-    ...mapActions("IllustComment", ['commentText']),
+    ...mapActions("Comments", ['comment']),
     submit() {
       this.loading = true;
-      this.commentText({
+      this.comment({
+        worksType: this.worksType,
         parentId: this.parentId,
         authorUserId: this.authorUserId,
-        illustId: this.pid,
-        text: this.text,
+        id: this.id,
+        type: 'comment',
+        comment: this.text
       }).then(res => {
         if (this.replyToUserId) {
           res.replyToUserId = this.replyToUserId;
@@ -102,7 +102,6 @@ export default {
       })
     },
     load(pid, force) {
-      this.authorUserId = this.getIllust()(pid).userId;
     }
   },
   mounted() {
@@ -114,8 +113,15 @@ export default {
     }
   },
   props: {
-    pid: {type: Number, required: true},
+    //作品id
+    id: {type: Number, required: true},
+    //类型 只能为 illusts 或 novels
+    worksType: {type: String, required: true},
+    //作者uid
+    authorUserId: {type: Number, required: true},
+    //如果是楼中楼，根评论id
     parentId: {type: Number},
+    //被回复的用户uid
     replyToUserId: {type: Number},
     iconSize: {type: Number, default: 20},
   },
