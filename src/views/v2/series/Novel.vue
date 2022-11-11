@@ -13,6 +13,8 @@
 
 <script>
 import {Title} from "gin-utils/dist/utils/DomUtils";
+import {ElMessage} from "element-plus";
+import {mapActions} from "vuex";
 
 const name = "小说系列"
 
@@ -20,28 +22,35 @@ export default {
   name: "Novel",
   data() {
     return {
-      showDialog: {},
-      loading: {},
       params: {
-        filter: {},
-        page: 1,
-        size: 10,
+        seriesId: Number(this.$route.params.seriesId),
+        force: false,
       },
-      form: {},
-      data: [],
-      total: 10,
     }
   },
   components: {},
   computed: {},
   methods: {
+    ...mapActions("Novel", ['series', 'seriesContent']),
+    success(e) {
+      console.log(e)
+    },
+    //失败回调
+    failed(e) {
+      ElMessage.error(e.message)
+    },
+    request({seriesId, force}) {
+      return this.series({seriesId, force})
+    },
     load(route, force) {
-
+      this.params = {
+        seriesId: Number(route.params.seriesId),
+        force,
+      }
     }
   },
   mounted() {
     Title.set(name)
-    this.load(this.$route)
   },
   watch: {
     $route(to) {
