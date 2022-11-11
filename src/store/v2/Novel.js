@@ -16,6 +16,8 @@ export default {
         series: new Map(),
         //小说各篇标题缓存
         seriesTitles: new Map(),
+        //系列中作品的基础信息
+        seriesContent: new Map(),
         // 收藏数据
         bookmarkData: new Map(),
         // 小说信息数据
@@ -97,6 +99,16 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].novel.series(seriesId, "zh").then(res => {
+                        return res
+                    })
+                }
+            })
+        },
+        //查询系列中作品的基础信息
+        seriesContent: ({dispatch, commit, state, rootGetters}, {force, seriesId, page, size,}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.seriesContent, force, key: `${seriesId}_${page}_${size}`, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].novel.seriesContent(seriesId, page, size, "asc", 'zh').then(res => {
                         return res
                     })
                 }
