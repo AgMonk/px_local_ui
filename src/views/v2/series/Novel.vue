@@ -1,9 +1,10 @@
 <template>
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
-    <el-header style="color:white">{{ $route.name }}</el-header>
+    <!--    <el-header style="color:white">{{ $route.name }}</el-header>-->
     <el-main>
-
+      <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
+      </retry-div>
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -39,7 +40,7 @@ export default {
     }
   },
   mounted() {
-    Title.set("小说系列")
+    Title.set(name)
     this.load(this.$route)
   },
   watch: {
