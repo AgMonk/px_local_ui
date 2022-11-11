@@ -49,7 +49,6 @@ const routes = [
 
         ]
     },
-
     {
         path: "/illust/:pid",
         name: "绘画详情",
@@ -59,6 +58,11 @@ const routes = [
         path: "/novel/:nid",
         name: "小说详情",
         component: () => import("../views/v2/detail/Novel")
+    },
+    {
+        path: "/novel/series/:seriesId",
+        name: "小说系列",
+        component: () => import("../views/v2/series/Novel")
     },
     {
         path: "/config",

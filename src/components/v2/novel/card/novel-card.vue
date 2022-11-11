@@ -8,9 +8,11 @@
         </novel-link>
       </el-aside>
       <el-main v-if="data" style="margin-left: 5px;">
-        <!--      todo   系列标题-->
-        <div v-if="data.seriesId" style="color: rgba(255,255,255,0.5)">
-          系列: {{ data.seriesTitle }}
+        <!--         系列标题-->
+        <div v-if="data.seriesId">
+          <novel-series-link :series-id="data.seriesId">
+            <span style="color: rgba(255,255,255,0.5)">系列: {{ data.title }}</span>
+          </novel-series-link>
         </div>
         <!--     标题-->
         <div class="single-line">
@@ -67,12 +69,13 @@ import NovelImage from "@/components/v2/novel/novel-image";
 import NovelLink from "@/components/v2/novel/novel-link";
 import {mapGetters} from "vuex";
 import CopySpan from "@/components/v2/copy/copy-span";
+import NovelSeriesLink from "@/components/v2/novel/novel-series-link";
 
 const name = ""
 
 export default {
   name: "novel-card",
-  components: {CopySpan, NovelLink, NovelImage, UserAvatar, UserLink},
+  components: {NovelSeriesLink, CopySpan, NovelLink, NovelImage, UserAvatar, UserLink},
   data() {
     return {data: undefined}
   },

@@ -28,7 +28,7 @@
                 </div>
               </el-link>
               <el-link v-if="item.type==='illustSeries'" :href="item.contentUrl" :underline="false" target="_blank">
-                <!--        todo 作品系列 -->
+                <!--        todo 绘画系列 -->
                 <div class="pickup-card">
                   <el-image v-if="item.url" :src="item.url" class="absolute-center pickup-image" />
                   <span class="absolute-center" style="background-color: rgba(240,248,255,0.41);font-size: 30px">

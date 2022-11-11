@@ -13,9 +13,11 @@
                 <novel-image :info="{id:data.id,showImage:true}" @failed="" @success="" />
               </el-aside>
               <el-main style="text-align: left;padding:0 10px">
-                <!--      todo   系列标题-->
-                <div v-if="data.seriesNavData" style="color: rgba(255,255,255,0.5)">
-                  系列: {{ data.seriesNavData.title }}
+                <!--       系列标题-->
+                <div v-if="seriesNavData" style="color: rgba(255,255,255,0.5)">
+                  <novel-series-link :series-id="seriesNavData.seriesId">
+                    <span style="font-size: 20px">系列: {{ seriesNavData.title }}</span>
+                  </novel-series-link>
                 </div>
                 <!--            标题-->
                 <div style="margin-top: 5px">
@@ -102,8 +104,9 @@
                     <span class="right-aside-label">系列</span>
                   </template>
                   <span style="color: white">
-                    <!--                    todo 系列链接-->
-                    {{ seriesNavData.title }}
+                    <novel-series-link :series-id="seriesNavData.seriesId">
+                      <span style="color: white">{{ seriesNavData.title }}</span>
+                    </novel-series-link>
                   </span>
                 </el-form-item>
                 <el-form-item v-if="seriesNavData.prev">
@@ -163,6 +166,7 @@ import NovelLink from "@/components/v2/novel/novel-link";
 import NovelSeriesTitle from "@/components/v2/novel/novel-series-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
 import CommentArea from "@/components/v2/comment/comment-area";
+import NovelSeriesLink from "@/components/v2/novel/novel-series-link";
 
 const name = "小说详情"
 
@@ -184,7 +188,7 @@ export default {
       page: 1,
     }
   },
-  components: {CommentArea, NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {NovelSeriesLink, CommentArea, NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
     ...mapActions("Novel", ['detail']),
