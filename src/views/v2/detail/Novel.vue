@@ -19,7 +19,7 @@
                 </div>
                 <!--            标题-->
                 <div style="margin-top: 5px">
-                  <novel-link :nid="data.id"><span style="font-weight: bold;color: white;">{{ data.title }}</span></novel-link>
+                  <novel-link :nid="data.id"><span style="font-weight: bold;color: white;font-size: 25px">{{ data.title }}</span></novel-link>
                 </div>
                 <!--            描述-->
                 <div class="gin-scrollbar" style="color: rgba(255,255,255,0.7);max-height: 200px;margin-top: 5px" v-html="data.description" />
