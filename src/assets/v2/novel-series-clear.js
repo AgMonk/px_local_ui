@@ -29,7 +29,6 @@ export const clearSeries = function (item) {
 
     item.cover = item.cover.urls
 
-    delete item.total
     delete item.maxXRestrict
     delete item.isWatched
     delete item.isNotifying
