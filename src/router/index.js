@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import {routeName} from "@/router/route-name";
 
 const routes = [
     {
@@ -11,11 +12,11 @@ const routes = [
     },
     {
         path: '/follow/latest',
-        name: '最新作品',
+        name: routeName.followLatest,
         component: () => import("../views/v2/follow_latest/Home"),
         children: [
-            {path: "illust/:page", name: "最新绘画", component: () => import("../views/v2/follow_latest/Illust"),},
-            {path: "novel/:page", name: "最新小说", component: () => import("../views/v2/follow_latest/Novel"),},
+            {path: "illust/:page", name: routeName.followLatestIllust, component: () => import("../views/v2/follow_latest/Illust"),},
+            {path: "novel/:page", name: routeName.followLatestNovel, component: () => import("../views/v2/follow_latest/Novel"),},
         ]
     },
     {
@@ -38,13 +39,19 @@ const routes = [
     },
     {
         path: '/user/:uid',
-        name: '用户主页',
+        name: routeName.user.index,
         component: () => import("../views/v2/user/Home"),
         children: [
-            {path: "illust", name: "用户插画", component: () => import("../views/v2/user/IllustManga"),},
-            {path: "manga", name: "用户漫画", component: () => import("../views/v2/user/IllustManga"),},
-            {path: "novel", name: "用户小说", component: () => import("../views/v2/user/Novel"),},
-            {path: "bookmark", name: "用户收藏", component: () => import("../views/v2/user/Bookmark"),},
+            {path: "illust", name: routeName.user.illust, component: () => import("../views/v2/user/IllustManga"),},
+            {path: "manga", name: routeName.user.manga, component: () => import("../views/v2/user/IllustManga"),},
+            {path: "novel", name: routeName.user.novel, component: () => import("../views/v2/user/Novel"),},
+            {
+                path: "bookmark", name: routeName.user.bookmark.index, component: () => import("../views/v2/user/Bookmark"),
+                children: [
+                    {path: "illust", name: routeName.user.bookmark.illust, component: () => import("../views/v2/user/bookmark/IllustManga"),},
+                    {path: "novel", name: routeName.user.bookmark.novel, component: () => import("../views/v2/user/bookmark/Novel"),},
+                ],
+            },
             {path: "request", name: "用户约稿", component: () => import("../views/v2/user/Request"),},
 
         ]
