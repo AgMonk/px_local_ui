@@ -24,7 +24,13 @@ export default {
         illust: ({dispatch, commit, state, rootGetters}, {force, uid, param: {page, size, tag, rest}}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illust, force, key: JSON.stringify({uid, page, size, tag, rest}), seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.illustsBookmarks(uid, {page, size, tag, rest, lang: 'zh'})
+                    return rootGetters["getApi"].user.illustsBookmarks(uid, {page, size, tag, rest, lang: 'zh'}).then(res => {
+                        const {total, works} = res
+                        commit("Illust/handleIllusts", {array: works}, {root: true})
+                        return {
+                            total, data: works, type: 'illust',
+                        }
+                    })
                 }
             })
         },
@@ -40,7 +46,13 @@ export default {
         novel: ({dispatch, commit, state, rootGetters}, {force, uid, param: {page, size, tag, rest}}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novel, force, key: JSON.stringify({uid, page, size, tag, rest}), seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.novelsBookmarks(uid, {page, size, tag, rest, lang: 'zh'})
+                    return rootGetters["getApi"].user.novelsBookmarks(uid, {page, size, tag, rest, lang: 'zh'}).then(res => {
+                        const {total, works} = res
+                        commit("Novel/handleNovels", works, {root: true})
+                        return {
+                            total, data: works, type: 'novel',
+                        }
+                    })
                 }
             })
         },

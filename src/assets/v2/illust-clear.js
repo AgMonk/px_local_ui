@@ -1,20 +1,16 @@
 import {DateUtils} from "gin-utils/dist/utils/DateUtils";
+import {clearAuthor, clearDate, clearR18} from "@/assets/v2/fields-clear";
 
 function clearIllust(item) {
     //格式转换
     item.id = Number(item.id)
-    item.userId = Number(item.userId)
-    item.uid = Number(item.userId)
-    item.r18 = !!item.xRestrict
-    item.r18g = !!item.restrict
     item.size = {
         width: item.width, height: item.height,
     }
-    item.author = {
-        avatar: item.profileImageUrl,
-        name: item.userName,
-        id: Number(item.userId)
-    }
+
+    clearAuthor(item)
+    clearR18(item)
+    clearDate(item)
 
     delete item.titleCaptionTranslation;
     delete item.alt;
@@ -24,8 +20,6 @@ function clearIllust(item) {
     delete item.height;
     delete item.width;
     delete item.xRestrict;
-    delete item.userName;
-    delete item.profileImageUrl;
 
 
 }

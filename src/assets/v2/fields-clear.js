@@ -16,6 +16,7 @@ export const clearAuthor = function (item) {
         id: uid
     }
     item.uid = Number(item.userId);
+    item.userId = Number(item.userId);
 
     delete item.userId;
     delete item.userName;

@@ -12,11 +12,11 @@ const routes = [
     },
     {
         path: '/follow/latest',
-        name: routeName.followLatest,
+        name: routeName.followLatest.index,
         component: () => import("../views/v2/follow_latest/Home"),
         children: [
-            {path: "illust/:page", name: routeName.followLatestIllust, component: () => import("../views/v2/follow_latest/Illust"),},
-            {path: "novel/:page", name: routeName.followLatestNovel, component: () => import("../views/v2/follow_latest/Novel"),},
+            {path: "illust/:page", name: routeName.followLatest.illust, component: () => import("../views/v2/follow_latest/Illust"),},
+            {path: "novel/:page", name: routeName.followLatest.novel, component: () => import("../views/v2/follow_latest/Novel"),},
         ]
     },
     {
