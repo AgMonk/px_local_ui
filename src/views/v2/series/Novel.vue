@@ -52,6 +52,13 @@
                       <template #label><span class="description-item">最后更新</span></template>
                       <span class="description-item">{{ data.lastPublish }}</span>
                     </el-form-item>
+                    <el-form-item>
+                      <template #label><span class="description-item">阅读</span></template>
+                      <novel-link :nid="data.firstNovelId" type="primary">第一话</novel-link>
+                      &nbsp;&nbsp;
+                      <novel-link :nid="data.latestNovelId" type="primary">最新一话</novel-link>
+                    </el-form-item>
+
                     <br>
                     <el-form-item>
                       <template #label><span class="description-item">话数</span></template>
@@ -120,6 +127,7 @@ import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
 import UserTitle from "@/components/v2/user/user-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
+import NovelLink from "@/components/v2/novel/novel-link";
 
 const name = "小说系列"
 
@@ -134,7 +142,7 @@ export default {
       data: undefined,
     }
   },
-  components: {NovelTags, UserTitle, CopySpan, NovelImage},
+  components: {NovelLink, NovelTags, UserTitle, CopySpan, NovelImage},
   computed: {},
   methods: {
     ...mapActions("Novel", ['series', 'seriesContent']),
