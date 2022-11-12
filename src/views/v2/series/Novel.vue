@@ -8,6 +8,7 @@
         <el-container v-if="data" direction="horizontal">
           <!--          header 和正文-->
           <el-main>
+            <!--            header-->
             <el-container direction="horizontal">
               <el-aside width="200px">
                 <el-image :src="data.cover['240mw']" />
@@ -76,11 +77,10 @@
 
                   </el-form>
                 </div>
-
-                <!--                todo 最新一话-->
               </el-main>
             </el-container>
-
+            <!--            正文列表-->
+            <novel-series-content :series-id="Number($route.params.seriesId)" />
           </el-main>
           <!--          右侧边-->
           <el-aside style="padding-left: 20px;" width="250px">
@@ -128,6 +128,7 @@ import CopySpan from "@/components/v2/copy/copy-span";
 import UserTitle from "@/components/v2/user/user-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
 import NovelLink from "@/components/v2/novel/novel-link";
+import NovelSeriesContent from "@/components/v2/novel/novel-series-content";
 
 const name = "小说系列"
 
@@ -142,10 +143,10 @@ export default {
       data: undefined,
     }
   },
-  components: {NovelLink, NovelTags, UserTitle, CopySpan, NovelImage},
+  components: {NovelSeriesContent, NovelLink, NovelTags, UserTitle, CopySpan, NovelImage},
   computed: {},
   methods: {
-    ...mapActions("Novel", ['series', 'seriesContent']),
+    ...mapActions("Novel", ['series']),
     success(e) {
       console.log(e)
       this.data = e;
