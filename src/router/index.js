@@ -45,13 +45,7 @@ const routes = [
             {path: "illust", name: routeName.user.illust, component: () => import("../views/v2/user/IllustManga"),},
             {path: "manga", name: routeName.user.manga, component: () => import("../views/v2/user/IllustManga"),},
             {path: "novel", name: routeName.user.novel, component: () => import("../views/v2/user/Novel"),},
-            {
-                path: "bookmark", name: routeName.user.bookmark.index, component: () => import("../views/v2/user/Bookmark"),
-                children: [
-                    {path: "illust", name: routeName.user.bookmark.illust, component: () => import("../views/v2/user/bookmark/IllustManga"),},
-                    {path: "novel", name: routeName.user.bookmark.novel, component: () => import("../views/v2/user/bookmark/Novel"),},
-                ],
-            },
+            {path: "bookmark", name: routeName.user.bookmark, component: () => import("../views/v2/user/Bookmark"),},
             {path: "request", name: "用户约稿", component: () => import("../views/v2/user/Request"),},
 
         ]

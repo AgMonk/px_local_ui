@@ -9,10 +9,6 @@ export const routeName = {
         illust: "用户插画",
         manga: "用户漫画",
         novel: "用户小说",
-        bookmark: {
-            index: "用户收藏",
-            illust: "用户收藏-绘画",
-            novel: "用户收藏-小说",
-        }
+        bookmark: "用户收藏",
     },
 }
