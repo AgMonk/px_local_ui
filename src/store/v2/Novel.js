@@ -23,6 +23,7 @@ export default {
         bookmarkData: new Map(),
         // 小说信息数据
         novelData: new Map(),
+
     },
     mutations: {
         method(state, payload) {
@@ -111,7 +112,10 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesContent, force, key: `${seriesId}_${page}_${size}`, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].novel.seriesContent(seriesId, page, size, "asc", 'zh').then(res => {
-                        res.forEach(i => clearSeriesContent(i))
+                        res.forEach(i => {
+                            clearSeriesContent(i);
+                            commit("updateBmkData", i);
+                        })
                         return res
                     })
                 }
@@ -130,7 +134,34 @@ export default {
                 }
             })
         },
-
+        //删除收藏
+        delBookmark: ({dispatch, commit, state, rootGetters}, {nid, bmkId}) => {
+            return rootGetters["getApi"].bookmark.delNovel(bmkId).then(res => {
+                state.bookmarkData.delete(nid)
+                return res
+            })
+        },
+        //添加收藏
+        addBookmark: ({dispatch, commit, state, rootGetters}, nid) => {
+            return rootGetters["getApi"].bookmark.addNovel({
+                comment: "", tags: [], novel_id: nid, restrict: 0,
+            }).then(id => {
+                if (id) {
+                    commit("updateBmkData", {id: nid, bookmarkData: {id: id, private: false}});
+                    return id
+                }
+                return dispatch("bookmarkData", nid).then(res => {
+                    return res.id
+                })
+            })
+        },
+        //查询收藏数据
+        bookmarkData: ({dispatch, commit, state, rootGetters}, nid) => {
+            return rootGetters["getApi"].novel.bookmarkData(nid).then(res => {
+                state.bookmarkData.set(nid, res.bookmarkData)
+                return res.bookmarkData;
+            })
+        },
 
     },
     getters: {
@@ -138,5 +169,9 @@ export default {
         getNovel: (state) => (id) => {
             return state.novelData.get(id)
         },
+        //获取收藏数据
+        getBookmarkData: (state) => (id) => {
+            return state.bookmarkData.get(id)
+        }
     },
 }

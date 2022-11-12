@@ -202,7 +202,9 @@ export default {
     }, getters: {
         getIllust: (state) => (id) => {
             return state.illustData.get(id)
-        }, getBookmarkData: (state) => (id) => {
+        },
+        //获取收藏数据
+        getBookmarkData: (state) => (id) => {
             return state.bookmarkData.get(id)
         }
     },
