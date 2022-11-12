@@ -6,7 +6,23 @@
     </el-header>
     <el-main>
       <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
+        <el-pagination v-model:current-page="params.page"
+                       :layout="layout"
+                       :page-size="params.size"
+                       :total="total"
+                       hide-on-single-page
+                       size="small"
+                       @current-change="load(undefined,$event)"
+        />
         <novel-series-content-card v-for="item in data " :data="item" />
+        <el-pagination v-model:current-page="params.page"
+                       :layout="layout"
+                       :page-size="params.size"
+                       :total="total"
+                       hide-on-single-page
+                       size="small"
+                       @current-change="load(undefined,$event)"
+        />
       </retry-div>
     </el-main>
   </el-container>
@@ -24,6 +40,7 @@ export default {
   name: "novel-series-content",
   data() {
     return {
+      layout: "prev, pager, next, jumper",
       params: {
         seriesId: this.seriesId,
         force: false,

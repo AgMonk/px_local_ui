@@ -150,6 +150,7 @@ export default {
     success(e) {
       console.log(e)
       this.data = e;
+      Title.set("系列: " + e.title)
     },
     //失败回调
     failed(e) {
