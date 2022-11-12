@@ -58,7 +58,7 @@ export default {
 
 <style scoped>
 .card-info {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .card-line {
