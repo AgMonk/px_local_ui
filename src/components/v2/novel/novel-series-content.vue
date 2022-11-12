@@ -6,7 +6,7 @@
     </el-header>
     <el-main>
       <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
-
+        <novel-series-content-card v-for="item in data " :data="item" />
       </retry-div>
     </el-main>
   </el-container>
@@ -16,6 +16,7 @@
 <script>
 import {ElMessage} from "element-plus";
 import {mapActions} from "vuex";
+import NovelSeriesContentCard from "@/components/v2/novel/novel-series-content-card";
 
 const name = "小说系列正文列表"
 
@@ -32,7 +33,7 @@ export default {
       data: undefined,
     }
   },
-  components: {},
+  components: {NovelSeriesContentCard},
   computed: {},
   methods: {
     ...mapActions("Novel", ['seriesContent']),
@@ -49,7 +50,7 @@ export default {
     },
     load(seriesId, page) {
       this.params = {
-        seriesId: seriesId,
+        seriesId: seriesId || this.seriesId,
         force: false,
         page: page || 1,
         size: 10
@@ -65,6 +66,7 @@ export default {
   },
   props: {
     seriesId: {type: Number, required: true},
+    total: {type: Number, required: true},
   },
 }
 

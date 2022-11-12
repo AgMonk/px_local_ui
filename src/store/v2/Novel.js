@@ -4,7 +4,7 @@
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {clearNovel, clearNovelDetail, clearNovelInfo} from "@/assets/v2/novel-clear";
 import {simplify} from "@/assets/v2/axios";
-import {clearSeries} from "@/assets/v2/novel-series-clear";
+import {clearSeries, clearSeriesContent} from "@/assets/v2/novel-series-clear";
 
 export default {
     namespaced: true,
@@ -111,6 +111,7 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesContent, force, key: `${seriesId}_${page}_${size}`, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].novel.seriesContent(seriesId, page, size, "asc", 'zh').then(res => {
+                        res.forEach(i => clearSeriesContent(i))
                         return res
                     })
                 }

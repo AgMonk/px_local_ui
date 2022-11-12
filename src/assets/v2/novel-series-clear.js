@@ -49,3 +49,33 @@ export const clearSeries = function (item) {
     delete item.isConcluded
     delete item.useWordCount
 }
+
+export const clearSeriesContent = function (item) {
+    item.id = Number(item.id)
+    clearR18(item)
+
+    item.counts = {
+        text: item.textLength,
+        character: item.characterCount,
+        word: item.wordCount,
+        bookmark: item.bookmarkCount,
+    }
+
+    item.index = item.series.contentOrder
+
+    item.uploadDate = DateUtils.format(new Date(item.uploadTimestamp * 1000), "yyyy-MM-dd hh:mm")
+    item.reuploadTimestamp && (item.reUploadDate = DateUtils.format(new Date(item.reuploadTimestamp * 1000), "yyyy-MM-dd hh:mm"))
+
+    delete item.userId
+    delete item.textLength
+    delete item.uploadTimestamp
+    delete item.reuploadTimestamp
+    delete item.isBookmarkable
+    delete item.wordCount
+    delete item.useWordCount
+    delete item.bookmarkCount
+    delete item.characterCount
+    delete item.series
+    delete item.isOriginal
+
+}

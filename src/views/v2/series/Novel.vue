@@ -5,7 +5,7 @@
     <el-main>
       <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
 
-        <el-container v-if="data" direction="horizontal">
+        <el-container direction="horizontal">
           <!--          header 和正文-->
           <el-main>
             <!--            header-->
@@ -80,7 +80,7 @@
               </el-main>
             </el-container>
             <!--            正文列表-->
-            <novel-series-content :series-id="Number($route.params.seriesId)" />
+            <novel-series-content :series-id="Number($route.params.seriesId)" :total="data.total.count" />
           </el-main>
           <!--          右侧边-->
           <el-aside style="padding-left: 20px;" width="250px">
