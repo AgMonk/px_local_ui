@@ -8,9 +8,9 @@
       </el-radio-group>
     </el-header>
     <el-main>
-      <!--用户收藏 todo-->
+      <router-view />
     </el-main>
-    <el-footer></el-footer>
+    <!--    <el-footer></el-footer>-->
   </el-container>
 
 </template>
@@ -41,7 +41,7 @@ export default {
     load(route, force) {
       Title.set(route.name)
       this.type = route.path.split('/')[4] || 'illust';
-
+      this.pushRoute(this.type)
     }
   },
   mounted() {
