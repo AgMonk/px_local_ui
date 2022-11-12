@@ -2,6 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
+import {simplify} from "@/assets/v2/axios";
 
 export default {
     namespaced: true,
@@ -28,7 +29,7 @@ export default {
                         const {total, works} = res
                         commit("Illust/handleIllusts", {array: works}, {root: true})
                         return {
-                            total, data: works, type: 'illust',
+                            total, data: simplify(works), type: 'illust',
                         }
                     })
                 }
@@ -50,7 +51,7 @@ export default {
                         const {total, works} = res
                         commit("Novel/handleNovels", works, {root: true})
                         return {
-                            total, data: works, type: 'novel',
+                            total, data: simplify(works), type: 'novel',
                         }
                     })
                 }

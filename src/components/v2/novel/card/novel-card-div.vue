@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 5px">
+  <div style="margin-top: 5px;text-align: left">
     <novel-card v-for="(info,index) in data"
                 :key="index"
                 :info="info"

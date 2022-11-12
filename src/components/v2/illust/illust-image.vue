@@ -79,8 +79,8 @@ export default {
       } else {
         //放弃加载
         this.loading = false;
+        this.$emit("failed", this.data.id)
       }
-      this.$emit("failed", this.data.id)
     },
     success() {
       this.loading = false;

@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip :disabled="disableTooltip" placement="top-start">
+  <el-tooltip :disabled="disableTooltip" :show-after="500" placement="top-start">
     <router-link :to="{name:'小说详情',params:{nid}}">
       <el-link :type="type" :underline="false">
         <slot />

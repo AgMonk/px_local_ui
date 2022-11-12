@@ -1,5 +1,5 @@
 <template>
-  <el-container v-if="info" class="novel-card" direction="horizontal" style="display: inline-block;vertical-align: top">
+  <el-container v-if="info" class="novel-card" direction="horizontal" style="display: inline-block;vertical-align: top;margin-bottom: 10px">
     <div style="display: flex;width: 400px">
       <el-aside width="150px">
         <!--    封面图-->

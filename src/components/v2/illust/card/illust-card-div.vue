@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div style="margin-top: 5px;text-align: left">
     <illust-card v-for="(item,index) in data"
                  :key="index"
                  :info="item"
                  :size="config.ui.cardSize"
                  style="margin-right: 5px"
+                 @failed="current--"
                  @success="imageCompleted"
                  @illust-bookmark-success="$emit('illust-bookmark-success',$event)"
     />

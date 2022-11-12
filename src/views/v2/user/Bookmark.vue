@@ -2,13 +2,31 @@
   <el-container direction="vertical">
     <!--  <el-container direction="horizontal">-->
     <el-header style="color:white">
-      <el-radio-group v-model="params.type" size="small" type="primary" @change="pushRoute(params)">
-        <el-radio-button label="illust">绘画</el-radio-button>
-        <el-radio-button label="novel">小说</el-radio-button>
-      </el-radio-group>
+
+      <el-row>
+        <el-col :span="12" style="text-align: left">
+          <el-radio-group v-model="params.type" size="small" type="primary" @change="change">
+            <el-radio-button label="illust">绘画</el-radio-button>
+            <el-radio-button label="novel">小说</el-radio-button>
+          </el-radio-group>
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+
+        </el-col>
+      </el-row>
     </el-header>
     <el-main>
-      <retry-div :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
+      <retry-div :params="params" :ready="ready" :request="request" unmount-while-loading @failed="failed" @success="success">
+        <el-pagination v-model:current-page="params.page"
+                       :layout="layout"
+                       :page-size="params.size"
+                       :total="total"
+                       hide-on-single-page
+                       size="small"
+                       @current-change="change"
+        />
+        <illust-card-div v-if="params.type==='illust'" :data="data.illust" />
+        <novel-card-div v-if="params.type==='novel'" :data="data.novel" />
       </retry-div>
     </el-main>
     <!--    <el-footer></el-footer>-->
@@ -21,29 +39,41 @@ import {Title} from "gin-utils/dist/utils/DomUtils";
 import {routeName} from "@/router/route-name";
 import {mapActions} from "vuex";
 import {ElMessage} from "element-plus";
+import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
+import NovelCardDiv from "@/components/v2/novel/card/novel-card-div";
 
 //用户收藏
 const name = routeName.user.bookmark
 
 export default {
   name: "Bookmark",
+  components: {NovelCardDiv, IllustCardDiv},
   data() {
     return {
       params: {
         //作品类型 'illust' 或 'novel'
-        type: this.$route.query.type || 'illust',
-        page: this.$route.query.page || 1,
-        size: this.$route.query.size || 48,
-        tag: this.$route.query.tag || '',
-        rest: this.$route.query.rest || 'show',
+        type: undefined,
+        page: undefined,
+        size: undefined,
+        tag: undefined,
+        rest: undefined,
         force: false,
       },
-      data: undefined,
+      data: {
+        illust: [],
+        novel: [],
+      },
+      layout: "prev, pager, next, jumper,total",
+      total: undefined,
+      ready: false,
     }
   },
   computed: {},
   methods: {
     ...mapActions("Bookmarks", ["illust", "novel"]),
+    change() {
+      this.pushRoute(this.params)
+    },
     //请求
     request({type, page, size, tag, rest, force}) {
       const method = type === 'illust' ? this.illust : this.novel;
@@ -51,9 +81,13 @@ export default {
       return method({force, uid, param: {page, size, tag, rest}})
     },
     //成功回调
-    success(res) {
-      this.data = res
-      console.log(res)
+    success({type, data, total}) {
+      if (this.params.type !== type) {
+        return;
+      }
+      this.data[type] = data
+      this.total = total
+      console.log(data)
     },
     //失败回调
     failed(e) {
@@ -74,9 +108,12 @@ export default {
       const rest = query.rest || 'show'
 
       this.params = {type, page, size, tag, rest, force}
+
+      this.ready = true;
     }
   },
   mounted() {
+    this.load(this.$route)
   },
   watch: {
     $route(to) {
