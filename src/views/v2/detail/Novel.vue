@@ -171,10 +171,10 @@ import UserTitle from "@/components/v2/user/user-title";
 import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
 import NovelLink from "@/components/v2/novel/novel-link";
-import NovelSeriesTitle from "@/components/v2/novel/novel-series-title";
+import NovelSeriesTitle from "@/components/v2/novel/series/novel-series-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
 import CommentArea from "@/components/v2/comment/comment-area";
-import NovelSeriesLink from "@/components/v2/novel/novel-series-link";
+import NovelSeriesLink from "@/components/v2/novel/series/novel-series-link";
 import NovelBookmarkButton from "@/components/v2/novel/novel-bookmark-button";
 
 const name = "小说详情"

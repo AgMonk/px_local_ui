@@ -54,6 +54,7 @@
           <span style="margin-right: 5px">{{ Math.floor(data.readingTime / 60) }}分钟</span>
           <!--          喜欢数量-->
           <span>★{{ data.bookmarkCount }}</span>
+          <novel-bookmark-button :nid="data.id" :size="25" />
         </div>
       </el-main>
     </div>
@@ -69,13 +70,14 @@ import NovelImage from "@/components/v2/novel/novel-image";
 import NovelLink from "@/components/v2/novel/novel-link";
 import {mapGetters} from "vuex";
 import CopySpan from "@/components/v2/copy/copy-span";
-import NovelSeriesLink from "@/components/v2/novel/novel-series-link";
+import NovelSeriesLink from "@/components/v2/novel/series/novel-series-link";
+import NovelBookmarkButton from "@/components/v2/novel/novel-bookmark-button";
 
 const name = ""
 
 export default {
   name: "novel-card",
-  components: {NovelSeriesLink, CopySpan, NovelLink, NovelImage, UserAvatar, UserLink},
+  components: {NovelBookmarkButton, NovelSeriesLink, CopySpan, NovelLink, NovelImage, UserAvatar, UserLink},
   data() {
     return {data: undefined}
   },

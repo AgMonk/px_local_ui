@@ -32,7 +32,7 @@
 <script>
 import {ElMessage} from "element-plus";
 import {mapActions} from "vuex";
-import NovelSeriesContentCard from "@/components/v2/novel/novel-series-content-card";
+import NovelSeriesContentCard from "@/components/v2/novel/series/novel-series-content-card";
 
 const name = "小说系列正文列表"
 

@@ -128,7 +128,7 @@ import CopySpan from "@/components/v2/copy/copy-span";
 import UserTitle from "@/components/v2/user/user-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
 import NovelLink from "@/components/v2/novel/novel-link";
-import NovelSeriesContent from "@/components/v2/novel/novel-series-content";
+import NovelSeriesContent from "@/components/v2/novel/series/novel-series-content";
 
 const name = "小说系列"
 
