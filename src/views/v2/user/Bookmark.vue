@@ -3,7 +3,7 @@
     <!--  <el-container direction="horizontal">-->
     <el-header style="color:white">{{ $route.name }}</el-header>
     <el-main>
-
+      <!--用户收藏 todo-->
     </el-main>
     <el-footer></el-footer>
   </el-container>

@@ -12,7 +12,7 @@
       :
       <!--      删除评论按钮-->
       <comment-del v-if="data.editable" :id="workId" :comment-id="data.id" :works-type="worksType" @deleted="$emit('deleted', data.id)" />
-      <!--      todo 回复楼中楼 按钮 表情贴图 或 文字回复-->
+      <!--      回复楼中楼 按钮 表情贴图 或 文字回复-->
       <comment-stamp :id="workId" :author-user-id="authorUserId" :parent-id="data.id" :works-type="worksType" @success="commentSuccess" />
       <comment-text :id="workId" :author-user-id="authorUserId" :parent-id="data.id" :works-type="worksType" @success="commentSuccess" />
     </div>

@@ -6,7 +6,7 @@
           class="ml-2"
           style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
       />
-        <!--      todo 发表评论按钮-->
+        <!--      发表评论按钮-->
       <comment-stamp :id="id" :author-user-id="authorUserId" :works-type="worksType" @success="commentSuccess" />
       <comment-text :id="id" :author-user-id="authorUserId" :works-type="worksType" @success="commentSuccess" />
     </h2>

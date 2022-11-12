@@ -5,7 +5,7 @@
       <h2 style="color: white">{{ $route.name }}</h2>
     </el-header>
     <el-main>
-
+      <!--todo 搜索小说-->
     </el-main>
     <el-footer></el-footer>
   </el-container>
