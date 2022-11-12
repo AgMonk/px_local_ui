@@ -95,7 +95,15 @@
                     <el-link :download="`[${data.id}] ${data.title}`" :href="blob" type="primary">下载</el-link>
                   </span>
                 </el-form-item>
+                <el-form-item>
+                  <template #label>
+                    <span style="color: white">收藏</span>
+                  </template>
+                  <novel-bookmark-button :nid="data.id" />
+                </el-form-item>
+
               </el-form>
+
               <!--小说系列-->
               <el-form v-if="seriesNavData">
 
@@ -167,6 +175,7 @@ import NovelSeriesTitle from "@/components/v2/novel/novel-series-title";
 import NovelTags from "@/components/v2/novel/novel-tags";
 import CommentArea from "@/components/v2/comment/comment-area";
 import NovelSeriesLink from "@/components/v2/novel/novel-series-link";
+import NovelBookmarkButton from "@/components/v2/novel/novel-bookmark-button";
 
 const name = "小说详情"
 
@@ -188,7 +197,7 @@ export default {
       page: 1,
     }
   },
-  components: {NovelSeriesLink, CommentArea, NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {NovelBookmarkButton, NovelSeriesLink, CommentArea, NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
     ...mapActions("Novel", ['detail']),

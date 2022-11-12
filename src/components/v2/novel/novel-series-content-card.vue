@@ -3,6 +3,7 @@
     <!--    链接-->
     <div class="card-line">
       <novel-link :nid="data.id" type="primary">#{{ data.index }} {{ data.title }}</novel-link>
+      <novel-bookmark-button :nid="data.id" :size="25" />
     </div>
     <!--    数据-->
     <div class="card-line" style="color: rgba(255,255,255,0.5)">
@@ -35,6 +36,7 @@
 import NovelLink from "@/components/v2/novel/novel-link";
 import CopySpan from "@/components/v2/copy/copy-span";
 import {Star} from "@element-plus/icons-vue";
+import NovelBookmarkButton from "@/components/v2/novel/novel-bookmark-button";
 
 const name = "小说系列正文卡片"
 
@@ -43,7 +45,7 @@ export default {
   data() {
     return {}
   },
-  components: {CopySpan, NovelLink, Star},
+  components: {NovelBookmarkButton, CopySpan, NovelLink, Star},
   computed: {},
   methods: {},
   mounted() {
