@@ -38,10 +38,7 @@ export default {
   },
   watch: {},
   props: {
-    nid: {
-      type: Number,
-      required: true,
-    },
+    nid: {type: Number, required: true,},
     title: {},
     type: {type: String,},
     disableTooltip: {

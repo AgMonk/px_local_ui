@@ -5,13 +5,19 @@
 
       <el-row>
         <el-col :span="12" style="text-align: left">
-          <el-radio-group v-model="params.type" size="small" type="primary" @change="change">
+          <el-radio-group v-model="params.type" size="small" type="primary" @change="changeType">
             <el-radio-button label="illust">绘画</el-radio-button>
             <el-radio-button label="novel">小说</el-radio-button>
           </el-radio-group>
         </el-col>
         <el-col :span="12" style="text-align: right">
-
+          <user-bookmark-tag v-if="ready"
+                             :rest="params.rest"
+                             :type="params.type"
+                             :uid="Number($route.params.uid)"
+                             :value="params.tag"
+                             @change="changeTag"
+          />
         </el-col>
       </el-row>
     </el-header>
@@ -23,7 +29,7 @@
                        :total="total"
                        hide-on-single-page
                        size="small"
-                       @current-change="change"
+                       @current-change="changePage"
         />
         <illust-card-div v-if="params.type==='illust'" :data="data.illust" />
         <novel-card-div v-if="params.type==='novel'" :data="data.novel" />
@@ -41,13 +47,14 @@ import {mapActions} from "vuex";
 import {ElMessage} from "element-plus";
 import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
 import NovelCardDiv from "@/components/v2/novel/card/novel-card-div";
+import UserBookmarkTag from "@/views/v2/user/user-bookmark-tag";
 
 //用户收藏
 const name = routeName.user.bookmark
 
 export default {
   name: "Bookmark",
-  components: {NovelCardDiv, IllustCardDiv},
+  components: {UserBookmarkTag, NovelCardDiv, IllustCardDiv},
   data() {
     return {
       params: {
@@ -71,7 +78,16 @@ export default {
   computed: {},
   methods: {
     ...mapActions("Bookmarks", ["illust", "novel"]),
-    change() {
+    changeTag(e) {
+      this.params.tag = e
+      this.changePage();
+    },
+    changeType() {
+      this.params.tag = ""
+      this.params.page = 1
+      this.pushRoute(this.params)
+    },
+    changePage() {
       this.pushRoute(this.params)
     },
     //请求
@@ -87,7 +103,6 @@ export default {
       }
       this.data[type] = data
       this.total = total
-      console.log(data)
     },
     //失败回调
     failed(e) {

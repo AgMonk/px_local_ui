@@ -4,6 +4,15 @@
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {simplify} from "@/assets/v2/axios";
 
+const sortUserTag = function (array) {
+    array.sort((a, b) => {
+        if (a.tag === '未分類') {
+            return -1;
+        }
+        return b.cnt - a.cnt
+    })
+}
+
 export default {
     namespaced: true,
     state: {
@@ -39,7 +48,13 @@ export default {
         illustTag: ({dispatch, commit, state, rootGetters}, {force, uid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illust, force, key: uid + "_tag", seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.illustsBookmarkTags(uid, 'zh')
+                    return rootGetters["getApi"].user.illustsBookmarkTags(uid, 'zh').then(res => {
+                        const hide = res.private
+                        const show = res.public
+                        sortUserTag(hide)
+                        sortUserTag(show)
+                        return {show, hide};
+                    })
                 }
             })
         },
@@ -61,7 +76,13 @@ export default {
         novelTag: ({dispatch, commit, state, rootGetters}, {force, uid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novel, force, key: uid + "_tag", seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.novelsBookmarkTags(uid, 'zh')
+                    return rootGetters["getApi"].user.novelsBookmarkTags(uid, 'zh').then(res => {
+                        const hide = res.private
+                        const show = res.public
+                        sortUserTag(hide)
+                        sortUserTag(show)
+                        return {show, hide};
+                    })
                 }
             })
         },
