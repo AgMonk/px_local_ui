@@ -63,7 +63,7 @@ export default {
 
         },
         discovery: ({dispatch, commit, state, rootGetters}, {limit, mode, sampleIllustId}) => {
-            return rootGetters["getApi"].illustManga.discovery(limit, mode, sampleIllustId, 'zh').then(res => {
+            return rootGetters["getApi"].illustManga.discovery(limit, mode, sampleIllustId).then(res => {
                 const {tagTranslation, thumbnails, recommendedIllusts} = res
                 const {illust} = thumbnails
                 commit("handleIllusts", {array: illust, dic: tagTranslation})
@@ -71,7 +71,7 @@ export default {
             })
         },
         recommendInit: ({dispatch, commit, state, rootGetters}, pid) => {
-            return rootGetters["getApi"].illustManga.recommendInit(pid, 24, 'zh').then(res => {
+            return rootGetters["getApi"].illustManga.recommendInit(pid, 24).then(res => {
                 console.log(res);
                 let {illusts, nextIds} = res
                 nextIds = nextIds.map(i => Number(i))
@@ -81,7 +81,7 @@ export default {
             })
         },
         recommendIllusts: ({dispatch, commit, state, rootGetters}, ids) => {
-            return rootGetters["getApi"].illustManga.recommendIllusts(ids, 'zh').then(illusts => {
+            return rootGetters["getApi"].illustManga.recommendIllusts(ids).then(illusts => {
                 illusts = illusts.filter(i => !i.hasOwnProperty('isAdContainer'))
                 commit("handleIllusts", {array: illusts})
                 return simplify(illusts)
@@ -160,7 +160,7 @@ export default {
             CancelerCache.cancel("illust_follow_latest")
             return CacheUtils.getCacheByTime({
                 caches: state.latest, force, key: page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].illustManga.followLatest(page, "all", "zh").then(res => {
+                    return rootGetters["getApi"].illustManga.followLatest(page, "all").then(res => {
                         handleTagTranslation(res)
                         const {tagTranslation, thumbnails} = res
                         const {illust} = thumbnails
@@ -178,7 +178,7 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustManga.search(keyword, {
-                        p, mode, scd, ecd, order: 'date_d', lang: 'zh',
+                        p, mode, scd, ecd, order: 'date_d',
                     }).then(res => {
                         handleTagTranslation(res)
                         const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res

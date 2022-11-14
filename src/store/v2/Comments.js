@@ -30,7 +30,7 @@ export default {
         illustsRoots: ({dispatch, commit, state, rootGetters}, {force, pid, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illusts, force, key: pid + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.illustsRoots(pid, page, 10, "zh").then(res => {
+                    return rootGetters["getApi"].comments.illustsRoots(pid, page, 10).then(res => {
                         console.log(res)
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
@@ -43,7 +43,7 @@ export default {
         novelsRoots: ({dispatch, commit, state, rootGetters}, {force, nid, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novels, force, key: nid + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.novelsRoots(nid, page, 10, "zh").then(res => {
+                    return rootGetters["getApi"].comments.novelsRoots(nid, page, 10).then(res => {
                         console.log(res)
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
@@ -56,7 +56,7 @@ export default {
         illustsReplies: ({dispatch, commit, state, rootGetters}, {force, commentId, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illusts, force, key: commentId + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.illustsReplies(commentId, page, "zh").then(res => {
+                    return rootGetters["getApi"].comments.illustsReplies(commentId, page).then(res => {
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
                         return res;
@@ -68,7 +68,7 @@ export default {
         novelsReplies: ({dispatch, commit, state, rootGetters}, {force, commentId, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novels, force, key: commentId + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.novelsReplies(commentId, page, "zh").then(res => {
+                    return rootGetters["getApi"].comments.novelsReplies(commentId, page).then(res => {
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
                         return res;

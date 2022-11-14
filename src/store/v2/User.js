@@ -61,7 +61,7 @@ export default {
         userInfo: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.user, force, key: uid, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.userInfo(uid, 1, "zh").then(res => {
+                    return rootGetters["getApi"].user.userInfo(uid, 1).then(res => {
                         res.avatar = res.image
                         res.avatarBig = res.imageBig
                         res.id = Number(res.userId)
@@ -79,7 +79,7 @@ export default {
         profileAll: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.profile, force, key: uid, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.profileAll(uid, 'zh').then((res) => {
+                    return rootGetters["getApi"].user.profileAll(uid).then((res) => {
                         console.log(res)
                         let {illusts, manga, novels, pickup, mangaSeries, novelSeries} = res
 
@@ -103,7 +103,7 @@ export default {
         profileIllusts: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.profile, force, key: uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.profileIllusts(uid, ids, 'zh').then((res) => {
+                    return rootGetters["getApi"].user.profileIllusts(uid, ids).then((res) => {
                         const array = Object.values(res.works)
                         commit("Illust/handleIllusts", {array}, {root: true})
                         return array.map(i => i.id).sort((a, b) => b - a)
@@ -115,7 +115,7 @@ export default {
         novelsTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novels, force, key: "tags_" + uid, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.novelsTags(uid, 'zh').then((res) => {
+                    return rootGetters["getApi"].user.novelsTags(uid).then((res) => {
                         res.forEach(i => {
                             delete i.tag_yomigana
                         })

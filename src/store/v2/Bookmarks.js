@@ -34,7 +34,7 @@ export default {
         illust: ({dispatch, commit, state, rootGetters}, {force, uid, param: {page, size, tag, rest}}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illust, force, key: JSON.stringify({uid, page, size, tag, rest}), seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.illustsBookmarks(uid, {page, size, tag, rest, lang: 'zh'}).then(res => {
+                    return rootGetters["getApi"].user.illustsBookmarks(uid, {page, size, tag, rest}).then(res => {
                         const {total, works} = res
                         commit("Illust/handleIllusts", {array: works}, {root: true})
                         return {
@@ -48,7 +48,7 @@ export default {
         illustTag: ({dispatch, commit, state, rootGetters}, {force, uid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illust, force, key: uid + "_tag", seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.illustsBookmarkTags(uid, 'zh').then(res => {
+                    return rootGetters["getApi"].user.illustsBookmarkTags(uid).then(res => {
                         const hide = res.private
                         const show = res.public
                         sortUserTag(hide)
@@ -62,7 +62,7 @@ export default {
         novel: ({dispatch, commit, state, rootGetters}, {force, uid, param: {page, size, tag, rest}}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novel, force, key: JSON.stringify({uid, page, size, tag, rest}), seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.novelsBookmarks(uid, {page, size, tag, rest, lang: 'zh'}).then(res => {
+                    return rootGetters["getApi"].user.novelsBookmarks(uid, {page, size, tag, rest}).then(res => {
                         const {total, works} = res
                         commit("Novel/handleNovels", works, {root: true})
                         return {
@@ -76,7 +76,7 @@ export default {
         novelTag: ({dispatch, commit, state, rootGetters}, {force, uid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novel, force, key: uid + "_tag", seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].user.novelsBookmarkTags(uid, 'zh').then(res => {
+                    return rootGetters["getApi"].user.novelsBookmarkTags(uid).then(res => {
                         const hide = res.private
                         const show = res.public
                         sortUserTag(hide)

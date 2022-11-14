@@ -78,7 +78,7 @@ export default {
         followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.latest, force, key: page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.followLatest(page, "all", "zh").then(res => {
+                    return rootGetters["getApi"].novel.followLatest(page, "all").then(res => {
                         const data = res.thumbnails.novel;
                         commit("handleNovels", data);
                         return simplify(data)
@@ -90,7 +90,7 @@ export default {
         detail: ({dispatch, commit, state, rootGetters}, {force, nid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.detail, force, key: nid, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.detail(nid, "zh").then(res => {
+                    return rootGetters["getApi"].novel.detail(nid).then(res => {
                         commit("handleNovel", res)
                         commit("handleNovels", res.otherNovelsInfo)
                         return res
@@ -102,7 +102,7 @@ export default {
         series: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.series(seriesId, "zh").then(res => {
+                    return rootGetters["getApi"].novel.series(seriesId).then(res => {
                         clearSeries(res)
                         return res
                     })
@@ -111,7 +111,7 @@ export default {
         },
         //搜索小说
         search: ({dispatch, commit, state, rootGetters}, {force, keyword, params: {p, mode, s_mode, gs, scd, ecd, tgt, tlt, work_lang}}) => {
-            const params = {p, order: "date_d", mode, s_mode, gs, scd, ecd, tgt, tlt, lang: 'zh', work_lang}
+            const params = {p, order: "date_d", mode, s_mode, gs, scd, ecd, tgt, tlt, work_lang}
             return CacheUtils.getCacheByTime({
                 caches: state.search,
                 force,
@@ -132,7 +132,7 @@ export default {
         seriesContent: ({dispatch, commit, state, rootGetters}, {force, seriesId, page, size,}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesContent, force, key: `${seriesId}_${page}_${size}`, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.seriesContent(seriesId, page, size, "asc", 'zh').then(res => {
+                    return rootGetters["getApi"].novel.seriesContent(seriesId, page, size, "asc").then(res => {
                         res.forEach(i => {
                             clearSeriesContent(i);
                             commit("updateBmkData", i);
@@ -145,7 +145,7 @@ export default {
         seriesTitles: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesTitles, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.seriesTitles(seriesId, "zh").then(res => {
+                    return rootGetters["getApi"].novel.seriesTitles(seriesId).then(res => {
                         res.forEach(i => {
                             // noinspection JSValidateTypes
                             i.id = Number(i.id)
