@@ -21,13 +21,12 @@
 import {mapActions, mapState} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 import {Title} from "gin-utils/dist/utils/DomUtils";
-import RetryDiv from "@/components/v2/retry-div";
 import {ElMessage} from "element-plus";
 import CopySpan from "@/components/v2/copy/copy-span";
 
 export default {
   name: "Illust",
-  components: {CopySpan, RetryDiv, IllustCardGroup},
+  components: {CopySpan, IllustCardGroup},
   data() {
     return {
       params: {

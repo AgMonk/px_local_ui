@@ -11,4 +11,9 @@ export const routeName = {
         novel: "用户小说",
         bookmark: "用户收藏",
     },
+    search: {
+        index: '搜索',
+        illust: "搜索绘画",
+        novel: "搜索小说",
+    }
 }

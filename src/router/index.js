@@ -21,11 +21,11 @@ const routes = [
     },
     {
         path: '/search',
-        name: '搜索',
+        name: routeName.search.index,
         component: () => import("../views/v2/search/Home"),
         children: [
-            {path: "illust/:keyword", name: "搜索绘画", component: () => import("../views/v2/search/Illust"),},
-            {path: "novel/:keyword", name: "搜索小说", component: () => import("../views/v2/search/Novel"),},
+            {path: "illust/:keyword", name: routeName.search.illust, component: () => import("../views/v2/search/Illust"),},
+            {path: "novel/:keyword", name: routeName.search.novel, component: () => import("../views/v2/search/Novel"),},
         ]
     },
     {

@@ -15,6 +15,8 @@ export default {
         detail: new Map(),
         //小说系列缓存
         series: new Map(),
+        //搜索小说缓存
+        search: new Map(),
         //小说各篇标题缓存
         seriesTitles: new Map(),
         //系列中作品的基础信息
@@ -102,6 +104,21 @@ export default {
                 caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].novel.series(seriesId, "zh").then(res => {
                         clearSeries(res)
+                        return res
+                    })
+                }
+            })
+        },
+        //搜索小说
+        search: ({dispatch, commit, state, rootGetters}, {force, keyword, params: {p, mode, s_mode, gs, scd, ecd, tgt, tlt,}}) => {
+            const params = {p, order: "date_d", mode, s_mode, gs, scd, ecd, tgt, tlt, lang: 'zh'}
+            return CacheUtils.getCacheByTime({
+                caches: state.search,
+                force,
+                key: JSON.stringify({keyword, params}),
+                seconds: 30 * 60,
+                requestMethod: () => {
+                    return rootGetters["getApi"].novel.search(keyword, params).then(res => {
                         return res
                     })
                 }
