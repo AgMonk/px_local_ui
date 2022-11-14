@@ -4,7 +4,7 @@
     <!--    <el-header></el-header>-->
     <el-main>
       <el-descriptions :column="3" border>
-        <el-descriptions-item label="加载卡片时，缓存它的详情数据" label-align="right">
+        <el-descriptions-item label="加载卡片时，缓存它的详情数据(todo)" label-align="right">
           <el-switch v-model="data.requestCardDetail"
                      active-text="是"
                      class="config-switch"

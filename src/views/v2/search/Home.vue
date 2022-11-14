@@ -263,6 +263,7 @@ export default {
       ElMessage.success("添加成功")
     },
     submit() {
+      this.tempParams.common.p = 1
       this.params = ObjectUtils.clone(this.tempParams)
       this.dialog.filter = false
       this.pushRoute();
