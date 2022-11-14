@@ -219,7 +219,6 @@ export default {
       data: undefined,
       //其他作品
       others: [],
-      pid: undefined,
     }
   },
   computed: {
@@ -309,7 +308,7 @@ export default {
     },
     like() {
       this.liking = true;
-      this.$store.getters.getApi.bookmark.like(this.pid).then(res => {
+      this.$store.getters.getApi.bookmark.like(this.params.pid).then(res => {
         this.data.likeData = true;
       }).catch(e => {
         console.error(e)
