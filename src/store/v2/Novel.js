@@ -110,8 +110,8 @@ export default {
             })
         },
         //搜索小说
-        search: ({dispatch, commit, state, rootGetters}, {force, keyword, params: {p, mode, s_mode, gs, scd, ecd, tgt, tlt,}}) => {
-            const params = {p, order: "date_d", mode, s_mode, gs, scd, ecd, tgt, tlt, lang: 'zh'}
+        search: ({dispatch, commit, state, rootGetters}, {force, keyword, params: {p, mode, s_mode, gs, scd, ecd, tgt, tlt, work_lang}}) => {
+            const params = {p, order: "date_d", mode, s_mode, gs, scd, ecd, tgt, tlt, lang: 'zh', work_lang}
             return CacheUtils.getCacheByTime({
                 caches: state.search,
                 force,
@@ -119,7 +119,11 @@ export default {
                 seconds: 30 * 60,
                 requestMethod: () => {
                     return rootGetters["getApi"].novel.search(keyword, params).then(res => {
-                        return res
+                        const {novel, relatedTags, tagTranslation} = res
+                        const {data, total} = novel
+                        commit("handleNovels", data)
+
+                        return {data: simplify(data), total, relatedTags, tagTranslation}
                     })
                 }
             })

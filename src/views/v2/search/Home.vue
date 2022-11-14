@@ -120,6 +120,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
+            <template #label><span class="form-label">作品语言</span></template>
+            <el-select v-model="tempParams.novel.work_lang" :clearable="true" effect="dark" style="width: 120px">
+              <el-option v-for="item in work_langs" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
             <template #label><span class="form-label">按系列分组</span></template>
             <el-radio-group v-model="tempParams.novel.gs" size="small" type="primary">
               <el-radio-button :label="1">是</el-radio-button>
@@ -192,6 +198,12 @@ export default {
         {label: "标签，完全一致", value: "s_tag_full"},
         {label: "正文", value: "s_tc"},
       ],
+      work_langs: [
+        {label: "简中", value: "zh-cn"},
+        {label: "繁中", value: "zh-tw"},
+        {label: "英语", value: "en"},
+        {label: "日语", value: "ja"},
+      ],
       dateRange: [],
       //日期快捷选项
       dateRangeShortCuts: [
@@ -219,6 +231,7 @@ export default {
           gs: 0,
           tgt: undefined,
           tlt: undefined,
+          work_lang: undefined,
         },
       },
       tempParams: {},
@@ -323,7 +336,7 @@ export default {
     //从路由中加载参数
     load(route) {
       const {keyword,} = route.params
-      const {mode, scd, ecd, s_mode, gs, tgt, tlt, p} = route.query
+      const {mode, scd, ecd, s_mode, gs, tgt, tlt, p, work_lang} = route.query
 
       this.dialog.filter = false
       //同步查询参数
@@ -346,6 +359,7 @@ export default {
       novel.gs = (!gs || gs === '0') ? 0 : 1;
       novel.tgt = tgt ? Number(tgt) : undefined;
       novel.tlt = tlt ? Number(tlt) : undefined;
+      novel.work_lang = work_lang;
     }
   },
   mounted() {

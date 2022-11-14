@@ -13,17 +13,17 @@
 5. 发现
 6. 评论区显示、发言
 7. 推荐作品
-8. 用户的：插画、漫画、小说（todo）、收藏（todo）、约稿 （todo）
+8. 用户的：插画、漫画、小说（todo）、收藏、约稿 （todo）
 
 #### 小说
 
 1. 最新关注
-2. 搜索（todo）
+2. 搜索
 3. 详情
 4. 喜欢、收藏、取消收藏
 5. 发现（todo）
 6. 评论区显示、发言
-6. 小说系列
+7. 小说系列
 
 ### 可配置功能
 
@@ -34,7 +34,8 @@
 
 1. 本项目基于 [Pixiv-Nginx](https://github.com/mashirozx/Pixiv-Nginx) 实现，需要部署在它里面。`Pixiv-Nginx`自己的部署方法见：[这里](https://2heng.xin/2017/09/19/pixiv/)
 2. 从[Releases](https://github.com/AgMonk/px_local_ui/releases)里下载UI包，或自己编译源码，放入`pixiv-nginx/plu`目录，确保`index.html`文件处于该根目录下
-3. 下载配置文件 [plu.conf](https://github.com/AgMonk/px_local_ui/blob/master/plu.conf)，放入`pixiv-nginx/conf`目录，用记事本打开该目录中的`nginx.conf`文件，在`include pixiv.conf;`后面新起一行，写`include plu.conf;` （注意分号不要丢）
+3. 下载配置文件 [plu.conf](https://github.com/AgMonk/px_local_ui/blob/master/plu.conf)，放入`pixiv-nginx/conf`目录，用记事本打开该目录中的`nginx.conf`文件，在`include pixiv.conf;`
+   后面新起一行，写`include plu.conf;` （注意分号不要丢）
 4. 回到`pixiv-nginx`目录，启动`nginx.exe`；如果之前已经启动，点地址栏输入`cmd`回车，会打开命令行，输入`nginx -s reload`重启nginx
 5. 用浏览器打开`http://localhost:8082/`，能看到界面说明部署成功
 
