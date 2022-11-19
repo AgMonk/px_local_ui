@@ -8,7 +8,7 @@
                    size="small"
                    @current-change="changePage"
     />
-    <illust-card-group v-if="['illust','novel'].includes(type)" ref="cardGroup" />
+    <illust-card-group v-if="['illust','manga'].includes(type)" ref="cardGroup" />
     <novel-card-group v-else ref="cardGroup" />
     <el-pagination v-model:current-page="params.page"
                    :layout="layout"
@@ -62,7 +62,7 @@ export default {
     success({total, data, type}) {
       this.total = total
       this.type = type;
-
+      console.log(type)
       this.$nextTick(() => {
         this.$refs.cardGroup.clear(data)
       })

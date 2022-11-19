@@ -178,6 +178,7 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.manga, force, key: uid + "_" + JSON.stringify(params), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].userWorksApi.mangasWithTag(uid, params).then(({total, works}) => {
+                        commit("Illust/handleIllusts", {array: works}, {root: true})
                         return {total, data: works, type: 'manga'}
                     })
                 }
