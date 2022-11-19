@@ -20,7 +20,7 @@
           <el-col :span="12" style="text-align: right">
             <span v-if="['illust','novel','manga'].includes(type)" style="margin-left: auto;color:white">
               <!--用户作品使用的标签-->
-              <user-work-tag :type="type" :uid="uid" />
+              <user-work-tag :type="type" :uid="uid" @use-tag="useTag" />
             </span>
           </el-col>
         </el-row>
@@ -69,6 +69,7 @@ import IllustImage from "@/components/v2/illust/illust-image";
 import RetryDiv from "@/components/v2/retry-div";
 import {ElMessage} from "element-plus";
 import UserWorkTag from "@/components/v2/user/user-work-tag";
+import {routeName} from "@/router/route-name";
 
 export default {
   name: "Home",
@@ -96,6 +97,14 @@ export default {
   methods: {
     ...mapGetters("Account", ['getCurrent']),
     ...mapActions('User', ['profileAll']),
+    useTag(tag) {
+      this.$router.push({
+        name: routeName.user.workWithTag,
+        params: {
+          tag, page: 1, type: this.type, uid: this.uid
+        }
+      })
+    },
     //刷新请求
     refresh() {
       this.load(this.$route, true)

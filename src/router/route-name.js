@@ -10,6 +10,7 @@ export const routeName = {
         manga: "用户漫画",
         novel: "用户小说",
         bookmark: "用户收藏",
+        workWithTag: "指定标签的用户作品",
     },
     search: {
         index: '搜索',
