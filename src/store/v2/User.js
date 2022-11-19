@@ -104,12 +104,20 @@ export default {
         // 查询用户绘画
         profileIllusts: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
             return CacheUtils.getCacheByTime({
-                caches: state.profile, force, key: uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
+                caches: state.profile, force, key: "i_" + uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].userWorksApi.illusts(uid, ids).then((res) => {
                         const array = Object.values(res.works)
                         commit("Illust/handleIllusts", {array}, {root: true})
                         return array.map(i => i.id).sort((a, b) => b - a)
                     })
+                }
+            })
+        },
+        // 查询用户小说
+        profileNovels: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.profile, force, key: "n_" + uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.novels(uid, ids)
                 }
             })
         },
