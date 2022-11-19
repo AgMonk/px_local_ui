@@ -104,7 +104,7 @@
                     <span class="right-aside-label">作品<br>标签</span>
                   </template>
                   <div class="gin-scrollbar" style="max-height: 300px">
-                    <novel-tags :uid="data.uid" />
+                    <novel-tags-list :uid="data.uid" />
                   </div>
                 </el-form-item>
               </el-form>
@@ -126,7 +126,7 @@ import {mapActions} from "vuex";
 import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
 import UserTitle from "@/components/v2/user/user-title";
-import NovelTags from "@/components/v2/novel/novel-tags";
+import NovelTagsList from "@/components/v2/novel/novel-tags-list";
 import NovelLink from "@/components/v2/novel/novel-link";
 import NovelSeriesContent from "@/components/v2/novel/series/novel-series-content";
 
@@ -143,7 +143,7 @@ export default {
       data: undefined,
     }
   },
-  components: {NovelSeriesContent, NovelLink, NovelTags, UserTitle, CopySpan, NovelImage},
+  components: {NovelSeriesContent, NovelLink, NovelTagsList, UserTitle, CopySpan, NovelImage},
   computed: {},
   methods: {
     ...mapActions("Novel", ['series']),

@@ -146,7 +146,7 @@
                     <span class="right-aside-label">作品<br>标签</span>
                   </template>
                   <div class="gin-scrollbar" style="max-height: 300px">
-                    <novel-tags :uid="data.uid" />
+                    <novel-tags-list :uid="data.uid" />
                   </div>
                 </el-form-item>
               </el-form>
@@ -172,7 +172,7 @@ import NovelImage from "@/components/v2/novel/novel-image";
 import CopySpan from "@/components/v2/copy/copy-span";
 import NovelLink from "@/components/v2/novel/novel-link";
 import NovelSeriesTitle from "@/components/v2/novel/series/novel-series-title";
-import NovelTags from "@/components/v2/novel/novel-tags";
+import NovelTagsList from "@/components/v2/novel/novel-tags-list";
 import CommentArea from "@/components/v2/comment/comment-area";
 import NovelSeriesLink from "@/components/v2/novel/series/novel-series-link";
 import NovelBookmarkButton from "@/components/v2/novel/novel-bookmark-button";
@@ -197,7 +197,7 @@ export default {
       page: 1,
     }
   },
-  components: {NovelBookmarkButton, NovelSeriesLink, CommentArea, NovelTags, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
+  components: {NovelBookmarkButton, NovelSeriesLink, CommentArea, NovelTagsList, NovelSeriesTitle, NovelLink, CopySpan, NovelImage, UserTitle, RetryDiv},
   computed: {},
   methods: {
     ...mapActions("Novel", ['detail']),

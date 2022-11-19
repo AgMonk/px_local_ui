@@ -15,7 +15,7 @@ import {ElMessage} from "element-plus";
 import CopySpan from "@/components/v2/copy/copy-span";
 
 export default {
-  name: "novel-tags",
+  name: "novel-tags-list",
   data() {
     return {
       data: [],
@@ -37,7 +37,7 @@ export default {
       this.data = res;
     },
     request({uid, force}) {
-      return this.novelsTags({uid, force})
+      return this.novelTags({uid, force})
     },
     load(uid, force) {
       this.params = {uid, force}
