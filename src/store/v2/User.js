@@ -152,6 +152,37 @@ export default {
                 }
             })
         },
+        // 用户带有指定标签的小说
+        novelsWithTag: ({dispatch, commit, state, rootGetters}, {uid, params, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.novels, force, key: uid + "_" + JSON.stringify(params), seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.novelsWithTag(uid, params).then(({total, works}) => {
+                        return {total, data: works, type: 'novel'}
+                    })
+                }
+            })
+        },
+        // 用户带有指定标签的插画
+        illustsWithTag: ({dispatch, commit, state, rootGetters}, {uid, params, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.illusts, force, key: uid + "_" + JSON.stringify(params), seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.illustsWithTag(uid, params).then(({total, works}) => {
+                        commit("Illust/handleIllusts", {array: works}, {root: true})
+                        return {total, data: works, type: 'illust'}
+                    })
+                }
+            })
+        },
+        // 用户带有指定标签的漫画
+        mangasWithTag: ({dispatch, commit, state, rootGetters}, {uid, params, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.manga, force, key: uid + "_" + JSON.stringify(params), seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.mangasWithTag(uid, params).then(({total, works}) => {
+                        return {total, data: works, type: 'manga'}
+                    })
+                }
+            })
+        },
 
 
     }, getters: {

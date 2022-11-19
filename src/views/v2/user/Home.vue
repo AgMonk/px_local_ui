@@ -5,7 +5,7 @@
       <user-title v-if="uid" :avatar-size="50" :disable-follow-button="getCurrent().uid===uid" :font-size="30" :uid="uid" />
     </el-header>
     <el-main>
-      <retry-div :min-height="300" :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
+      <retry-div :min-height="300" :params="params" :ready="ready" :request="request" unmount-while-loading @failed="failed" @success="success">
         <!--        子路由切换-->
         <el-row>
           <el-col :span="12" style="text-align: left">
@@ -20,7 +20,7 @@
           <el-col :span="12" style="text-align: right">
             <span v-if="['illust','novel','manga'].includes(type)" style="margin-left: auto;color:white">
               <!--用户作品使用的标签-->
-              <user-work-tag :type="type" :uid="uid" @use-tag="useTag" />
+              <user-work-tag :default-value="tag" :type="type" :uid="uid" @use-tag="useTag" />
             </span>
           </el-col>
         </el-row>
@@ -87,6 +87,8 @@ export default {
       ],
       profile: {},
       data: undefined,
+      tag: undefined,
+      ready: false,
       params: {
         force: false,
         uid: Number(this.$route.params.uid),
@@ -98,12 +100,16 @@ export default {
     ...mapGetters("Account", ['getCurrent']),
     ...mapActions('User', ['profileAll']),
     useTag(tag) {
-      this.$router.push({
-        name: routeName.user.workWithTag,
-        params: {
-          tag, page: 1, type: this.type, uid: this.uid
-        }
-      })
+      if (tag) {
+        this.$router.push({
+          name: routeName.user.workWithTag,
+          params: {
+            tag, page: 1, type: this.type, uid: this.uid
+          }
+        })
+      } else {
+        this.$router.push(`/user/${this.uid}/${this.type}`)
+      }
     },
     //刷新请求
     refresh() {
@@ -126,11 +132,13 @@ export default {
     load(route, force) {
       this.getParam(route)
       this.params = {uid: this.uid, force}
+      this.ready = true;
     },
     //从路由获取参数
     getParam(route) {
       this.type = route.path.split('/')[3]
       this.uid = Number(route.params.uid);
+      this.tag = route.params.tag;
     },
     typeChanged(e) {
       this.$router.push(`/user/${this.uid}/${e}`)
@@ -138,6 +146,7 @@ export default {
   },
   mounted() {
     Title.set("用户主页")
+    this.load(this.$route)
   },
   watch: {
     $route(to) {

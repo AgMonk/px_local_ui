@@ -47,7 +47,7 @@ import {mapActions} from "vuex";
 import {ElMessage} from "element-plus";
 import IllustCardDiv from "@/components/v2/illust/card/illust-card-div";
 import NovelCardDiv from "@/components/v2/novel/card/novel-card-div";
-import UserBookmarkTag from "@/views/v2/user/user-bookmark-tag";
+import UserBookmarkTag from "@/components/v2/user/user-bookmark-tag";
 
 //用户收藏
 const name = routeName.user.bookmark

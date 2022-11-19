@@ -1,6 +1,6 @@
 <template>
   <retry-div :min-height="40" :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
-    <el-select v-model="value" :filterable="true" @change="change">
+    <el-select v-model="value" :clearable="true" :filterable="true" @change="change">
       <el-option v-for="item in options" :value="item.tag">
         <div style="display: flex; justify-content: flex-start;">
           <span>{{ item.tag }}({{ item.cnt }})</span>
