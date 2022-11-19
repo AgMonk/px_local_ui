@@ -1,31 +1,23 @@
 <template>
-  <el-container direction="vertical">
-    <!--  <el-container direction="horizontal">-->
-    <!--    <el-header style="color:white">{{ $route.name }}</el-header>-->
-    <el-main>
-      <retry-div :params="params" :ready="ready" :request="request" @failed="failed" @success="success">
-        <el-pagination v-model:current-page="page"
-                       :layout="layout"
-                       :page-size="size"
-                       :total="total"
-                       hide-on-single-page
-                       size="small"
-                       @current-change="changePage"
-        />
-        <illust-card-group ref="cardGroup" @request-refresh="refresh" />
-        <el-pagination v-model:current-page="page"
-                       :layout="layout"
-                       :page-size="size"
-                       :total="total"
-                       hide-on-single-page
-                       size="small"
-                       @current-change="changePage"
-        />
-      </retry-div>
-    </el-main>
-    <!--    <el-footer></el-footer>-->
-  </el-container>
-
+  <retry-div :params="params" :ready="ready" :request="request" @failed="failed" @success="success">
+    <el-pagination v-model:current-page="page"
+                   :layout="layout"
+                   :page-size="size"
+                   :total="total"
+                   hide-on-single-page
+                   size="small"
+                   @current-change="changePage"
+    />
+    <illust-card-group ref="cardGroup" @request-refresh="refresh" />
+    <el-pagination v-model:current-page="page"
+                   :layout="layout"
+                   :page-size="size"
+                   :total="total"
+                   hide-on-single-page
+                   size="small"
+                   @current-change="changePage"
+    />
+  </retry-div>
 </template>
 
 <script>
@@ -33,6 +25,7 @@ import {mapActions, mapGetters} from "vuex";
 import IllustCardGroup from "@/components/v2/illust/card/illust-card-group";
 import RetryDiv from "@/components/v2/retry-div";
 import {ElMessage} from "element-plus";
+import {routeName} from "@/router/route-name";
 
 export default {
   name: "IllustManga",
@@ -100,7 +93,7 @@ export default {
   },
   watch: {
     $route(to) {
-      if (['用户插画', '用户漫画'].includes(to.name)) {
+      if ([routeName.user.illust, routeName.user.manga].includes(to.name)) {
         this.load(to)
       }
     }

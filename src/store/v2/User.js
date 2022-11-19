@@ -82,7 +82,6 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.profile, force, key: uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].userWorksApi.all(uid).then((res) => {
-                        console.log(res)
                         let {illusts, manga, novels, pickup, mangaSeries, novelSeries} = res
 
                         illusts = Object.keys(illusts).map(i => Number(i)).sort((a, b) => b - a)
@@ -94,6 +93,7 @@ export default {
                         commit("Illust/handleIllusts", {array: pickupIllust}, {root: true})
                         let result = {illusts, manga, novels, pickup, mangaSeries, novelSeries}
                         commit("updateProfile", {uid, ...result})
+                        console.log(result)
 
 
                         return result
@@ -101,7 +101,7 @@ export default {
                 }
             })
         },
-        // 查询用户插画/漫画
+        // 查询用户绘画
         profileIllusts: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.profile, force, key: uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
