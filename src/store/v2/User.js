@@ -112,7 +112,7 @@ export default {
             })
         },
         // 用户小说使用的标签
-        novelsTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+        novelTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novels, force, key: "tags_" + uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].userWorksApi.novelTags(uid).then((res) => {
@@ -124,6 +124,20 @@ export default {
                 }
             })
         },
+        // 用户绘画使用的标签
+        illustTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.illusts, force, key: "tags_" + uid, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.illustTags(uid).then((res) => {
+                        res.forEach(i => {
+                            delete i.tag_yomigana
+                        })
+                        return res.sort((a, b) => b.cnt - a.cnt)
+                    })
+                }
+            })
+        },
+
 
     }, getters: {
         //获取用户数据

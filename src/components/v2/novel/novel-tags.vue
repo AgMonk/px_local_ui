@@ -28,7 +28,7 @@ export default {
   components: {CopySpan, RetryDiv},
   computed: {},
   methods: {
-    ...mapActions("User", ['novelsTags']),
+    ...mapActions("User", ['novelTags']),
     //失败回调
     failed(e) {
       ElMessage.error(e.message)
