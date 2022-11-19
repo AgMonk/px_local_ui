@@ -78,7 +78,7 @@ export default {
         followLatest: ({dispatch, commit, state, rootGetters}, {force, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.latest, force, key: page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.followLatest(page, "all").then(res => {
+                    return rootGetters["getApi"].novelApi.latest(page, "all").then(res => {
                         const data = res.thumbnails.novel;
                         commit("handleNovels", data);
                         return simplify(data)
@@ -90,7 +90,7 @@ export default {
         detail: ({dispatch, commit, state, rootGetters}, {force, nid}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.detail, force, key: nid, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.detail(nid).then(res => {
+                    return rootGetters["getApi"].novelApi.detail(nid).then(res => {
                         commit("handleNovel", res)
                         commit("handleNovels", res.otherNovelsInfo)
                         return res
@@ -102,7 +102,7 @@ export default {
         series: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.series(seriesId).then(res => {
+                    return rootGetters["getApi"].novelApi.series(seriesId).then(res => {
                         clearSeries(res)
                         return res
                     })
@@ -118,7 +118,7 @@ export default {
                 key: JSON.stringify({keyword, params}),
                 seconds: 30 * 60,
                 requestMethod: () => {
-                    return rootGetters["getApi"].novel.search(keyword, params).then(res => {
+                    return rootGetters["getApi"].novelApi.search(keyword, params).then(res => {
                         const {novel, relatedTags, tagTranslation} = res
                         const {data, total} = novel
                         commit("handleNovels", data)
@@ -132,7 +132,7 @@ export default {
         seriesContent: ({dispatch, commit, state, rootGetters}, {force, seriesId, page, size,}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesContent, force, key: `${seriesId}_${page}_${size}`, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.seriesContent(seriesId, page, size, "asc").then(res => {
+                    return rootGetters["getApi"].novelApi.seriesContent(seriesId, page, size, "asc").then(res => {
                         res.forEach(i => {
                             clearSeriesContent(i);
                             commit("updateBmkData", i);
@@ -145,7 +145,7 @@ export default {
         seriesTitles: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesTitles, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novel.seriesTitles(seriesId).then(res => {
+                    return rootGetters["getApi"].novelApi.seriesTitles(seriesId).then(res => {
                         res.forEach(i => {
                             // noinspection JSValidateTypes
                             i.id = Number(i.id)
@@ -157,14 +157,14 @@ export default {
         },
         //删除收藏
         delBookmark: ({dispatch, commit, state, rootGetters}, {nid, bmkId}) => {
-            return rootGetters["getApi"].bookmark.delNovel(bmkId).then(res => {
+            return rootGetters["getApi"].bookmarkApi.delNovel(bmkId).then(res => {
                 state.bookmarkData.delete(nid)
                 return res
             })
         },
         //添加收藏
         addBookmark: ({dispatch, commit, state, rootGetters}, nid) => {
-            return rootGetters["getApi"].bookmark.addNovel({
+            return rootGetters["getApi"].bookmarkApi.addNovel({
                 comment: "", tags: [], novel_id: nid, restrict: 0,
             }).then(id => {
                 if (id) {
@@ -178,7 +178,7 @@ export default {
         },
         //查询收藏数据
         bookmarkData: ({dispatch, commit, state, rootGetters}, nid) => {
-            return rootGetters["getApi"].novel.bookmarkData(nid).then(res => {
+            return rootGetters["getApi"].novelApi.bookmarkData(nid).then(res => {
                 state.bookmarkData.set(nid, res.bookmarkData)
                 return res.bookmarkData;
             })

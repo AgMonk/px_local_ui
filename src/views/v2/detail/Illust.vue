@@ -308,7 +308,7 @@ export default {
     },
     like() {
       this.liking = true;
-      this.$store.getters.getApi.bookmark.like(this.params.pid).then(res => {
+      this.$store.getters.getApi.illustApi.like(this.params.pid).then(res => {
         this.data.likeData = true;
       }).catch(e => {
         console.error(e)

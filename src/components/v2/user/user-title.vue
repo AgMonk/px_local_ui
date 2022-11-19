@@ -91,7 +91,7 @@ export default {
     },
     follow() {
       this.following = true;
-      this.$store.getters.getApi.follow.add(this.uid, 0, '').then(() => {
+      this.$store.getters.getApi.userApi.follow(this.uid, 0, '').then(() => {
         this.data.isFollowed = true
       }).catch(e => {
         console.error(e)
@@ -102,7 +102,7 @@ export default {
     },
     unfollow() {
       this.unfollowing = true;
-      this.$store.getters.getApi.follow.del(this.uid).then(() => {
+      this.$store.getters.getApi.userApi.unfollow(this.uid).then(() => {
         this.data.isFollowed = false
       }).catch(e => {
         console.error(e)

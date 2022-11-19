@@ -20,8 +20,15 @@ export default {
 
         },
         //删除评论
-        delComment: ({dispatch, commit, state, rootGetters}, {id, commentId, isNovel,}) => {
-            return rootGetters["getApi"].comments.delComment(id, commentId, isNovel).then(res => {
+        delNovel: ({dispatch, commit, state, rootGetters}, {id, commentId, isNovel,}) => {
+            return rootGetters["getApi"].commentNovelApi.del(id, commentId).then(res => {
+                state[isNovel ? 'novels' : 'illusts'].clear()
+                return res;
+            })
+        },
+        //删除评论
+        delIllust: ({dispatch, commit, state, rootGetters}, {id, commentId, isNovel,}) => {
+            return rootGetters["getApi"].commentIllustApi.del(id, commentId).then(res => {
                 state[isNovel ? 'novels' : 'illusts'].clear()
                 return res;
             })
@@ -30,7 +37,7 @@ export default {
         illustsRoots: ({dispatch, commit, state, rootGetters}, {force, pid, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illusts, force, key: pid + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.illustsRoots(pid, page, 10).then(res => {
+                    return rootGetters["getApi"].commentIllustApi.roots(pid, page, 10).then(res => {
                         console.log(res)
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
@@ -43,7 +50,7 @@ export default {
         novelsRoots: ({dispatch, commit, state, rootGetters}, {force, nid, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novels, force, key: nid + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.novelsRoots(nid, page, 10).then(res => {
+                    return rootGetters["getApi"].commentNovelApi.roots(nid, page, 10).then(res => {
                         console.log(res)
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
@@ -56,7 +63,7 @@ export default {
         illustsReplies: ({dispatch, commit, state, rootGetters}, {force, commentId, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illusts, force, key: commentId + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.illustsReplies(commentId, page).then(res => {
+                    return rootGetters["getApi"].commentIllustApi.replies(commentId, page).then(res => {
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
                         return res;
@@ -68,7 +75,7 @@ export default {
         novelsReplies: ({dispatch, commit, state, rootGetters}, {force, commentId, page}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.novels, force, key: commentId + "_" + page, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].comments.novelsReplies(commentId, page).then(res => {
+                    return rootGetters["getApi"].commentNovelApi.replies(commentId, page).then(res => {
                         clearComments(res.comments)
                         commit("User/updateBatch", res.comments, {root: true});
                         return res;
@@ -86,7 +93,11 @@ export default {
             if (worksType === 'novels') {
                 params.novelId = id;
             }
-            return rootGetters["getApi"].comments.comment(params).then(res => {
+            const method = worksType === 'novels' ?
+                rootGetters["getApi"].commentNovelApi.post
+                : rootGetters["getApi"].commentIllustApi.post
+
+            return method(params).then(res => {
                 const {comment, comment_id, parent_id, stamp_id, user_id, user_name,} = res
 
                 state[worksType].clear()

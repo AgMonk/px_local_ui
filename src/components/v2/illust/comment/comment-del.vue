@@ -23,14 +23,14 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions("Comments", ['delComment']),
+    ...mapActions("Comments", ['delIllust', 'delNovel']),
     del() {
       ElMessageBox.confirm("删除评论?", "确认删除").then(() => {
         this.loading = true;
-        this.delComment({
+        const method = this.worksType === 'novels' ? this.delNovel : this.delIllust
+        method({
           commentId: this.commentId,
           id: this.id,
-          isNovel: this.worksType === 'novels'
         }).then(() => {
           ElMessage.success("删除成功");
           this.$emit('deleted', this.commentId)
