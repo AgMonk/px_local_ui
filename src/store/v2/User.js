@@ -11,6 +11,8 @@ export default {
         profile: new Map(),
         //用户插画缓存
         illusts: new Map(),
+        //用户漫画缓存
+        manga: new Map(),
         //用户小说缓存
         novels: new Map(),
         //用户
@@ -124,11 +126,24 @@ export default {
                 }
             })
         },
-        // 用户绘画使用的标签
+        // 用户插画使用的标签
         illustTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.illusts, force, key: "tags_" + uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].userWorksApi.illustTags(uid).then((res) => {
+                        res.forEach(i => {
+                            delete i.tag_yomigana
+                        })
+                        return res.sort((a, b) => b.cnt - a.cnt)
+                    })
+                }
+            })
+        },
+        // 用户漫画使用的标签
+        mangaTags: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.manga, force, key: "tags_" + uid, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.mangaTags(uid).then((res) => {
                         res.forEach(i => {
                             delete i.tag_yomigana
                         })

@@ -7,12 +7,23 @@
     <el-main>
       <retry-div :min-height="300" :params="params" :request="request" unmount-while-loading @failed="failed" @success="success">
         <!--        子路由切换-->
-        <el-radio-group v-model="type" size="large" @change="typeChanged">
-          <el-radio-button v-for="item in types" :disabled="item.count && data[item.count] && data[item.count].length===0 " :label="item.value">
-            {{ item.label }}
-            <span v-if="item.count && data[item.count] && data[item.count].length>0">({{ data[item.count].length }})</span>
-          </el-radio-button>
-        </el-radio-group>
+        <el-row>
+          <el-col :span="12" style="text-align: left">
+
+            <el-radio-group v-model="type" @change="typeChanged">
+              <el-radio-button v-for="item in types" :disabled="item.count && data[item.count] && data[item.count].length===0 " :label="item.value">
+                {{ item.label }}
+                <span v-if="item.count && data[item.count] && data[item.count].length>0">({{ data[item.count].length }})</span>
+              </el-radio-button>
+            </el-radio-group>
+          </el-col>
+          <el-col :span="12" style="text-align: right">
+            <span v-if="['illust','novel','manga'].includes(type)" style="margin-left: auto;color:white">
+              <!--用户作品使用的标签-->
+              <user-work-tag :type="type" :uid="uid" />
+            </span>
+          </el-col>
+        </el-row>
 
         <!--        精选作品-->
         <div v-if="data.pickup &&data.pickup.length>0 && $route.name==='用户主页'" style="text-align: left">
@@ -57,10 +68,11 @@ import {mapActions, mapGetters} from "vuex";
 import IllustImage from "@/components/v2/illust/illust-image";
 import RetryDiv from "@/components/v2/retry-div";
 import {ElMessage} from "element-plus";
+import UserWorkTag from "@/components/v2/user/user-work-tag";
 
 export default {
   name: "Home",
-  components: {RetryDiv, IllustImage, UserTitle},
+  components: {UserWorkTag, RetryDiv, IllustImage, UserTitle},
   data() {
     return {
       uid: Number(this.$route.params.uid),
