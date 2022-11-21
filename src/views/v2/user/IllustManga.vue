@@ -34,8 +34,6 @@ export default {
     return {
       layout: "prev, pager, next, jumper",
       ready: false,
-      illusts: {},
-      showDialog: {},
       page: 1,
       size: 60,
       total: 10,

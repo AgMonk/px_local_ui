@@ -117,7 +117,11 @@ export default {
         profileNovels: ({dispatch, commit, state, rootGetters}, {uid, ids, force}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.profile, force, key: "n_" + uid + ids.join(','), seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].userWorksApi.novels(uid, ids)
+                    return rootGetters["getApi"].userWorksApi.novels(uid, ids).then(({works}) => {
+                        const array = Object.values(works)
+                        commit("Novel/handleNovels", array, {root: true})
+                        return array.map(i => i.id).sort((a, b) => b - a)
+                    })
                 }
             })
         },
