@@ -2,6 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
+import {userClear} from "@/assets/v2/user-clear";
 
 export default {
     namespaced: true, state: {
@@ -15,6 +16,8 @@ export default {
         manga: new Map(),
         //用户小说缓存
         novels: new Map(),
+        //用户约稿缓存
+        commission: new Map(),
         //用户
         userData: new Map(), //用户作品数据
         userProfile: new Map(),
@@ -64,13 +67,7 @@ export default {
             return CacheUtils.getCacheByTime({
                 caches: state.user, force, key: uid, seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].userApi.userInfo(uid, 1).then(res => {
-                        res.avatar = res.image
-                        res.avatarBig = res.imageBig
-                        res.id = Number(res.userId)
-                        delete res.image
-                        delete res.imageBig
-                        delete res.userId
-
+                        userClear(res)
                         commit("update", res)
                         return res
                     })
@@ -93,9 +90,6 @@ export default {
                         commit("Illust/handleIllusts", {array: pickupIllust}, {root: true})
                         let result = {illusts, manga, novels, pickup, mangaSeries, novelSeries}
                         commit("updateProfile", {uid, ...result})
-                        console.log(result)
-
-
                         return result
                     })
                 }
@@ -192,6 +186,21 @@ export default {
                     return rootGetters["getApi"].userWorksApi.mangasWithTag(uid, params).then(({total, works}) => {
                         commit("Illust/handleIllusts", {array: works}, {root: true})
                         return {total, data: works, type: 'manga'}
+                    })
+                }
+            })
+        },
+        commissionRequestSent: ({dispatch, commit, state, rootGetters}, {uid, force}) => {
+            return CacheUtils.getCacheByTime({
+                caches: state.commission, force, key: uid, seconds: 30 * 60, requestMethod: () => {
+                    return rootGetters["getApi"].userWorksApi.commissionRequestSent(uid).then(({requests, thumbnails, users}) => {
+                        const {illust} = thumbnails
+
+                        users.forEach(item => userClear(item))
+                        commit("Illust/handleIllusts", {array: illust}, {root: true})
+                        return {
+                            requests, illust: illust.map(({id}) => ({id}))
+                        }
                     })
                 }
             })

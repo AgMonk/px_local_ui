@@ -83,7 +83,7 @@ export default {
         {label: '漫画', value: 'manga', count: 'manga'},
         {label: '小说', value: 'novel', count: 'novels'},
         {label: '收藏', value: 'bookmark'},
-        {label: '约稿', value: 'request'},
+        {label: '约稿', value: 'commission'},
       ],
       profile: {},
       data: undefined,

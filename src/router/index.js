@@ -42,12 +42,12 @@ const routes = [
         name: routeName.user.index,
         component: () => import("../views/v2/user/Home"),
         children: [
+            {path: "commission", name: routeName.user.commission, component: () => import("../views/v2/user/Commission"),},
             {path: "illust", name: routeName.user.illust, component: () => import("../views/v2/user/IllustManga"),},
             {path: "manga", name: routeName.user.manga, component: () => import("../views/v2/user/IllustManga"),},
             {path: "novel", name: routeName.user.novel, component: () => import("../views/v2/user/Novel"),},
             {path: "bookmark", name: routeName.user.bookmark, component: () => import("../views/v2/user/Bookmark"),},
             {path: ":type/:tag/:page", name: routeName.user.workWithTag, component: () => import("../views/v2/user/WorkWithTag"),},
-            {path: "request", name: "用户约稿", component: () => import("../views/v2/user/Request"),},
 
         ]
     },
