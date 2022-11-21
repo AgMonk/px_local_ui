@@ -102,7 +102,7 @@ export default {
         series: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.series, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novelApi.series(seriesId).then(res => {
+                    return rootGetters["getApi"].novelSeriesApi.info(seriesId).then(res => {
                         clearSeries(res)
                         return res
                     })
@@ -132,7 +132,7 @@ export default {
         seriesContent: ({dispatch, commit, state, rootGetters}, {force, seriesId, page, size,}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesContent, force, key: `${seriesId}_${page}_${size}`, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novelApi.seriesContent(seriesId, page, size, "asc").then(res => {
+                    return rootGetters["getApi"].novelSeriesApi.contents(seriesId, page, size, "asc").then(res => {
                         res.forEach(i => {
                             clearSeriesContent(i);
                             commit("updateBmkData", i);
@@ -145,7 +145,7 @@ export default {
         seriesTitles: ({dispatch, commit, state, rootGetters}, {force, seriesId}) => {
             return CacheUtils.getCacheByTime({
                 caches: state.seriesTitles, force, key: seriesId, seconds: 30 * 60, requestMethod: () => {
-                    return rootGetters["getApi"].novelApi.seriesTitles(seriesId).then(res => {
+                    return rootGetters["getApi"].novelSeriesApi.titles(seriesId).then(res => {
                         res.forEach(i => {
                             // noinspection JSValidateTypes
                             i.id = Number(i.id)
