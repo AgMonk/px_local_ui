@@ -3,6 +3,7 @@
 
 import {CacheUtils} from "gin-utils/dist/utils/CacheUtils";
 import {userClear} from "@/assets/v2/user-clear";
+import {commissionClear} from "@/assets/v2/commission-clear";
 
 export default {
     namespaced: true, state: {
@@ -198,6 +199,8 @@ export default {
 
                         users.forEach(item => userClear(item))
                         commit("Illust/handleIllusts", {array: illust}, {root: true})
+
+                        requests.forEach(item => commissionClear(item))
                         return {
                             requests, illust: illust.map(({id}) => ({id}))
                         }
