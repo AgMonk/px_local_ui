@@ -31,7 +31,7 @@
           </el-col>
         </el-row>
         <!--      搜索框-->
-        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="params.common.p=1;pushRoute()" />
+        <el-input v-model="keyword" placeholder="请输入关键字" size="small" style="margin-top: 5px" @keyup.enter="params.common.p=1;pushRoute()"/>
       </div>
       <div>
         <!--      已保存的搜索 -->
@@ -47,7 +47,7 @@
                        @current-change="changePage"
         />
         <!--        子路由-->
-        <router-view @change-total="total=$event" />
+        <router-view @change-total="total=$event"/>
         <!--        翻页-->
         <el-pagination v-model:current-page="params.common.p"
                        :layout="layout"
@@ -60,7 +60,7 @@
       </div>
 
 
-      <el-dialog v-model="dialog.search" append-to-body title="保存搜索">
+      <el-dialog v-model="dialog.search" append-to-body destroy-on-close title="保存搜索">
         <el-form v-if="dialog.search" label-width="80px" size="small" @submit.prevent>
           <el-form-item>
             <template #label><span class="form-label">标题</span></template>
@@ -75,12 +75,12 @@
           <el-form-item>
             <template #label><span class="form-label">日期快捷项</span></template>
             <el-select v-model="searchForm.command.dateShortcut">
-              <el-option v-for="item in dateRangeShortCuts" :label="item.text" :value="item.text" />
+              <el-option v-for="item in dateRangeShortCuts" :label="item.text" :value="item.text"/>
             </el-select>
           </el-form-item>
           <el-form-item>
             <template #label><span class="form-label">关键字</span></template>
-            <el-input v-model="searchForm.command.keyword" />
+            <el-input v-model="searchForm.command.keyword"/>
           </el-form-item>
           <el-form-item>
             <el-button size="small" type="success" @click="saveSearch">保存</el-button>
@@ -93,8 +93,16 @@
           <el-form-item>
             <template #label><span class="form-label">模式</span></template>
             <el-select v-model="tempParams.common.mode" effect="dark" style="width: 80px">
-              <el-option v-for="item in modes" :label="item.label" :value="item.value" />
+              <el-option v-for="item in modes" :label="item.label" :value="item.value"/>
             </el-select>
+          </el-form-item>
+          <el-form-item>
+            <template #label><span class="form-label">隐藏AI作品</span></template>
+            <el-switch v-model="tempParams.common.ai_type"
+                       active-value="1"
+                       inactive-color="red"
+                       style="margin-right: 10px"
+            />
           </el-form-item>
           <el-form-item>
             <template #label><span class="form-label">日期范围</span></template>
@@ -116,13 +124,13 @@
           <el-form-item>
             <template #label><span class="form-label">检索范围</span></template>
             <el-select v-model="tempParams.novel.s_mode" effect="dark" style="width: 120px">
-              <el-option v-for="item in s_modes" :label="item.label" :value="item.value" />
+              <el-option v-for="item in s_modes" :label="item.label" :value="item.value"/>
             </el-select>
           </el-form-item>
           <el-form-item>
             <template #label><span class="form-label">作品语言</span></template>
             <el-select v-model="tempParams.novel.work_lang" :clearable="true" effect="dark" style="width: 120px">
-              <el-option v-for="item in work_langs" :label="item.label" :value="item.value" />
+              <el-option v-for="item in work_langs" :label="item.label" :value="item.value"/>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -135,13 +143,13 @@
           <el-form-item>
             <template #label><span class="form-label">最小字数</span></template>
             <el-select v-model="tempParams.novel.tlt" :clearable="true" effect="dark" style="width: 120px">
-              <el-option v-for="item in tlts" :label="item" :value="item" />
+              <el-option v-for="item in tlts" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
           <el-form-item>
             <template #label><span class="form-label">最大字数</span></template>
             <el-select v-model="tempParams.novel.tgt" :clearable="true" effect="dark" style="width: 120px">
-              <el-option v-for="item in tgts" :label="item" :value="item" />
+              <el-option v-for="item in tgts" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
         </el-form>
@@ -224,6 +232,7 @@ export default {
           mode: undefined,
           scd: undefined,
           ecd: undefined,
+          ai_type: undefined,
         },
         //小说专用参数
         novel: {
@@ -277,6 +286,7 @@ export default {
     },
     submit() {
       this.tempParams.common.p = 1
+      this.tempParams.common.ai_type = this.tempParams.common.ai_type ? 1 : undefined;
       this.params = ObjectUtils.clone(this.tempParams)
       this.dialog.filter = false
       this.pushRoute();
@@ -336,7 +346,7 @@ export default {
     //从路由中加载参数
     load(route) {
       const {keyword,} = route.params
-      const {mode, scd, ecd, s_mode, gs, tgt, tlt, p, work_lang} = route.query
+      const {mode, scd, ecd, s_mode, gs, tgt, tlt, p, work_lang, ai_type} = route.query
 
       this.dialog.filter = false
       //同步查询参数
@@ -351,7 +361,9 @@ export default {
       common.mode = mode || "all";
       common.scd = scd;
       common.ecd = ecd;
+      common.ai_type = ai_type;
       this.dateRange = [scd, ecd]
+      console.log(common)
 
       //小说参数
       const novel = this.params.novel
@@ -360,6 +372,7 @@ export default {
       novel.tgt = tgt ? Number(tgt) : undefined;
       novel.tlt = tlt ? Number(tlt) : undefined;
       novel.work_lang = work_lang;
+
     }
   },
   mounted() {

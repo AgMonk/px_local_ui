@@ -173,12 +173,12 @@ export default {
             })
         },
         //搜索
-        search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd}, force}) => {
+        search: ({dispatch, commit, state, rootGetters}, {keyword, params: {p, mode, scd, ecd, ai_type}, force}) => {
             CancelerCache.cancel("illust_search")
             return CacheUtils.getCacheByTime({
-                caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd}), seconds: 30 * 60, requestMethod: () => {
+                caches: state.search, force, key: JSON.stringify({keyword, p, mode, scd, ecd, ai_type}), seconds: 30 * 60, requestMethod: () => {
                     return rootGetters["getApi"].illustApi.search(keyword, {
-                        p, mode, scd, ecd, order: 'date_d',
+                        p, mode, scd, ecd, order: 'date_d', ai_type: ai_type ? 1 : undefined
                     }).then(res => {
                         handleTagTranslation(res)
                         const {illustManga, popular, relatedTags, tagTranslation, zoneConfig} = res

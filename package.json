@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "build:prod": "vue-cli-service build --dest=D:\\Working\\pixiv-nginx\\plu2"
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider &&  vue-cli-service serve",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider &&  vue-cli-service build",
+    "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider &&  vue-cli-service build --dest=D:\\Working\\pixiv-nginx\\plu2"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
@@ -14,7 +14,7 @@
     "core-js": "^3.6.5",
     "element-plus": "^2.2.19",
     "gin-utils": "^1.0.50",
-    "pixiv-web-api-for-browser": "^1.0.87",
+    "pixiv-web-api-for-browser": "^1.0.90",
     "v-clipboard3": "^0.1.4",
     "vue": "^3.0.0",
     "vue-clipboard3": "^2.0.0",
