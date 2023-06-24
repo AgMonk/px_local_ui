@@ -16,6 +16,7 @@
 
 <script>
 import {mapGetters} from "vuex";
+import {IMG_URL_PREFIX} from "@/assets/v2/domain"
 
 const name = ""
 
@@ -42,7 +43,7 @@ export default {
     load(info) {
       this.data = this.getNovel()(info.id);
       // this.src = '/pximg/c/600x600/novel-cover-master/img/2022/10/04/09/11/35/ci185806_983b9b0b0136aad09ad637fa64fe61c5_master1200.jpg'
-      this.src = this.data.coverUrl.replace('https://i.pximg.net', '/pximg')
+      this.src = this.data.coverUrl.replace('https://i.pximg.net', IMG_URL_PREFIX)
     }
   },
   mounted() {

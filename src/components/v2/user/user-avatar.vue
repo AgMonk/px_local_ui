@@ -1,9 +1,10 @@
 <template>
-  <el-avatar v-if="data" :size="size" :src="src" />
+  <el-avatar v-if="data" :size="size" :src="src"/>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
+import {IMG_URL_PREFIX} from "@/assets/v2/domain"
 
 export default {
   name: "user-avatar",
@@ -29,7 +30,7 @@ export default {
         const {avatar, avatarBig} = this.data;
         let url = (this.big && avatarBig) ? avatarBig : avatar;
         if (url) {
-          this.src = url.replace('https://i.pximg.net', '/pximg')
+          this.src = url.replace('https://i.pximg.net', IMG_URL_PREFIX)
           clearInterval(this.interval);
         } else {
           this.setInterval(uid)

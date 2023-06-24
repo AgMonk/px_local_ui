@@ -9,7 +9,7 @@
     <!--图片-->
     <illust-link :disable-tooltip="true" :pid="info.id">
       <el-image v-if="data.url && info.showImage"
-                :src="data.url.replace('https://i.pximg.net','/pximg')"
+                :src="data.url.replace('https://i.pximg.net',prefix)"
                 style="border-radius:15px"
                 @error="failed"
                 @load="success"
@@ -30,13 +30,13 @@
     >
       <illust-link :disable-tooltip="true" :pid="info.id">
         <el-icon :size="size/3" color="white">
-          <CaretRight />
+          <CaretRight/>
         </el-icon>
       </illust-link>
     </span>
     <!--      收藏按钮-->
     <span class="b1" style="bottom:0 ; right: 0;border-radius:15px">
-      <illust-bookmark-button :pid="info.id" @illust-bookmark-success="$emit('illust-bookmark-success',$event)" />
+      <illust-bookmark-button :pid="info.id" @illust-bookmark-success="$emit('illust-bookmark-success',$event)"/>
     </span>
     <!--      图片数量-->
     <el-tag v-if="data.pageCount && data.pageCount>1" effect="dark" style="position: absolute; top:0 ; right: 0;border-radius:15px">
@@ -50,12 +50,14 @@ import IllustBookmarkButton from "@/components/v2/illust/illust-bookmark-button"
 import IllustLink from "@/components/v2/illust/illust-link";
 import {mapGetters} from "vuex";
 import {CaretRight} from "@element-plus/icons-vue";
+import {IMG_URL_PREFIX, IMG_URL_PREFIX_ORI} from "@/assets/v2/domain"
 
 export default {
   name: "illust-image",
   components: {IllustLink, IllustBookmarkButton, CaretRight},
   data() {
     return {
+      prefix: IMG_URL_PREFIX,
       loading: true,
       errorCount: 0,
       data: {},
@@ -74,6 +76,11 @@ export default {
         let url = this.data.url
         this.data.url = ""
         this.$nextTick(() => {
+          if (url.startsWith(IMG_URL_PREFIX_ORI)) {
+            url.replace(IMG_URL_PREFIX_ORI, IMG_URL_PREFIX)
+          } else {
+            url.replace(IMG_URL_PREFIX, IMG_URL_PREFIX_ORI)
+          }
           this.data.url = url;
         })
       } else {

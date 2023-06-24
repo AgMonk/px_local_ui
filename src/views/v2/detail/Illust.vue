@@ -28,7 +28,7 @@
                 >
                   <template #placeholder>
                     <el-icon :size="100" class="is-loading" color="white" style="margin-top: 100px">
-                      <Loading />
+                      <Loading/>
                     </el-icon>
                   </template>
                 </el-image>
@@ -39,7 +39,7 @@
           <el-aside style="width: 280px;padding-left: 20px;">
             <div>
               <!--            用户头像-->
-              <user-title :uid="data.userId" />
+              <user-title :uid="data.userId"/>
             </div>
 
             <div style="display: flex; justify-content: space-between">
@@ -53,23 +53,23 @@
               </span>
             </div>
             <div>
-              <illust-image v-for="info in others" :info="info" :size="80" />
+              <illust-image v-for="info in others" :info="info" :size="80"/>
               <!--              <illust-card v-for="info in others" :info="info" :size="80" disable-author disable-title />-->
             </div>
             <el-descriptions :column="1" border style="margin-top: 10px">
               <el-descriptions-item label="收藏">
-                <illust-bookmark-button :pid="data.id" empty-color="black" />
+                <illust-bookmark-button :pid="data.id" empty-color="black"/>
                 ({{ data.bookmarkCount }})
               </el-descriptions-item>
               <el-descriptions-item label="喜欢">
                 <el-icon v-if="liking" :size="25" class="is-loading">
-                  <Loading />
+                  <Loading/>
                 </el-icon>
                 <el-icon v-else-if="data.likeData" :size="25" color="red">
-                  <SuccessFilled />
+                  <SuccessFilled/>
                 </el-icon>
                 <el-icon v-else :size="25" style="cursor: pointer" @click="like">
-                  <QuestionFilled />
+                  <QuestionFilled/>
                 </el-icon>
                 ({{ data.likeCount }})
               </el-descriptions-item>
@@ -85,8 +85,8 @@
               <el-descriptions-item label="尺寸">{{ data.size.width }}x{{ data.size.height }}</el-descriptions-item>
               <el-descriptions-item v-if="data.isCommission" label="约稿人">
                 <div v-if="data.commissionFrom">
-                  <user-avatar :uid="data.commissionFrom.id" />
-                  <user-link :uid="data.commissionFrom.id" />
+                  <user-avatar :uid="data.commissionFrom.id"/>
+                  <user-link :uid="data.commissionFrom.id"/>
                 </div>
                 <div v-else>匿名约稿</div>
               </el-descriptions-item>
@@ -108,21 +108,21 @@
                 {{ data.title ? data.title : '无标题' }}
               </h2>
             </illust-link>
-            <div v-html="data.description" />
+            <div v-html="data.description"/>
           </div>
           <!--         标签-->
           <div style="text-align: left;margin-top: 20px">
-            <block-tag-button :tags="data.tags" style="margin-right: 5px" />
-            <illust-tag v-for="item in data.tags" :tag="item" />
+            <block-tag-button :tags="data.tags" style="margin-right: 5px"/>
+            <illust-tag v-for="item in data.tags" :tag="item"/>
             <!--            todo 追加标签-->
           </div>
           <!--        评论区-->
           <div v-if="data.commentCount>0" style="margin-top: 20px">
-            <comment-area :id="data.id" :author-user-id="data.userId" worksType="illusts" />
+            <comment-area :id="data.id" :author-user-id="data.userId" worksType="illusts"/>
           </div>
           <!--           推荐作品-->
           <div v-if="data" style="margin-top: 20px">
-            <illust-recommend :pid="data.id" />
+            <illust-recommend :pid="data.id"/>
           </div>
         </div>
       </retry-div>
@@ -136,7 +136,7 @@
           <el-checkbox-group v-model="images.selected" size="small">
             <el-tooltip v-for="index in data.pageCount">
               <template #content>
-                <el-image :src="images.small[index-1]" lazy style="height:200px;" />
+                <el-image :src="images.small[index-1]" lazy style="height:200px;"/>
               </template>
               <el-checkbox :label="images.download[index-1]" border>
                 {{ index - 1 }}
@@ -171,6 +171,7 @@ import {ElMessage} from "element-plus";
 import RetryDiv from "@/components/v2/retry-div";
 import IllustRecommend from "@/components/v2/illust/illust-recommend";
 import CommentArea from "@/components/v2/comment/comment-area";
+import {IMG_URL_PREFIX} from "@/assets/v2/domain"
 
 export default {
   name: "Illust",
@@ -317,7 +318,7 @@ export default {
       })
     },
     getUrl(type, index) {
-      return this.data.urls[type].replace('https://i.pximg.net', '/pximg').replace("_p0", "_p" + index)
+      return this.data.urls[type].replace('https://i.pximg.net', IMG_URL_PREFIX).replace("_p0", "_p" + index)
     },
   },
   mounted() {
